@@ -14,7 +14,6 @@ erDiagram
     temperature DOUBLE
     humidity DOUBLE
     CountTime TIMESTAMP
-    AdminID VARCHAR 
   }
 
   DetectionData {
