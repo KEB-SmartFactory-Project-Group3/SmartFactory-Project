@@ -1,17 +1,12 @@
 import React from 'react';
-import './App.css';
-import Login from './Login';
-
+import SignIn from './SignIn';
 
 function App() {
   return (
     <div className="App">
-      <h1>SmartFactory Monitoring</h1>
-      <Login />
+      <SignIn />
     </div>
   );
 }
 
 export default App;
-
-
