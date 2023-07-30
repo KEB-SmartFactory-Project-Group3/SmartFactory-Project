@@ -1,6 +1,6 @@
 import React from 'react';
-import SignIn from './SignIn';
-import "./App.css";
+import SignIn from './Components/SignIn/SignIn';
+
 
 function App() {
   return (
