@@ -16,7 +16,7 @@ function SignIncomponent() {
   const [password,setPassword] = useState('')
 
   const [loginSuccess, setLoginSuccess] = useState(false)
-  const [loginFailed, setLoginFailed] = useState(false)
+  //const [loginFailed, setLoginFailed] = useState(false)
 
   const navigate = useNavigate();
 
@@ -34,13 +34,14 @@ function SignIncomponent() {
     if (username === "12193152" && password === "dabin") {
       console.log("Success")
       setLoginSuccess(true)
-      setLoginFailed(false)
+      //setLoginFailed(false)
       // 로그인 성공하면 landig page로 이동
       navigate(`/landing/${username}`) 
     } else {
       console.log("Failed")
       setLoginSuccess(false)
-      setLoginFailed(true)
+      //setLoginFailed(true)
+      alert("다시 입력하세요!")
     }
   }
 
@@ -61,7 +62,7 @@ function SignIncomponent() {
       <form className = "loginform">
         {/* 로그인 인증 하드코딩 --세션으로 나중에 수정 */}
         {loginSuccess && <div className="success">Successfully</div>}
-        {loginFailed && <div className="erro">Failed</div> }
+        {/* {loginFailed && <div className="erro">Failed</div> } */}
 
 
         <div className ="form">
