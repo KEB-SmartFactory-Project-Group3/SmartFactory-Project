@@ -13,12 +13,17 @@ import Container from '@mui/material/Container';
 import { blue, green } from '@mui/material/colors';
 import './SignIn.css'
 import { BrowserRouter, Routes, Route , useNavigate, useParams } from 'react-router-dom';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Button from '@mui/material/Button';
+
 
 
 function SignIn() {
   return (
     <div className="SignInApp">
       <BrowserRouter>
+      <Header />
         <Routes>
           <Route path='/' element={<SignIncomponent />}/>
           <Route path='/Signin' element={<SignIncomponent />} />
@@ -31,6 +36,7 @@ function SignIn() {
 
           <Route path='*' element={<ErrorPage />}/>
         </Routes>
+    
       </BrowserRouter>
     </div>
   )
@@ -83,6 +89,7 @@ function SignIncomponent() {
       <Avatar sx={{ m: 1}}>
       <LockIcon />
       </Avatar>
+  
       <form className = "loginform">
         {/* 로그인 인증 하드코딩 --세션으로 나중에 수정 */}
         {loginSuccess && <div className="success">Successfully</div>}
@@ -121,28 +128,11 @@ function SignIncomponent() {
 function LandingPage() {
  
   const {username} = useParams()
-  const navigate = useNavigate();
-
-   // 로그아웃 하드 코딩
-   function handleSubmitLogout(e) {
-    e.preventDefault();
-    // 로그아웃 성공하면 로그아웃 페이지로 이동
-    navigate(`/Logout`) 
-    
-  }
 
   return (
     <div className="landing">
       <h1>Welcome {username}</h1>
-      <div>
-        <p><Link to="/MachinePage">기계</Link></p>
-        <p><Link to="/TemperaturePage">온도</Link></p>
-        <p><Link to="/Computervision">불량품</Link></p>
-        <p><Link to="/Administrator">관리자DB</Link></p>
-      </div>
-      <div>
-        <button type="submit" name ="logoutbtn" onClick={handleSubmitLogout}>Logout</button>
-      </div>
+    
     </div>
   )
 }
@@ -194,4 +184,43 @@ function LogoutPage() {
     </div>
   )
 }
+
+function Header() {
+
+ const navigate = useNavigate()
+
+  // 로그아웃 하드 코딩
+  function handleSubmitLogout(e) {
+   e.preventDefault();
+   // 로그아웃 성공하면 로그아웃 페이지로 이동
+   // mui 사용하면 필요없어짐
+  navigate(`/Logout`) 
+  }
+  return (
+    <header className="header">
+       <AppBar position="static" sx={{ backgroundColor: 'transparent'}} className="headerapp">
+      <div className="container">
+        <Toolbar>
+          <ul className="navbar-nav" style={{ display: 'flex', alignItems: 'center' ,listStyle: 'none'}}>
+          
+            <li style={{marginRight: '1rem'}} className="nav-item"><Link className="nav-link" to="/Landing/:username">Home</Link></li>
+            <li style={{marginRight: '1rem'}} className="nav-item"><Link className="nav-link" to="/MachinePage">기계</Link></li>
+            <li style={{marginRight: '1rem'}} className="nav-item"><Link className="nav-link" to="/TemperaturePage">온도</Link></li>
+            <li style={{marginRight: '1rem'}} className="nav-item"><Link className="nav-link" to="/Computervision">불량품</Link></li>
+            <li style={{marginRight: '1rem'}} className="nav-item"><Link className="nav-link" to="/Administrator">관리자DB</Link></li>
+           
+          </ul>
+          <ul className="navbar-nav" style={{ marginLeft: 'auto' }}>
+            <li className="nav-item"><Button onClick={handleSubmitLogout}>Logout</Button></li>
+          </ul>
+        </Toolbar>
+      </div>
+    </AppBar>
+   </header>
+
+
+
+  )
+}
+
 export default SignIn;
