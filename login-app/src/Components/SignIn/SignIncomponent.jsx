@@ -32,16 +32,39 @@ function SignIncomponent() {
   }
 
   // 로그인 하드 코딩
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    if (authContext.login(username, password)) {
-      // 로그인 성공하면 landig page로 이동
-      navigate(`/landing/${username}`)
-    } else {
-      //setLoginFailed(true)
-      alert("다시 입력하세요!")
+    
+    try {
+      // 백엔드 api 호출해서 로그인 인증
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({id: username, password: password}),
+      })
+
+      if (response.ok) {
+        navigate(`/landing/${username}`)
+      } else {
+        alert("다시 입력하세요!")
+      }
+    }
+
+    catch (error) {
+      console.error("로그인 오류: ",error)
+      alert("로그인 중 API 오류 발생")
     }
   }
+    // if (authContext.login(username, password)) {
+    //   // 로그인 성공하면 landig page로 이동
+    //   navigate(`/landing/${username}`)
+    // } else {
+    //   //setLoginFailed(true)
+    //   alert("다시 입력하세요!")
+    // }
+
 
   return (
     <Container component="main" maxWidth="xs">
