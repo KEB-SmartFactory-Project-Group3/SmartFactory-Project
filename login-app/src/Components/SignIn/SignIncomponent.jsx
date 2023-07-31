@@ -8,6 +8,8 @@ import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import {useNavigate} from 'react-router-dom';
+import { useAuth } from './security/AuthContext';
+
 
 
 function SignIncomponent() {
@@ -19,6 +21,7 @@ function SignIncomponent() {
   //const [loginFailed, setLoginFailed] = useState(false)
 
   const navigate = useNavigate();
+  const authContext = useAuth()
 
   function handleUsername(e) {
     setUsername(e.target.value)
@@ -31,15 +34,10 @@ function SignIncomponent() {
   // 로그인 하드 코딩
   function handleSubmit(e) {
     e.preventDefault();
-    if (username === "12193152" && password === "dabin") {
-      console.log("Success")
-      setLoginSuccess(true)
-      //setLoginFailed(false)
+    if (authContext.login(username, password)) {
       // 로그인 성공하면 landig page로 이동
-      navigate(`/landing/${username}`) 
+      navigate(`/landing/${username}`)
     } else {
-      console.log("Failed")
-      setLoginSuccess(false)
       //setLoginFailed(true)
       alert("다시 입력하세요!")
     }
@@ -61,7 +59,6 @@ function SignIncomponent() {
   
       <form className = "loginform">
         {/* 로그인 인증 하드코딩 --세션으로 나중에 수정 */}
-        {loginSuccess && <div className="success">Successfully</div>}
         {/* {loginFailed && <div className="erro">Failed</div> } */}
 
 
