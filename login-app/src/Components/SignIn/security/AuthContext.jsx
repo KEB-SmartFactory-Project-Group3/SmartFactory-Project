@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import React,{ createContext, useContext, useState } from "react";
 
 
 //다른 컴포넌트와 공유할 컨텍스트

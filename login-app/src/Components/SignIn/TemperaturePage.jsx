@@ -1,3 +1,5 @@
+import React from 'react';
+
 function TemperaturePage() {
   return (
     <div className="TemperaturePage">

@@ -1,3 +1,5 @@
+import React from 'react';
+
 function Administrator() {
   return (
     <div className="Administrator">

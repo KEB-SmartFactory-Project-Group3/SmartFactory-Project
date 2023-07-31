@@ -1,3 +1,5 @@
+import React from 'react';
+
 function LogoutPage() {
   return (
     <div className="LogoutPage">

@@ -1,3 +1,5 @@
+import React from 'react';
+
 function Computervison() {
   return (
     <div className="Computervision">
