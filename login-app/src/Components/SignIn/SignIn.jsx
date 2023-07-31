@@ -12,7 +12,7 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import { blue, green } from '@mui/material/colors';
 import './SignIn.css'
-import { BrowserRouter, Routes, Route , useNavigate, useParams} from 'react-router-dom';
+import { BrowserRouter, Routes, Route , useNavigate, useParams } from 'react-router-dom';
 
 
 function SignIn() {
@@ -20,10 +20,16 @@ function SignIn() {
     <div className="SignInApp">
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<SignIncomponent />}></Route>
-          <Route path='/Signin' element={<SignIncomponent />}></Route>
-          <Route path='/Landing/:username' element={<LandingPage />}></Route>
-          <Route path='*' element={<ErrorPage />}></Route>
+          <Route path='/' element={<SignIncomponent />}/>
+          <Route path='/Signin' element={<SignIncomponent />} />
+          <Route path='/Landing/:username' element={<LandingPage />}/>
+          <Route path='/MachinePage' element={<MachinePage />}/>
+          <Route path='/TemperaturePage' element={<TemperaturePage />}/>
+          <Route path='/Computervision' element={<Computervison />}/>
+          <Route path='/Administrator' element={<Administrator />}/>
+          <Route path='/Logout' element={<LogoutPage />}/>
+
+          <Route path='*' element={<ErrorPage />}/>
         </Routes>
       </BrowserRouter>
     </div>
@@ -101,7 +107,7 @@ function SignIncomponent() {
           <button type="submit" name ="loginbtn" onClick={handleSubmit}>Login</button>
         </div>
       </form>
-      <Grid container>
+      <Grid container >
         <Grid item sx={{mt:2, ml:13}}>
         <Link>비밀번호를 잊어버리셨나요?</Link>
         </Grid>
@@ -111,13 +117,32 @@ function SignIncomponent() {
   );
 }
 
-function LandingPage() {
 
+function LandingPage() {
+ 
   const {username} = useParams()
+  const navigate = useNavigate();
+
+   // 로그아웃 하드 코딩
+   function handleSubmitLogout(e) {
+    e.preventDefault();
+    // 로그아웃 성공하면 로그아웃 페이지로 이동
+    navigate(`/Logout`) 
+    
+  }
 
   return (
     <div className="landing">
       <h1>Welcome {username}</h1>
+      <div>
+        <p><Link to="/MachinePage">기계</Link></p>
+        <p><Link to="/TemperaturePage">온도</Link></p>
+        <p><Link to="/Computervision">불량품</Link></p>
+        <p><Link to="/Administrator">관리자DB</Link></p>
+      </div>
+      <div>
+        <button type="submit" name ="logoutbtn" onClick={handleSubmitLogout}>Logout</button>
+      </div>
     </div>
   )
 }
@@ -126,6 +151,46 @@ function ErrorPage() {
   return (
     <div className="Errorpage">
       <h1>error!</h1>
+    </div>
+  )
+}
+
+function MachinePage() {
+  return (
+    <div className="MachinePage">
+      <h1>기계 장치</h1>
+    </div>
+  )
+}
+
+function TemperaturePage() {
+  return (
+    <div className="TemperaturePage">
+      <h1>온도</h1>
+    </div>
+  )
+}
+
+function Computervison() {
+  return (
+    <div className="Computervision">
+      <h1>컴퓨터 비전</h1>
+    </div>
+  )
+}
+
+function Administrator() {
+  return (
+    <div className="Administrator">
+      <h1>관리자DB</h1>
+    </div>
+  )
+}
+
+function LogoutPage() {
+  return (
+    <div className="LogoutPage">
+      <h1>로그아웃</h1>
     </div>
   )
 }
