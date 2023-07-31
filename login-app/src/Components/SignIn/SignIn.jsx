@@ -22,6 +22,7 @@ function AuthenticatedRoute( {children} ) {
   return <Navigate to="/" />
 }
 function Monitoring() {
+
   return (
     <div className="SignInApp">
       <AuthProvider>
@@ -29,8 +30,8 @@ function Monitoring() {
         <Header />
           <Routes>
             <Route path='/' element={<SignIncomponent />}/>
-            <Route path='/Signin' element={<SignIncomponent />} />
-
+            {/* <Route path='/Signin' element={<SignIncomponent />} /> */}
+        
             <Route path='/Landing/:username' element={
                   <AuthenticatedRoute>
                       <LandingPage />
@@ -55,7 +56,7 @@ function Monitoring() {
                   <AuthenticatedRoute>
                       <Administrator />
                   </AuthenticatedRoute>}/>
-                  
+
             <Route path='/Logout' element={<LogoutPage />}/>
 
             <Route path='*' element={<ErrorPage />}/>

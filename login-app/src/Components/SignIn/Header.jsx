@@ -3,6 +3,7 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import { useAuth } from './security/AuthContext';
+import { useState } from 'react';
 
 function Header() {
    
@@ -11,12 +12,16 @@ function Header() {
   const isAuthenticated = authContext.isAuthenticated 
 
   const navigate = useNavigate()
+
+ 
+  if (window.location.pathname === '/')
+    return null
  
    // 로그아웃 하드 코딩
    function handleSubmitLogout(e) {
     e.preventDefault();
     // 로그아웃 성공하면 로그아웃 페이지로 이동
-    navigate(`/Signin`)
+    navigate(`/`)
     authContext.logout()
    }
 
@@ -50,6 +55,7 @@ function Header() {
            </ul>
          </Toolbar>
        </div>
+
      </AppBar>
     </header>
  
