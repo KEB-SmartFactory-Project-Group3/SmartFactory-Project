@@ -1,15 +1,16 @@
-package com.SpringServer.login;
+package com.SpringServer.service;
 
+import com.SpringServer.model.entity.User;
 import com.SpringServer.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService {
+public class LoginService {
     @Autowired
     private UserRepository userRepository;
 
-    public User findById(int id) {
+    public User findById(String id) {
         return userRepository.findById(id).orElse(null);
     }
 

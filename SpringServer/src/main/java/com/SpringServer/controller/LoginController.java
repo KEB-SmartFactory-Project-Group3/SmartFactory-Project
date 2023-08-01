@@ -1,23 +1,24 @@
-package com.SpringServer.login;
+package com.SpringServer.controller;
 
+import com.SpringServer.model.entity.User;
+import com.SpringServer.model.dto.LoginDTO;
+import com.SpringServer.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+//@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/auth")
-public class AuthController {
+public class LoginController {
 
     @Autowired
-    private UserService userService;
+    private LoginService userService;
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody User request) {
-        System.out.println("Request body: id=" + request.getId() + ", pwd=" + request.getPassword());
+        System.out.println("Request body: id=" + request.getId() + ", password=" + request.getPassword());
         User user = userService.findById(request.getId());
         if (user != null && userService.checkPassword(user, request.getPassword())) {
             return ResponseEntity.ok().body(new LoginDTO(user));

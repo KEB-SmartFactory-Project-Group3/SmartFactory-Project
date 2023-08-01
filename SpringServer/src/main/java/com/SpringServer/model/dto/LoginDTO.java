@@ -1,5 +1,6 @@
-package com.SpringServer.login;
+package com.SpringServer.model.dto;
 
+import com.SpringServer.model.entity.User;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class LoginDTO {
-    private Integer id;
+    private String id;
     private String name;
 
     public LoginDTO(User user) {

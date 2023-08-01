@@ -1,4 +1,4 @@
-package com.SpringServer.login;
+package com.SpringServer.model.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -14,11 +14,11 @@ import lombok.NoArgsConstructor;
 @Table(name="user")
 public class User {
     @Id
-    private Integer id;
+    private String id;
     private String password;
     private String name;
 
-    public User(int id, String password, String name){
+    public User(String id, String password, String name){
         this.id = id;
         this.password = password;
         this.name = name;
