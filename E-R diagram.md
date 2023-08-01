@@ -1,6 +1,6 @@
 ```mermaid
 erDiagram
-  Administer {
+  Administrator {
     AdminID VARCHAR PK
     AdminPW VARCHAR
     name VARCHAR
@@ -17,7 +17,7 @@ erDiagram
   }
 
   DetectionData {
-    ProductNumber INTEGER PK
+    ProductNumber INTEGER FK
     DefectStatus BOOLEAN
   }
 
