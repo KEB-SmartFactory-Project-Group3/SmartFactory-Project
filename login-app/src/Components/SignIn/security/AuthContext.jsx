@@ -19,7 +19,7 @@ function AuthProvider( {children}) {
     
     try {
       // 백엔드 api 호출해서 로그인 인증
-      const response = await axios.post('http://localhost:8080/api/auth/login', {
+      const response = await axios.post('http://165.246.116.39:8080/api/auth/login', {
         id: id,
         password: password,
         headers: {
