@@ -10,7 +10,10 @@ function Header() {
    
   const authContext = useAuth()
   //authContext에서 인증 정보를 가져와서 지역 변수에 넣음
-  const isAuthenticated = authContext.isAuthenticated 
+  const isAuthenticated = authContext.isAuthenticated
+  
+  // 현재 관리자 가져오기
+  const currentUser = authContext.currentUser 
 
   const navigate = useNavigate()
 
@@ -51,6 +54,9 @@ function Header() {
            <ul className="navbar-nav" style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center' }}>
              {/* <li style={{marginRight: '1rem'}} className="nav-item">
               {!isAuthenticated && <Button onClick={handleLoginClick}>Login</Button>}</li> */}
+
+            <li className="nav-item" style={{ marginRight: '1rem' }}>
+              {isAuthenticated && currentUser && <span>현재 관리자 : {currentUser.name}</span>}</li>
              <li className="nav-item">
               {isAuthenticated && <Button onClick={handleSubmitLogout}>Logout</Button>}</li>
            </ul>

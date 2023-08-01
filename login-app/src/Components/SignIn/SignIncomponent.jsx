@@ -9,13 +9,14 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import {useNavigate} from 'react-router-dom';
 import { useAuth } from './security/AuthContext';
-
+import axios from 'axios';
 
 
 function SignIncomponent() {
 
-  const [username,setUsername] = useState('')
+  const [id,setId] = useState('')
   const [password,setPassword] = useState('')
+  const [name,setName] = useState('')
 
   const [loginSuccess, setLoginSuccess] = useState(false)
   //const [loginFailed, setLoginFailed] = useState(false)
@@ -24,47 +25,25 @@ function SignIncomponent() {
   const authContext = useAuth()
 
   function handleUsername(e) {
-    setUsername(e.target.value)
+    setId(e.target.value)
   }
 
   function handlePassword(e) {
     setPassword(e.target.value)
   }
 
-  // 로그인 하드 코딩
-  async function handleSubmit(e) {
+
+  // 로그인  코딩
+  function handleSubmit(e) {
     e.preventDefault();
-    
-    try {
-      // 백엔드 api 호출해서 로그인 인증
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({id: username, password: password}),
-      })
-
-      if (response.ok) {
-        navigate(`/landing/${username}`)
-      } else {
-        alert("다시 입력하세요!")
-      }
-    }
-
-    catch (error) {
-      console.error("로그인 오류: ",error)
-      alert("로그인 중 API 오류 발생")
+    if (authContext.login(id, password)) {
+      // 로그인 성공하면 landig page로 이동
+      navigate(`/landing/${id}`)
+    } else {
+      //setLoginFailed(true)
+      alert("다시 입력하세요!")
     }
   }
-    // if (authContext.login(username, password)) {
-    //   // 로그인 성공하면 landig page로 이동
-    //   navigate(`/landing/${username}`)
-    // } else {
-    //   //setLoginFailed(true)
-    //   alert("다시 입력하세요!")
-    // }
-
 
   return (
     <Container component="main" maxWidth="xs">
@@ -88,8 +67,8 @@ function SignIncomponent() {
         <div className ="form">
           <div>
             <label>Username : </label>
-            <input type="text" name = "username" placeholder = "아이디" required 
-            value={username} onChange={handleUsername}/>
+            <input type="text" name = "id" placeholder = "아이디" required 
+            value={id} onChange={handleUsername}/>
           </div>
           <div>
             <label>Password : </label>
