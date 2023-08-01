@@ -58,16 +58,15 @@ function Header() {
                 display: 'flex',
                 alignItems: 'center',
                 marginRight: '1rem',
-                color: 'black',
                 padding: '0.5rem',
-                backgroundColor: 'blue',
+                backgroundColor: 'rgba(0, 0, 255, 0.5)',
                 borderRadius: '10px'
               }}
               >
                 {isAuthenticated && currentUser && (
                   <>
                     <AccountCircleIcon style={{ marginRight: '0.5rem' }} />
-                    <span>현재 관리자: {currentUser.name}</span>
+                    <span style={{ color: 'black' }} >현재 관리자 : {currentUser.name}</span>
                   </>
                 )}
               </div>

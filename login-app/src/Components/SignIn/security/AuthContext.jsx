@@ -16,6 +16,7 @@ function AuthProvider( {children}) {
 
  
   async function login(id,password,name) {
+
     
     try {
       // 백엔드 api 호출해서 로그인 인증
