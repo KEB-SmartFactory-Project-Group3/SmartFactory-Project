@@ -4,6 +4,7 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import { useAuth } from './security/AuthContext';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useState } from 'react';
 
 function Header() {
@@ -16,10 +17,6 @@ function Header() {
   const currentUser = authContext.currentUser 
 
   const navigate = useNavigate()
-
- 
-  if (window.location.pathname === '/')
-    return null
  
    // 로그아웃 하드 코딩
    function handleSubmitLogout(e) {
@@ -29,9 +26,9 @@ function Header() {
     authContext.logout()
    }
 
-  //  function handleLoginClick() {
-  //   navigate(`/`)
-  //  }
+  if (window.location.pathname === '/' || window.location.pathname === '*')
+  return null
+
    return (
      <header className="header">
         <AppBar position="static" sx={{ backgroundColor: 'transparent'}} className="headerapp">
@@ -55,8 +52,25 @@ function Header() {
              {/* <li style={{marginRight: '1rem'}} className="nav-item">
               {!isAuthenticated && <Button onClick={handleLoginClick}>Login</Button>}</li> */}
 
-              <li className="nav-item" style={{ marginRight: '1rem' }}>
-                {isAuthenticated && currentUser && <span>현재 관리자 : {currentUser.name}</span>}</li>
+              <div
+              className="nav-item"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                marginRight: '1rem',
+                color: 'black',
+                padding: '0.5rem',
+                backgroundColor: 'blue',
+                borderRadius: '10px'
+              }}
+              >
+                {isAuthenticated && currentUser && (
+                  <>
+                    <AccountCircleIcon style={{ marginRight: '0.5rem' }} />
+                    <span>현재 관리자: {currentUser.name}</span>
+                  </>
+                )}
+              </div>
              <li className="nav-item">
               {isAuthenticated && <Button onClick={handleSubmitLogout}>Logout</Button>}</li>
            </ul>

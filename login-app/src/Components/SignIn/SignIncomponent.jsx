@@ -19,7 +19,6 @@ function SignIncomponent() {
   const [name,setName] = useState('')
 
   const [loginSuccess, setLoginSuccess] = useState(false)
-  //const [loginFailed, setLoginFailed] = useState(false)
 
   const navigate = useNavigate();
   const authContext = useAuth()
