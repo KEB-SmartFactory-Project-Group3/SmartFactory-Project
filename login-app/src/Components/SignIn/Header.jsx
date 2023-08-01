@@ -5,6 +5,11 @@ import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import { useAuth } from './security/AuthContext';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import { useState } from 'react';
 
 function Header() {
@@ -17,14 +22,38 @@ function Header() {
   const currentUser = authContext.currentUser 
 
   const navigate = useNavigate()
+  const [open,setOpen] = useState(true)
  
    // 로그아웃 하드 코딩
    function handleSubmitLogout(e) {
     e.preventDefault();
-    // 로그아웃 성공하면 로그아웃 페이지로 이동
+    setOpen(true)
+   }
+
+   function handleLogoutConfirm() {
     navigate(`/`)
     authContext.logout()
+    setOpen(false) 
    }
+
+   function handleLogoutCancel() {
+    setOpen(false)
+   }
+    // <Dialog open={open}>
+    //   <DialogTitle>로그아웃</DialogTitle>
+    //   <DialogContent>
+    //     정말 로그아웃 하시겠습니까?
+    //   </DialogContent>
+    //   <DialogActions>
+    //     <button variant="outlined" onClick={()=> {navigate(`/`); authContext.logout();}}>yes</button>
+    //     <button variant="outlined" onClick={()=>setOpen(false)}>cancel</button>
+    //   </DialogActions>
+    // </Dialog>
+
+    // 로그아웃 성공하면 로그아웃 페이지로 이동
+    // navigate(`/`)
+    // authContext.logout()
+   
 
   if (window.location.pathname === '/' || window.location.pathname === '*')
   return null
@@ -77,8 +106,19 @@ function Header() {
        </div>
 
      </AppBar>
+
+     <Dialog open={open}>
+      <DialogTitle>로그아웃</DialogTitle>
+      <DialogContent>
+        정말 로그아웃 하시겠습니까?
+      </DialogContent>
+      <DialogActions>
+           <button variant="outlined" onClick={handleLogoutConfirm}>yes</button>
+           <button variant="outlined" onClick={handleLogoutCancel}>cancel</button>
+      </DialogActions>
+     </Dialog>
     </header>
- 
+
  
  
    )
