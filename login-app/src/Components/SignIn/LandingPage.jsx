@@ -5,11 +5,11 @@ import axios  from 'axios';
 function LandingPage() {
 
   const {id} = useParams()
-  const {operationtime,setOperationtime} = useState(null)
+  const [operationtime,setOperationtime] = useState("")
 
   function callTimeApi() {
     console.log("called")
-    axios.get("http://172.20.10.3:8080/api/time/operationtime")
+    axios.get("http://165.246.116.26:8080/api/display/operationtime")
           .then (
             (response) => successfulResponse(response)
           )
