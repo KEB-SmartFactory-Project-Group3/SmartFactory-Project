@@ -40,7 +40,7 @@ function Header() {
            <ul className="navbar-nav" style={{ display: 'flex', alignItems: 'center' ,listStyle: 'none'}}>
            
              <li style={{marginRight: '4rem'}} className="nav-item">
-              {isAuthenticated && <Link className="nav-link" to="/Landing/:username" style={{ textDecoration: 'none', color: 'black' }}>Home</Link>}</li>
+              {isAuthenticated && <Link className="nav-link" to={`/Landing/${currentUser.name}`}  style={{ textDecoration: 'none', color: 'black' }}>Home</Link>}</li>
              <li style={{marginRight: '4rem'}} className="nav-item">
               {isAuthenticated && <Link className="nav-link" to="/MachinePage" style={{ textDecoration: 'none', color: 'black' }}>기계</Link>}</li>
              <li style={{marginRight: '4rem'}} className="nav-item">
@@ -55,8 +55,8 @@ function Header() {
              {/* <li style={{marginRight: '1rem'}} className="nav-item">
               {!isAuthenticated && <Button onClick={handleLoginClick}>Login</Button>}</li> */}
 
-            <li className="nav-item" style={{ marginRight: '1rem' }}>
-              {isAuthenticated && currentUser && <span>현재 관리자 : {currentUser.name}</span>}</li>
+              <li className="nav-item" style={{ marginRight: '1rem' }}>
+                {isAuthenticated && currentUser && <span>현재 관리자 : {currentUser.name}</span>}</li>
              <li className="nav-item">
               {isAuthenticated && <Button onClick={handleSubmitLogout}>Logout</Button>}</li>
            </ul>

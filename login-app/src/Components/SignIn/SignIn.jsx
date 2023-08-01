@@ -32,7 +32,7 @@ function Monitoring() {
             <Route path='/' element={<SignIncomponent />}/>
             {/* <Route path='/Signin' element={<SignIncomponent />} /> */}
         
-            <Route path='/Landing/:username' element={
+            <Route path='/Landing/:id' element={
                   <AuthenticatedRoute>
                       <LandingPage />
                   </AuthenticatedRoute>}/>
