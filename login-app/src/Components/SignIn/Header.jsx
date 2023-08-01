@@ -22,7 +22,7 @@ function Header() {
   const currentUser = authContext.currentUser 
 
   const navigate = useNavigate()
-  const [open,setOpen] = useState(true)
+  const [open,setOpen] = useState(false)
  
    // 로그아웃 하드 코딩
    function handleSubmitLogout(e) {
@@ -39,20 +39,6 @@ function Header() {
    function handleLogoutCancel() {
     setOpen(false)
    }
-    // <Dialog open={open}>
-    //   <DialogTitle>로그아웃</DialogTitle>
-    //   <DialogContent>
-    //     정말 로그아웃 하시겠습니까?
-    //   </DialogContent>
-    //   <DialogActions>
-    //     <button variant="outlined" onClick={()=> {navigate(`/`); authContext.logout();}}>yes</button>
-    //     <button variant="outlined" onClick={()=>setOpen(false)}>cancel</button>
-    //   </DialogActions>
-    // </Dialog>
-
-    // 로그아웃 성공하면 로그아웃 페이지로 이동
-    // navigate(`/`)
-    // authContext.logout()
    
 
   if (window.location.pathname === '/' || window.location.pathname === '*')
@@ -113,8 +99,8 @@ function Header() {
         정말 로그아웃 하시겠습니까?
       </DialogContent>
       <DialogActions>
-           <button variant="outlined" onClick={handleLogoutConfirm}>yes</button>
-           <button variant="outlined" onClick={handleLogoutCancel}>cancel</button>
+           <button variant="text" onClick={handleLogoutConfirm}>yes</button>
+           <button variant="text" onClick={handleLogoutCancel}>cancel</button>
       </DialogActions>
      </Dialog>
     </header>
