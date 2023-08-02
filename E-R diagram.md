@@ -1,23 +1,28 @@
 ```mermaid
 erDiagram
   user{
-    id VARCHAR(10) PK
+    id CHAR(8) PK
     password VARCHAR(20)
     name VARCHAR(20)
   }
 
   operationStop{
+    stopTimes TIMESTAMP PK
+    restartTimes TIMESTAMP 
     machineNumber VARCHAR(2) FK
-    userID VARCHAR(10) FK
+    userID CHAR(8) FK
     reason VARCHAR
-    updateTime TIMESTAMP
   }
 
-  productsMachine{
+  products{
     times TIMESTAMP PK
-    machineNumber VARCHAR(2) PK
+    machineNumber VARCHAR(2) PK,FK
     temperature DOUBLE
     count INT
+  }
+
+  machine{
+    machineNumber VARCHAR(2) PK
   }
 
   factoryInfo{
@@ -28,11 +33,9 @@ erDiagram
   
   camMachine{
     times TIMESTAMP PK
-    productNumber INTEGER FK
     defectStatus BOOLEAN
   }
 
-user }|..|| operationStop: References  
-operationStop }|..|| productsMachine: References
-productsMachine }|..|| factoryInfo: References
-productsMachine }|..|| camMachine: References
+user }|..|| operationStop: ""
+machine }|..|| products: ""
+machine }|..|| operationStop: ""
