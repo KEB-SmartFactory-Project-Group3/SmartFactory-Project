@@ -1,12 +1,12 @@
 ```mermaid
 erDiagram
-  User {
+  User{
     id char(8) PK
     password VARCHAR(20)
     name VARCHAR(20)
   }
 
-  OperationStop {
+  OperationStop{
     machineNumber FK
     reason VARCHAR
     updateTime TIMESTAMP
@@ -25,11 +25,11 @@ erDiagram
     factoryHumidity DOUBLE
   }
   
-  camData {
+  camData{
     times TIMESTAMP PK
     productNumber INTEGER FK
     defectStatus BOOLEAN
   }
 
-
   products ||--|| camData : "Reliant entity"
+
