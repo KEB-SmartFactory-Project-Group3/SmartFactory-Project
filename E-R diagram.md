@@ -31,5 +31,5 @@ erDiagram
     defectStatus BOOLEAN
   }
 
-  products ||--|| camData : "Reliant entity"
-
+  
+  products ||--o{ camData : "Reliant entity"
