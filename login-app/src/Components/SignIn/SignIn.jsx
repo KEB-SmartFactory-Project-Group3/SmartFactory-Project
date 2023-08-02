@@ -27,32 +27,36 @@ function Monitoring() {
     <div className="SignInApp">
       <AuthProvider>
         <BrowserRouter>
-        <Header />
           <Routes>
             <Route path='/' element={<SignIncomponent />}/>
             {/* <Route path='/Signin' element={<SignIncomponent />} /> */}
             <Route path='/Landing/:id' element={
                   <AuthenticatedRoute>
+                      <Header />
                       <LandingPage />
                   </AuthenticatedRoute>}/>
 
             <Route path='/MachinePage' element={
                   <AuthenticatedRoute>
+                      <Header />
                       <MachinePage />
                   </AuthenticatedRoute>}/>
 
             <Route path='/TemperaturePage' element={
                   <AuthenticatedRoute>
+                      <Header />
                       <TemperaturePage />
                   </AuthenticatedRoute>}/>
 
             <Route path='/Computervision' element={
                   <AuthenticatedRoute>
+                      <Header />
                       <Computervison />
                   </AuthenticatedRoute>}/>
 
             <Route path='/Administrator' element={
                   <AuthenticatedRoute>
+                      <Header />
                       <Administrator />
                   </AuthenticatedRoute>}/>
 
