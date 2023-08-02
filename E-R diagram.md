@@ -8,7 +8,7 @@ erDiagram
     department VARCHAR
   }
 
-  sensorData {
+  SensorData {
   ProductNumber INTEGER PK
     MachineID INTEGER
     temperature DOUBLE
@@ -21,11 +21,11 @@ erDiagram
     DefectStatus BOOLEAN
   }
 
-  ShutDown {
+  OperationStop {
     reasonID INT PK
     reason VARCHAR
     updateTime TIMESTAMP
   }
 
 
-  sensorData ||--o{ DetectionData : "Reliant entity"
+  SensorData ||--o{ DetectionData : "Reliant entity"
