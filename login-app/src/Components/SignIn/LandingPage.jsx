@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
-import axios  from 'axios';
+import { retrieveOperation } from '../api/ApiService';
 
 function LandingPage() {
 
@@ -18,7 +18,7 @@ function LandingPage() {
 
   function callTimeApi() {
     console.log("called")
-    axios.get("http://165.246.116.49:8080/api/display/operationtime")
+    retrieveOperation()
           .then (
             (response) => successfulResponse(response)
           )
