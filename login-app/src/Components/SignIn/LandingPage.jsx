@@ -26,7 +26,7 @@ function LandingPage() {
       {/* <h1>Welcome {id}</h1> */}
       <div className="operation-info">총 가동 시간 : {operationtime}</div>
 
-      <Box sx={{ flexGrow: 10 , height: '1500px' }}>
+      <Box sx={{ flexGrow: 10 }}>
         <Grid container spacing={6}>
           <Grid item xs>
             <Item>기계</Item>

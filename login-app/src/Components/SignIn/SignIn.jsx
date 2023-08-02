@@ -1,6 +1,6 @@
 import React from 'react';
 import './SignIn.css'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import LogoutPage from './LogoutPage';
 import Header from './Header'
 import LandingPage from './LandingPage';
