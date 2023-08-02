@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios  from 'axios';
 
 function LandingPage() {
@@ -7,9 +7,18 @@ function LandingPage() {
   const {id} = useParams()
   const [operationtime,setOperationtime] = useState("")
 
+  useEffect(() => {
+    
+    const intervalTime = setInterval(callTimeApi, 1000) //1초 간격으로 api 호출
+
+    return () => {
+      clearInterval(intervalTime) //컴포넌트가 언마운트될 때 메모리 누수 방지
+    }
+  }, [operationtime])
+
   function callTimeApi() {
     console.log("called")
-    axios.get("http://165.246.116.26:8080/api/display/operationtime")
+    axios.get("http://165.246.116.49:8080/api/display/operationtime")
           .then (
             (response) => successfulResponse(response)
           )
@@ -29,10 +38,7 @@ function LandingPage() {
   return (
     <div className="landing">
       <h1>Welcome {id}</h1>
-      <div>
-        <button className="btn-time" onClick={callTimeApi}>Time API</button>
-      </div>
-      <div className="operation-info">{operationtime}</div>
+      <div className="operation-info">총 가동 시간 : {operationtime}</div>
     
     </div>
   )
