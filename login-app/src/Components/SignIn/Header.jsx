@@ -41,8 +41,8 @@ function Header() {
    }
    
 
-  if (window.location.pathname === '/' || window.location.pathname === '*')
-  return null
+  if (window.location.pathname === '/')
+      return null
 
    return (
      <header className="header">
