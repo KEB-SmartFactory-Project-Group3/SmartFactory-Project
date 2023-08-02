@@ -10,7 +10,6 @@ import Container from '@mui/material/Container';
 import {useNavigate} from 'react-router-dom';
 import { useAuth } from './security/AuthContext';
 
-import axios from 'axios';
 
 
 function SignIncomponent() {
@@ -20,6 +19,7 @@ function SignIncomponent() {
   const [name,setName] = useState('')
 
   const [loginSuccess, setLoginSuccess] = useState(false)
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const navigate = useNavigate();
   const authContext = useAuth()
@@ -36,13 +36,21 @@ function SignIncomponent() {
   // 로그인  코딩
   function handleSubmit(e) {
     e.preventDefault();
-    if (authContext.login(id, password)) {
-      // 로그인 성공하면 landig page로 이동
-      navigate(`/landing/${id}`)
-    } else {
-      //setLoginFailed(true)
-      alert("다시 입력하세요!")
-    }
+
+    if(isLoggingIn) return //이미 로그인 중이면 중복 실행 방지
+    setIsLoggingIn(true)
+
+    authContext.login(id, password).then((isLoginInSuccessful) => {
+      setIsLoggingIn(false)
+      if (isLoginInSuccessful) {
+         // 로그인 성공하면 landig page로 이동
+          navigate(`/landing/${id}`) 
+      }else {
+        //setLoginFailed(true)
+        alert("다시 입력하세요!")
+      } 
+
+    }) 
   }
 
   return (

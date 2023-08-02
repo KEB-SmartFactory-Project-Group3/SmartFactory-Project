@@ -17,7 +17,6 @@ function AuthProvider( {children}) {
  
   async function login(id,password,name) {
 
-    
     try {
       // 백엔드 api 호출해서 로그인 인증
       const response = await axios.post('http://165.246.116.49:8080/api/auth/login', {
@@ -49,7 +48,7 @@ function AuthProvider( {children}) {
       setAuthenticated(false);
       setCurrentUser(null);
       return false;
-    }
+    } 
   }
 
   function logout() {
