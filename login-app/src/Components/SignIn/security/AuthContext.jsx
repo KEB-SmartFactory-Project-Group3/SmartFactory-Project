@@ -41,20 +41,23 @@ function AuthProvider( {children}) {
        
       }
     } 
-
     catch (error) {
       console.error("로그인 오류: ",error)
-      alert("로그인 중 API 오류 발생")
-      setAuthenticated(false);
-      setCurrentUser(null);
-      return false;
+      if (error.response === undefined) {//서버에서 응답이 오지 않는 경우
+        throw new Error("API 서버에 접속할 수 없습니다!")
+      }else if (error.response.status === 401) {
+        //비밀번호가 틀릴 때
+        throw new Error("비밀번호가 틀렸습니다!")
+      } else {
+        throw new Error("로그인 중 알 수 없는 오류가 발생했습니다!")
+      }
+   
     } 
   }
 
   function logout() {
     setAuthenticated(false)
     setCurrentUser(null) // 로그아웃 시 관리자 정보 초기화
-
 
   }
 

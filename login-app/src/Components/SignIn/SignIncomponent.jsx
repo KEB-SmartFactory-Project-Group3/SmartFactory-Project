@@ -46,11 +46,13 @@ function SignIncomponent() {
          // 로그인 성공하면 landig page로 이동
           navigate(`/landing/${id}`) 
       }else {
-        //setLoginFailed(true)
-        alert("다시 입력하세요!")
+        alert("비밀번호가 틀렸습니다. 다시 입력하세요!")
       } 
 
     }) 
+    .catch((error) => {
+      alert(error.message) //api 오류 처리
+    })
   }
 
   return (
