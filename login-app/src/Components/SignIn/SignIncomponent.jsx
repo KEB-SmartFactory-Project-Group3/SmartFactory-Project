@@ -10,7 +10,7 @@ import Container from '@mui/material/Container';
 import {useNavigate} from 'react-router-dom';
 import { useAuth } from './security/AuthContext';
 import Button from '@mui/material/Button';
-import './SignIncomponent.css';
+import './SignIn.css';
 
 
 
@@ -111,7 +111,7 @@ function SignIncomponent() {
       </form>
       <Grid container >
         <Grid item sx={{mt:2, ml:13}}>
-        <Link sx = {{color: 'white'}}>비밀번호를 잊어버리셨나요?</Link>
+        <Link>비밀번호를 잊어버리셨나요?</Link>
         </Grid>
       </Grid>
       </Box>

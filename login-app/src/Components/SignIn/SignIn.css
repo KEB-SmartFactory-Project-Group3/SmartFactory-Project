@@ -1,4 +1,6 @@
-
+/* body {
+  background-color: #9ea3cd;
+} */
 .form {
   margin-top: 20px;
   display: flex;
@@ -13,7 +15,7 @@ label {
 .loginform {
   padding-top: 20px;
   padding-bottom: 20px;
-  background-color:rgb(255, 255, 255);
+  background-color:rgb(170, 167, 228);
   border-radius: 10px;
   margin: auto;
   width: 400px;
