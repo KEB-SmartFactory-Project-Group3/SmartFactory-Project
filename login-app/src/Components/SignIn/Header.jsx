@@ -11,6 +11,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useState } from 'react';
+import { Tabs, Tab } from '@mui/material';
+
 
 
 function Header() {
@@ -24,6 +26,14 @@ function Header() {
 
   const navigate = useNavigate()
   const [open,setOpen] = useState(false)
+
+  // 활성 탭을 업데이트하는 구간
+  const [value, setValue] = useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
  
    // 로그아웃 하드 코딩
    function handleSubmitLogout(e) {
@@ -50,20 +60,48 @@ function Header() {
         <AppBar position="static" sx={{ backgroundColor: 'transparent'}} className="headerapp">
        <div className="container">
          <Toolbar>
-           <ul className="navbar-nav" style={{ display: 'flex', alignItems: 'center' ,listStyle: 'none'}}>
-           
-             <li style={{marginRight: '4rem'}} className="nav-item">
-              {isAuthenticated && <Link className="nav-link" to={`/Landing/${currentUser.name}`}  style={{ textDecoration: 'none', color: 'black' }}>Home</Link>}</li>
-             <li style={{marginRight: '4rem'}} className="nav-item">
-              {isAuthenticated && <Link className="nav-link" to="/MachinePage" style={{ textDecoration: 'none', color: 'black' }}>기계</Link>}</li>
-             <li style={{marginRight: '4rem'}} className="nav-item">
-              {isAuthenticated && <Link className="nav-link" to="/TemperaturePage" style={{ textDecoration: 'none', color: 'black' }}>온도</Link>}</li>
-             <li style={{marginRight: '4rem'}} className="nav-item">
-              {isAuthenticated && <Link className="nav-link" to="/Computervision" style={{ textDecoration: 'none', color: 'black' }}>불량품</Link>}</li>
-             <li style={{marginRight: '4rem'}} className="nav-item">
-              {isAuthenticated && <Link className="nav-link" to="/Administrator" style={{ textDecoration: 'none', color: 'black' }}>관리자DB</Link>}</li>
-            
-           </ul>
+           <Tabs value={value} onChange={handleChange} aria-label="nav tabs example">
+            {isAuthenticated && (
+              <>
+                <Tab
+                  label="Home"
+                  value={`/Landing/${currentUser.name}`}
+                  component={Link}
+                  to={`/Landing/${currentUser.name}`}
+                  style={{ textDecoration: 'none', color: 'black', marginRight: '4rem' }}
+                />
+                <Tab
+                  label="기계"
+                  value="/MachinePage"
+                  component={Link}
+                  to="/MachinePage"
+                  style={{ textDecoration: 'none', color: 'black', marginRight: '4rem' }}
+                />
+                <Tab
+                  label="온도"
+                  value="/TemperaturePage"
+                  component={Link}
+                  to="/TemperaturePage"
+                  style={{ textDecoration: 'none', color: 'black', marginRight: '4rem' }}
+                />
+                <Tab
+                  label="불량품"
+                  value="/Computervision"
+                  component={Link}
+                  to="/Computervision"
+                  style={{ textDecoration: 'none', color: 'black', marginRight: '4rem' }}
+                />
+                <Tab
+                  label="관리자DB"
+                  value="/Administrator"
+                  component={Link}
+                  to="/Administrator"
+                  style={{ textDecoration: 'none', color: 'black', marginRight: '4rem' }}
+                />
+              </>
+            )}
+          </Tabs>
+
            <ul className="navbar-nav" style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center' }}>
              {/* <li style={{marginRight: '1rem'}} className="nav-item">
               {!isAuthenticated && <Button onClick={handleLoginClick}>Login</Button>}</li> */}
