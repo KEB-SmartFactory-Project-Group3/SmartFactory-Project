@@ -16,7 +16,7 @@ const long  gmtOffset_sec = 0;
 const int   daylightOffset_sec = 0; 
 
 const byte tempSensor = A2;
-const String machineNumber = "Part A"; // 각 보드의 고유 ID를 설정하세요
+const String machineNumber = "Machine A"; // 각 보드의 고유 ID를 설정하세요
 int red_button = D6;            
 int blue_button = D7;
 int trig_pin = D9;      // TRIG pin setting (ultrasonic transmitter pin)
