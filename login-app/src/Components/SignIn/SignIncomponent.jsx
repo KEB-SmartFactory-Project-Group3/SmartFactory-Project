@@ -9,6 +9,7 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import {useNavigate} from 'react-router-dom';
 import { useAuth } from './security/AuthContext';
+import Button from '@mui/material/Button';
 
 
 
@@ -21,8 +22,14 @@ function SignIncomponent() {
   const [loginSuccess, setLoginSuccess] = useState(false)
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
+  const [rememberMe, setRememberMe] = useState(false);
+
   const navigate = useNavigate();
   const authContext = useAuth()
+
+  function handelRememberMe(e) {
+    setRememberMe(e.target.checked)
+  }
 
   function handleUsername(e) {
     setId(e.target.value)
@@ -48,6 +55,14 @@ function SignIncomponent() {
       }else {
         alert("비밀번호가 틀렸습니다. 다시 입력하세요!")
       } 
+      
+      if (rememberMe) {
+        localStorage.setItem("rememberMe",true)
+        localStorage.setItem("rememberedUsername", id)
+      }else {
+        localStorage.removeItem("rememberMe")
+        localStorage.removeItem("rememberedUsername")
+      }
 
     }) 
     .catch((error) => {
@@ -86,15 +101,16 @@ function SignIncomponent() {
             value={password} onChange={handlePassword} />
           </div>
           {/* 비밀번호를 기억하는 옵션 */}
-          <FormControlLabel control={<Checkbox value="remember" color="primary" />}
+          <FormControlLabel control={<Checkbox value="remember" color="primary" checked={rememberMe} onChange={handelRememberMe}/>}
           label="Remember me" />
           {/* 서버 쪽으로 데이터 전송 */}
-          <button type="submit" name ="loginbtn" onClick={handleSubmit}>Login</button>
+          <Button type="submit" name ="loginbtn" 
+                variant="contained" style={{ backgroundColor: '#5C6AC4', color: 'white' }} size="small" onClick={handleSubmit}>Login</Button>
         </div>
       </form>
       <Grid container >
         <Grid item sx={{mt:2, ml:13}}>
-        <Link>비밀번호를 잊어버리셨나요?</Link>
+        <Link sx={{ color: 'white' }}>비밀번호를 잊어버리셨나요?</Link>
         </Grid>
       </Grid>
       </Box>
