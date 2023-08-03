@@ -8,3 +8,8 @@ const apiClient = axios.create(
 
 export const retrieveOperation
      = () => apiClient.get("/api/display/operationtime")
+
+export const retrieveCount
+     = () => apiClient.get("/api/display/count")
+   
+
