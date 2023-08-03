@@ -88,7 +88,7 @@ function SignIncomponent() {
         <LockIcon />
       </Avatar>
   
-      <form className = "loginform">
+      <form className="loginform">
         {/* 로그인 인증 하드코딩 --세션으로 나중에 수정 */}
         {/* {loginFailed && <div className="erro">Failed</div> } */}
         <div sx = {{
@@ -96,45 +96,58 @@ function SignIncomponent() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            width: '300px'
+            width: '250px'
           }}
         >
-
-
-          {/* <div className ="form"> */}
-            <div>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
               <label style={{ color: '#1f2454' }}>Username : </label>
-              <input type="text" name = "id" placeholder = "아이디" required 
-              value={id} onChange={handleUsername}/>
-            </div>
-            <div>
+              <input type="text" name="id" placeholder="아이디" required value={id} onChange={handleUsername} />
+            </Grid>
+            <Grid item xs={12}>
               <label style={{ color: '#1f2454' }}>Password : </label>
-              <input type="password" name = "password" placeholder="비밀번호" required
-              value={password} onChange={handlePassword} />
-            </div>
-            {/* 비밀번호를 기억하는 옵션 */}
-            <FormControlLabel control={<Checkbox value="remember" color="primary" checked={rememberMe} onChange={handelRememberMe}/>}
-            label="Remember me" />
-            {/* 서버 쪽으로 데이터 전송 */}
-            <Button type="submit" name ="loginbtn" 
-                  variant="contained" style={{ 
-                                              backgroundColor: '#5C6AC4',
-                                              color: '#c6caee',
-                                              width: '80px',
-                                              height: '30px',
-                                              marginTop: '10px',
-                                              borderRadius: '10px',
-                                               }} 
-            size="small" onClick={handleSubmit}>Login</Button>
-          </div>
+              <input
+                type="password"
+                name="password"
+                placeholder="비밀번호"
+                required
+                value={password}
+                onChange={handlePassword}
+              />
+            </Grid>
+          </Grid>
+          {/* 비밀번호를 기억하는 옵션 */}
+          <FormControlLabel
+            control={<Checkbox value="remember" color="primary" checked={rememberMe} onChange={handelRememberMe} />}
+            label="Remember me"
+          />
+          {/* 서버 쪽으로 데이터 전송 */}
+          <Button
+            type="submit"
+            name="loginbtn"
+            variant="contained"
+            style={{
+              backgroundColor: '#5C6AC4',
+              color: '#c6caee',
+              width: '80px',
+              height: '30px',
+              marginTop: '10px',
+              borderRadius: '10px',
+            }}
+            size="small"
+            onClick={handleSubmit}
+          >
+            Login
+          </Button>
+        </div>
       </form>
       <Grid container >
-        <Grid item sx={{mt:2, ml:13}}>
-        <Link style={{ color: 'white' }}>비밀번호를 잊어버리셨나요?</Link>
+        <Grid item sx={{ mt: 2, ml: 13 }}>
+          <Link style={{ color: 'white' }}>비밀번호를 잊어버리셨나요?</Link>
         </Grid>
       </Grid>
-      </Box>
-      </Container>
+    </Box>
+  </Container>
   );
 }
 
