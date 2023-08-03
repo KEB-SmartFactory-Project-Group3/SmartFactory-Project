@@ -12,4 +12,14 @@ export const retrieveOperation
 export const retrieveCount
      = () => apiClient.get("/api/display/count")
    
+export const exeuteBasicAuthentication
+     =(token) => apiClient.post(`/api/auth/login`,{
+      name: name,
+      headers: {
+          Authorization: token
+      },
+      body:JSON.stringify({name: name}), 
+    })
+  
+    
 
