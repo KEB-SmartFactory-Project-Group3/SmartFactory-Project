@@ -14,8 +14,7 @@ import { useState } from 'react';
 import { Tabs, Tab } from '@mui/material';
 
 
-
-function Header() {
+function Header(props) {
    
   const authContext = useAuth()
   //authContext에서 인증 정보를 가져와서 지역 변수에 넣음
@@ -28,12 +27,11 @@ function Header() {
   const [open,setOpen] = useState(false)
 
   // 활성 탭을 업데이트하는 구간
-  const [value, setValue] = useState(0);
+  const [value, setValue] = React.useState('')
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
  
    // 로그아웃 하드 코딩
    function handleSubmitLogout(e) {
@@ -60,7 +58,12 @@ function Header() {
         <AppBar position="static" sx={{ backgroundColor: 'transparent'}} className="headerapp">
        <div className="container">
          <Toolbar>
-           <Tabs value={value} onChange={handleChange} aria-label="nav tabs example">
+           <Tabs value={value} 
+                 onChange={handleChange} 
+                 aria-label="nav tabs example"
+                //  textColor='#3f51b5'
+                //  indicatorColor='#3f51b5'
+            >
             {isAuthenticated && (
               <>
                 <Tab
@@ -68,7 +71,7 @@ function Header() {
                   value={`/Landing/${currentUser.name}`}
                   component={Link}
                   to={`/Landing/${currentUser.name}`}
-                  style={{ textDecoration: 'none', color: 'black', marginRight: '4rem' }}
+                  style={{ textDecoration: 'none', color: '#3f51b5', marginRight: '4rem' ,  }}
                 />
                 <Tab
                   label="기계"
@@ -143,8 +146,6 @@ function Header() {
       </DialogActions>
      </Dialog>
     </header>
-
- 
  
    )
  }
