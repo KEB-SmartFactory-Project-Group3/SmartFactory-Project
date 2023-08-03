@@ -12,6 +12,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useState } from 'react';
 
+
 function Header() {
    
   const authContext = useAuth()
@@ -92,15 +93,15 @@ function Header() {
        </div>
 
      </AppBar>
-
+    
      <Dialog open={open}>
       <DialogTitle>로그아웃</DialogTitle>
       <DialogContent>
         정말 로그아웃 하시겠습니까?
       </DialogContent>
       <DialogActions>
-           <button variant="text" onClick={handleLogoutConfirm}>yes</button>
-           <button variant="text" onClick={handleLogoutCancel}>cancel</button>
+           <Button variant="contained" style={{ backgroundColor: '#5C6AC4', color: 'white' }} size="small" onClick={handleLogoutConfirm}>yes</Button>
+           <Button variant="contained" style={{ backgroundColor: '#5C6AC4', color: 'white' }} size="small" onClick={handleLogoutCancel}>cancel</Button>
       </DialogActions>
      </Dialog>
     </header>

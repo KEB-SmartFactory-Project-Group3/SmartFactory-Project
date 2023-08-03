@@ -19,7 +19,7 @@ function AuthProvider( {children}) {
 
     try {
       // 백엔드 api 호출해서 로그인 인증
-      const response = await axios.post('http://165.246.116.49:8080/api/auth/login', {
+      const response = await axios.post('http://165.246.116.192:8080/api/auth/login', {
         id: id,
         password: password,
         headers: {
@@ -62,7 +62,7 @@ function AuthProvider( {children}) {
   }
 
   return (
-    <AuthContext.Provider value={ {isAuthenticated, currentUser, login, logout} }>
+    <AuthContext.Provider value={ {isAuthenticated,currentUser, login, logout} }>
       {children}
     </AuthContext.Provider>
 
