@@ -96,17 +96,19 @@ function SignIncomponent() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            width: '250px'
+            width: '250px',
+          
+
           }}
         >
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <label style={{ color: '#1f2454' }}>Username : </label>
+              <label style={{ color: '#1f2454'}}>Username : </label>
               <input type="text" name="id" placeholder="아이디" required value={id} onChange={handleUsername} />
             </Grid>
             <Grid item xs={12}>
-              <label style={{ color: '#1f2454' }}>Password : </label>
-              <input
+              <label style={{ color: '#1f2454'}}>Password : </label>
+              <input 
                 type="password"
                 name="password"
                 placeholder="비밀번호"
