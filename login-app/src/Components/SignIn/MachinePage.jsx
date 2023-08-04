@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import useMachine from '../hooks/useMachine';
 import useTimeRecorder from '../hooks/customMachine';
 import useMachineCount from '../hooks/useMachineCount';
 import Button from '@mui/material/Button';
+import FormDialog from './FormDialog';
+
 
 function MachinePage() {
 
-  const { isRunning, elapsedTime, handleStart, handleStop, resetTimer } = useTimeRecorder();
+  const { isRunning, elapsedTime, handleStart, handleStop, resetTimer} = useTimeRecorder();
   const operationTime = useMachine()
   const {production, targetAchievement, targetProduction, handleTargetProductionChange} = useMachineCount()
 

@@ -15,7 +15,9 @@ function useMachine() {
 
   function callTimeApi() {
     retrieveOperation()
-      .then((response) => successfulResponse(response))
+      .then((response) => {
+        console.log("API 응답 데이터:", response)
+        successfulResponse(response)})
       .catch((error) => errorResponse(error))
       .finally(() => console.log('cleanup'));
   }

@@ -1,21 +1,17 @@
 import { useState, useEffect } from 'react';
 
-
 function useTimeRecorder() {
   const [isRunning, setIsRunning] = useState(false);
   const [startTime, setStartTime] = useState(null);
   const [elapsedTime, setElapsedTime] = useState(0); //경과시간
 
-  const [open,setOpen] = useState(false)
-
   const handleStart = () => {
     setIsRunning((prevIsRunning) => !prevIsRunning);
-
   };
+
 
   const handleStop = () => {
     setIsRunning((prevIsRunning) => !prevIsRunning);
-    
   };
 
   const resetTimer = () => {
@@ -38,7 +34,7 @@ function useTimeRecorder() {
   }, [isRunning, elapsedTime, startTime]);
 
 
-  return { isRunning, elapsedTime, handleStart, handleStop, resetTimer };
+  return { isRunning, elapsedTime, handleStart, handleStop, resetTimer }
 }
 
 export default useTimeRecorder;
