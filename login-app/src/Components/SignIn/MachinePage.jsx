@@ -11,6 +11,16 @@ function MachinePage() {
   const operationTime = useMachine()
   const {production, targetAchievement, targetProduction, handleTargetProductionChange} = useMachineCount()
 
+  const [formOpen, setFormOpen] = useState(false)
+
+  const handleOpenForm = () => {
+    setFormOpen(true)
+  }
+
+  const handleCloseForm = () => {
+    setFormOpen(false)
+  };
+
   const formatTime = (time) => {
     // 시간을 분:초 형식으로 포맷팅하는 함수
     const minutes = Math.floor(time / 60000);
@@ -18,28 +28,52 @@ function MachinePage() {
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   };
 
- 
   return (
     <div className="MachinePage">
-      <FormDialog />
+      {isRunning ? (
+        <Button
+          variant="contained"
+          style={{ backgroundColor: '#5C6AC4', color: 'white' }}
+          sx={{ width: '20px' }}
+          size="small"
+          onClick={handleStop}
+        >
+          Stop
+        </Button>
+      ) : (
+        <Button
+          variant="contained"
+          style={{ backgroundColor: '#5C6AC4', color: 'white' }}
+          sx={{ width: '20px' }}
+          size="small"
+          onClick={() => {
+            handleStart();
+            handleOpenForm();
+          }}
+        >
+          Start
+        </Button>
+      )}
+      <FormDialog open={formOpen} handleClose={handleCloseForm} />
       <h1>기계 장치</h1>
       <div className="targetAchievement-info">도달량 : {targetAchievement}</div>
       <div className="targetProduction-info">목표 생산량 : {targetProduction}</div>
       <div className="operation-info">총 가동 시간 : {operationTime}</div>
       <div className="production-info">생산량 : {production}</div> 
       <p>가동중지: {formatTime(elapsedTime)}</p>
-      {isRunning ? (
-        <Button variant="contained" style={{ backgroundColor: '#5C6AC4', color: 'white' }} 
-            sx={{ width: '20px' }} size='small' onClick={handleStop}>Stop</Button>
-      ) : (
-        <Button variant="contained" style={{ backgroundColor: '#5C6AC4', color: 'white' }} 
-            sx={{ width: '20px' }} size='small' onClick={handleStart}>Start</Button>
-      )}
-        <Button variant="contained" style={{ backgroundColor: '#5C6AC4', color: 'white' }}
-              sx={{ width: '20px' }} size='small' onClick={resetTimer}>Reset</Button>
+      <Button
+        variant="contained"
+        style={{ backgroundColor: '#5C6AC4', color: 'white' }}
+        sx={{ width: '20px' }}
+        size="small"
+        onClick={resetTimer}
+      >
+        Reset
+      </Button>
     </div>
-  )
+  );
 }
+
 
 
 export default MachinePage;
