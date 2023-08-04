@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {  useNavigate, Link } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -21,7 +21,8 @@ function Header(props) {
   const isAuthenticated = authContext.isAuthenticated
   
   // 현재 관리자 가져오기
-  const currentUser = authContext.currentUser 
+  const currentUser = authContext.currentUser
+  const name = authContext.currentUser?.name //
 
   const navigate = useNavigate()
   const [open,setOpen] = useState(false)
@@ -123,7 +124,7 @@ function Header(props) {
                 {isAuthenticated && currentUser && (
                   <>
                     <AccountCircleIcon style={{ marginRight: '0.5rem' }} />
-                    <span style={{ color: 'black' }} >현재 관리자 : {currentUser.name}</span>
+                    <span style={{ color: 'black' }} >현재 관리자 : {name}</span>
                   </>
                 )}
               </div>

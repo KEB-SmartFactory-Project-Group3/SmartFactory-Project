@@ -1,6 +1,6 @@
 import React,{ createContext, useContext, useState } from "react";
 import axios from 'axios';
-import { retrieveOperation } from "../../api/ApiService";
+import { useCookies} from 'react-cookie';
 
 
 //다른 컴포넌트와 공유할 컨텍스트
@@ -9,6 +9,8 @@ export const AuthContext = createContext()
 export const useAuth = () => useContext(AuthContext)
 
 function AuthProvider( {children}) {
+
+  const [cookie, setCookie] = useCookies(['accessToken'])
 
   //로그인 성공 여부
   const [isAuthenticated,setAuthenticated] = useState(false)
@@ -23,6 +25,7 @@ function AuthProvider( {children}) {
       const response = await axios.post('http://165.246.116.139:8080/api/auth/login', {
         id: id,
         password: password,
+        name: name,
         headers: {
           'Content-Type': 'application/json',
           //  Authorization: `Bearer ${token}`, 
@@ -32,8 +35,9 @@ function AuthProvider( {children}) {
 
       if (response.status === 200) {
         //로그인 성공 시 헤더에 관리자 이름 띄우기
-        const { name, token } = response.data;
+        const { token, name } = response.data; //토큰, 관리자이름 추출
         setAuthenticated(true);
+        setCookie('accessToken',token, {path: '/', maxAge: 36000})
         setCurrentUser({ name: name });
         return true
       } else {
