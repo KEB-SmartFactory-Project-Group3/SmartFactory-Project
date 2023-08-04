@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 
 function MachinePage() {
 
-  const { isRunning, elapsedTime, handleStartStop, resetTimer } = useTimeRecorder();
+  const { isRunning, elapsedTime, handleStart, handleStop, resetTimer } = useTimeRecorder();
   const operationTime = useMachine()
   const {production, targetAchievement, targetProduction, handleTargetProductionChange} = useMachineCount()
 
@@ -18,7 +18,6 @@ function MachinePage() {
   };
 
  
-
   return (
     <div className="MachinePage">
       <h1>기계 장치</h1>
@@ -29,10 +28,10 @@ function MachinePage() {
       <p>가동중지: {formatTime(elapsedTime)}</p>
       {isRunning ? (
         <Button variant="contained" style={{ backgroundColor: '#5C6AC4', color: 'white' }} 
-            sx={{ width: '20px' }} size='small' onClick={handleStartStop}>Stop</Button>
+            sx={{ width: '20px' }} size='small' onClick={handleStop}>Stop</Button>
       ) : (
         <Button variant="contained" style={{ backgroundColor: '#5C6AC4', color: 'white' }} 
-            sx={{ width: '20px' }} size='small' onClick={handleStartStop}>Start</Button>
+            sx={{ width: '20px' }} size='small' onClick={handleStart}>Start</Button>
       )}
         <Button variant="contained" style={{ backgroundColor: '#5C6AC4', color: 'white' }}
               sx={{ width: '20px' }} size='small' onClick={resetTimer}>Reset</Button>
