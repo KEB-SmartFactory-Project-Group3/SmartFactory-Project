@@ -1,5 +1,7 @@
 package com.SpringServer.service;
 
+import com.SpringServer.model.dto.CountDTO;
+import com.SpringServer.model.dto.TimesDTO;
 import com.SpringServer.model.entity.ESP32Data;
 import com.SpringServer.repository.ESP32Repository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,7 @@ public class DisplayService {
     @Autowired
     private ESP32Repository esp32Repository;
 
-    public String getOperationTime(){
+    public TimesDTO getOperationTime(){
         ESP32Data firstRecord = esp32Repository.findFirstByOrderByTimesAsc();
 
         if (firstRecord != null) {
@@ -26,18 +28,28 @@ public class DisplayService {
             long minutes = (totalSeconds % 3600) / 60;
             long seconds = totalSeconds % 60;
 
-            return String.format("%02d시간 %02d분 %02d초", hours, minutes, seconds);
+            String formattedDuration = String.format("%02d시간 %02d분 %02d초", hours, minutes, seconds);
+
+            return TimesDTO.builder()
+                    .operationTime(formattedDuration)
+                    .build();
         }
-        return String.format("%02d시간 %02d분 %02d초", 0, 0, 0);
+        return TimesDTO.builder()
+                .operationTime(String.format("%02d시간 %02d분 %02d초", 0, 0, 0))
+                .build();
     }
 
-    public Integer getCount(){
+    public CountDTO getCount(){
         ESP32Data latestRecode = esp32Repository.findFirstByOrderByTimesDesc();
 
         if (latestRecode != null) {
             int latestCount = latestRecode.getCount();
-            return latestCount;
+            return CountDTO.builder()
+                    .count(latestCount)
+                    .build();
         }
-        return 0;
+        return CountDTO.builder()
+                .count(0)
+                .build();
     }
 }

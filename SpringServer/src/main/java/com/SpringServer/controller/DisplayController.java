@@ -1,6 +1,8 @@
 package com.SpringServer.controller;
 
 
+import com.SpringServer.model.dto.CountDTO;
+import com.SpringServer.model.dto.TimesDTO;
 import com.SpringServer.service.DisplayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,13 +19,13 @@ public class DisplayController {
     private DisplayService displayService;
 
     @GetMapping("/operationtime")
-    public ResponseEntity<String> getOperationTime() {
-        return new ResponseEntity<>(displayService.getOperationTime(), HttpStatus.OK);
+    public ResponseEntity<TimesDTO> getOperationTime() {
+        return ResponseEntity.ok(displayService.getOperationTime());
     }
 
     @GetMapping("/count")
-    public ResponseEntity<Integer> getCount(){
-        return new ResponseEntity<>(displayService.getCount(), HttpStatus.OK);
+    public ResponseEntity<CountDTO> getCount(){
+        return ResponseEntity.ok(displayService.getCount());
     }
 
 

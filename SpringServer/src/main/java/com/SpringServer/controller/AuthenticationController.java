@@ -7,10 +7,7 @@ import com.SpringServer.model.dto.RegisterRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -24,10 +21,7 @@ public class AuthenticationController {
         return  ResponseEntity.ok(service.register(request));
     }
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthenticationRequest request, HttpServletResponse response){
-        AuthenticationResponse authResponse = service.authenticate(request);
-        response.addHeader("Authorization", authResponse.getToken());
-        String responseBody = authResponse.getName();
-        return  ResponseEntity.ok(responseBody);
+    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest request){
+        return  ResponseEntity.ok(service.authenticate(request));
     }
 }

@@ -1,19 +1,13 @@
 package com.SpringServer.model.dto;
 
-import com.SpringServer.model.entity.ESP32Data;
-import com.SpringServer.model.entity.User;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.sql.Timestamp;
-
-@NoArgsConstructor
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class TimesDTO {
-    private Timestamp times;
+    private String operationTime;
 
-    public TimesDTO(ESP32Data esp32Data){
-        this.times = esp32Data.getTimes();
-    }
+
 }

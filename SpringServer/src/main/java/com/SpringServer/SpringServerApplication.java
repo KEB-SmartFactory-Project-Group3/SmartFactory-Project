@@ -12,18 +12,4 @@ public class SpringServerApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SpringServerApplication.class, args);
 	}
-
-	@Bean
-	public WebMvcConfigurer corConfigurer(){
-		return new WebMvcConfigurer() {
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**")
-						.allowedMethods("*")
-						.allowedOrigins("*")
-						.allowedHeaders("*")
-						.maxAge(3600);
-			}
-		};
-	}
-
 }
