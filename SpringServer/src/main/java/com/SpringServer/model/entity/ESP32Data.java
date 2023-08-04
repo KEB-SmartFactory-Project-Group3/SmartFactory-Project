@@ -2,6 +2,7 @@ package com.SpringServer.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.sql.Timestamp;
@@ -20,6 +21,7 @@ public class ESP32Data {
     private int brightness;
     private int count;
 
+    @Builder
     public ESP32Data(Long id, Timestamp times, double temperature, int brightness, int count) {
         this.id = id;
         this.times = times;
