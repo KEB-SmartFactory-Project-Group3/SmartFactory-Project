@@ -8,7 +8,7 @@ function MachinePage() {
 
   const { isRunning, elapsedTime, handleStartStop, resetTimer } = useTimeRecorder();
   const operationTime = useMachine()
-  const production = useMachineCount()
+  const {production, targetAchievement, targetProduction, handleTargetProductionChange} = useMachineCount()
 
   const formatTime = (time) => {
     // 시간을 분:초 형식으로 포맷팅하는 함수
@@ -22,6 +22,8 @@ function MachinePage() {
   return (
     <div className="MachinePage">
       <h1>기계 장치</h1>
+      <div className="targetAchievement-info">도달량 : {targetAchievement}</div>
+      <div className="targetProduction-info">목표 생산량 : {targetProduction}</div>
       <div className="operation-info">총 가동 시간 : {operationTime}</div>
       <div className="production-info">생산량 : {production}</div> 
       <p>가동중지: {formatTime(elapsedTime)}</p>
