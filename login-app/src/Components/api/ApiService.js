@@ -17,7 +17,7 @@ export const retrieveOperation = async () => {
       },
     };
     const response = await apiClient.get("/api/display/operationtime", config);
-    return response.data
+    return response.data.operationTime
    } catch (error) {
     console.log("API 호출 오류:", error);
     throw error
@@ -33,7 +33,8 @@ export const retrieveCount = async () => {
       },
     };
     const response = await apiClient.get("/api/display/count", config);
-    return response.data
+    console.log(response.data)
+    return response.data.production
   } catch (error) {
     console.log("API 호출 오류:", error);
     throw error
