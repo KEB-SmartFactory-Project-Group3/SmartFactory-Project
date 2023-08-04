@@ -1,35 +1,42 @@
-import axios  from 'axios';
+import axios from 'axios';
 
-const apiClient = axios.create(
-  {
-    baseURL: 'http://165.246.116.139:8080'
+const apiClient = axios.create({
+  baseURL: 'http://165.246.116.139:8080',
+  withCredentials: true, //쿠키 자동 포함
+});
+
+// export const retrieveOperation 
+//       = () => apiClient.get("/api/display/operationtime")
+
+export const retrieveOperation = async () => {
+  try {
+    const token = document.cookie.split('=')[1]; // 쿠키에서 토큰 가져오기
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const response = await apiClient.get("/api/display/operationtime", config);
+    return response.data
+   } catch (error) {
+    console.log("API 호출 오류:", error);
+    throw error
   }
-)
-
-// export const retrieveOperation
-//      = () => apiClient.get("/api/display/operationtime")
-
-export const retrieveOperation = (token) => {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
-  return apiClient.get("/api/display/operationtime", config);
 };
-     
 
-export const retrieveCount = (token) => {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+export const retrieveCount = async () => {
+  try {
+    const token = document.cookie.split('=')[1]; // 쿠키에서 토큰 가져오기
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const response = await apiClient.get("/api/display/count", config);
+    return response.data
+  } catch (error) {
+    console.log("API 호출 오류:", error);
+    throw error
   }
-  return apiClient.get("/api/display/count",config)
-}
-   
-     
-  
-    
+};
 
