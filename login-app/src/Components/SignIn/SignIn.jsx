@@ -10,6 +10,7 @@ import TemperaturePage from './TemperaturePage';
 import Computervison from './Computervision';
 import Administrator from './Administrator';
 import AuthProvider, { useAuth } from './security/AuthContext';
+import FormDialog from './FormDialog';
 
 function AuthenticatedRoute( {children} ) {
   const authContext = useAuth()
@@ -58,6 +59,12 @@ function Monitoring() {
                       <Header />
                       <Administrator />
                   </AuthenticatedRoute>}/>
+
+            <Route path='/FormDialog' element={
+            <AuthenticatedRoute>
+                <Header />
+                <FormDialog />
+            </AuthenticatedRoute>}/>
 
             <Route path='/Logout' element={<LogoutPage />}/>
 

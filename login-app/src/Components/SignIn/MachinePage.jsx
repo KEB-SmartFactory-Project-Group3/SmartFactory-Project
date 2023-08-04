@@ -5,7 +5,6 @@ import useMachineCount from '../hooks/useMachineCount';
 import Button from '@mui/material/Button';
 import FormDialog from './FormDialog';
 
-
 function MachinePage() {
 
   const { isRunning, elapsedTime, handleStart, handleStop, resetTimer} = useTimeRecorder();
@@ -22,6 +21,7 @@ function MachinePage() {
  
   return (
     <div className="MachinePage">
+      <FormDialog />
       <h1>기계 장치</h1>
       <div className="targetAchievement-info">도달량 : {targetAchievement}</div>
       <div className="targetProduction-info">목표 생산량 : {targetProduction}</div>
