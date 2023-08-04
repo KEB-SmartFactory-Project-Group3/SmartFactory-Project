@@ -15,13 +15,21 @@ function useMachineCount() {
 
   function callCountApi() {
     retrieveCount()
-      .then((response) => successfulResponse(response))
+      .then((response) => {
+        console.log("API 응답 데이터:", response)
+        if (response && response.data && response.data.count !== undefined){
+            successfulResponse(response) 
+        } else {
+          errorResponse(new Error("API 응답 없음"))
+        }
+      })
       .catch((error) => errorResponse(error))
       .finally(() => console.log('count cleanup'));
   }
 
   function successfulResponse(response) {
-    setProduction(response.data);
+    const count = response.data.count
+    setProduction(count); //production 상태 업데이트
   }
 
   function errorResponse(error) {
