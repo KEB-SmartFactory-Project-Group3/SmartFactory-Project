@@ -1,6 +1,6 @@
 import React,{ createContext, useContext, useState } from "react";
 import axios from 'axios';
-import { exeuteBasicAuthentication } from "../../api/ApiService";
+import { retrieveOperation } from "../../api/ApiService";
 
 
 //다른 컴포넌트와 공유할 컨텍스트
@@ -18,51 +18,42 @@ function AuthProvider( {children}) {
  
   async function login(id,password,name) {
 
-    const baToken = 'Basic ' + window.btoa(id + ":" + password)
-    //const name
+    try {
+      // 백엔드 api 호출해서 로그인 인증
+      const response = await axios.post('http://165.246.116.139:8080/api/auth/login', {
+        id: id,
+        password: password,
+        headers: {
+          'Content-Type': 'application/json',
+          //  Authorization: `Bearer ${token}`, 
+        },
+        body: JSON.stringify({ name: name}),
+      })
 
-    exeuteBasicAuthentication(baToken,name)
-    .then(responseData => console.log(responseData))
-    .catch(error => console.log(error))
-
-    setAuthenticated(false)
-    
-    // try {
-    //   // 백엔드 api 호출해서 로그인 인증
-    //   const response = await axios.post('http://165.246.116.192:8080/api/auth/login', {
-    //     id: id,
-    //     password: password,
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify({id: id, name: name}),
-    //   })
-
-    //   if (response.status === 200) {
-    //     //로그인 성공 시 헤더에 관리자 이름 띄우기
-    //     const { name } = response.data;
-    //     setAuthenticated(true);
-    //     setCurrentUser({ name: name });
-    //     return true
-    //   } else {
-    //     setAuthenticated(false);
-    //     setCurrentUser(null);
-    //     return false;
-       
-    //   }
-    // } 
-    // catch (error) {
-    //   console.error("로그인 오류: ",error)
-    //   if (error.response === undefined) {//서버에서 응답이 오지 않는 경우
-    //     throw new Error("API 서버에 접속할 수 없습니다!")
-    //   }else if (error.response.status === 401) {
-    //     //비밀번호가 틀릴 때
-    //     throw new Error("비밀번호가 틀렸습니다!")
-    //   } else {
-    //     throw new Error("로그인 중 알 수 없는 오류가 발생했습니다!")
-    //   }
+      if (response.status === 200) {
+        //로그인 성공 시 헤더에 관리자 이름 띄우기
+        const { name, token } = response.data;
+        setAuthenticated(true);
+        setCurrentUser({ name: name });
+        return true
+      } else {
+        setAuthenticated(false);
+        setCurrentUser(null);
+        return false;
+      }
+    } 
+    catch (error) {
+      console.error("로그인 오류: ",error)
+      if (error.response === undefined) {//서버에서 응답이 오지 않는 경우
+        throw new Error("API 서버에 접속할 수 없습니다!")
+      }else if (error.response.status === 401) {
+        //비밀번호가 틀릴 때
+        throw new Error("비밀번호가 틀렸습니다!")
+      } else {
+        throw new Error("로그인 중 알 수 없는 오류가 발생했습니다!")
+      }
    
-    // } 
+    } 
   }
 
   function logout() {
