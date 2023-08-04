@@ -18,10 +18,11 @@ function AuthProvider( {children}) {
  
   async function login(id,password,name) {
 
-    const baToken = 'Basic ' + window.btoa(name)
+    const baToken = 'Basic ' + window.btoa(id + ":" + password)
+    //const name
 
-    exeuteBasicAuthentication(baToken)
-    .then(response => console.log(response))
+    exeuteBasicAuthentication(baToken,name)
+    .then(responseData => console.log(responseData))
     .catch(error => console.log(error))
 
     setAuthenticated(false)
