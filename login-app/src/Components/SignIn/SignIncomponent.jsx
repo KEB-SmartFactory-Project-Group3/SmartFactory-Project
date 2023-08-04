@@ -10,7 +10,7 @@ import Container from '@mui/material/Container';
 import {useNavigate} from 'react-router-dom';
 import { useAuth } from './security/AuthContext';
 import Button from '@mui/material/Button';
-
+import './SignIn.css'
 
 function SignIncomponent() {
 
@@ -95,16 +95,14 @@ function SignIncomponent() {
             flexDirection: 'column',
             alignItems: 'center',
             width: '250px',
-          
-
           }}
         >
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
+          <Grid container spacing={2} alignItems="center">
+            <Grid item sx={ {mt: 1, ml: 8}}>
               <label style={{ color: '#1f2454'}}>Username : </label>
               <input type="text" name="id" placeholder="아이디" required value={id} onChange={handleUsername} />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item sx={ {ml: 8, mb:1}}>
               <label style={{ color: '#1f2454'}}>Password : </label>
               <input 
                 type="password"
@@ -117,10 +115,10 @@ function SignIncomponent() {
             </Grid>
           </Grid>
           {/* 비밀번호를 기억하는 옵션 */}
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" checked={rememberMe} onChange={handelRememberMe} />}
+          {/* <FormControlLabel
+            control={<Checkbox value="remember" color="primary" checked={rememberMe} onChange={handelRememberMe} sx={{mt: 1, ml: 8}}/>}
             label="Remember me"
-          />
+          /> */}
           {/* 서버 쪽으로 데이터 전송 */}
           <Button
             type="submit"
@@ -133,6 +131,7 @@ function SignIncomponent() {
               height: '30px',
               marginTop: '10px',
               borderRadius: '10px',
+              marginLeft: '145px'
             }}
             size="small"
             onClick={handleSubmit}
@@ -142,7 +141,7 @@ function SignIncomponent() {
         </div>
       </form>
       <Grid container >
-        <Grid item sx={{ mt: 2, ml: 13 }}>
+        <Grid item sx={{ mt: 2, ml: 11 }}>
           <Link style={{ color: 'white' }}>비밀번호를 잊어버리셨나요?</Link>
         </Grid>
       </Grid>
