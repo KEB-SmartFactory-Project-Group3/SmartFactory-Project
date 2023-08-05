@@ -33,16 +33,16 @@ function MachinePage() {
   };
 
   return (
-    <div className="MachinePage">
-       <Grid container spacing={3}>
-        <Grid item xs={4} md = {4}>
-          <Box sx={{p:6.5}}>
+    <div className="MachinePage" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+       <Grid container spacing={2}>
+        <Grid item xs={4}>
+          <Box>
             <Paper 
                 sx={{
-                  height: 550,
-                  width: 350,
+                  height: 700,
+                  width: 400,
                   backgroundColor: (theme) =>
-                      theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+                      theme.palette.mode === 'dark' ?  'rgba(147, 158, 213, 0.5)' : '#b2b9e1',
                 }}
             >
               <item>
@@ -94,14 +94,15 @@ function MachinePage() {
           </Paper>
           </Box>
         </Grid>
-          <Grid item xs={4} md ={4}>
-            <Box sx={{p:6.5}}>
+          <Grid item xs={4}>
+            <Box>
               <Paper
                   sx = {{
-                    height: 550,
-                    width: 350,
+                    height: 700,
+                    width: 400,
                     backgroundColor: (theme) =>
-                        theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+                         theme.palette.mode === 'dark' ? 'rgba(147, 158, 213, 0.5)' : '#b2b9e1',
+                         border: 'none',
                   }}
                 >
               <item>
@@ -153,14 +154,14 @@ function MachinePage() {
               </Paper>
             </Box>
           </Grid>
-          <Grid item xs={4} md={4}>
-            <Box sx={{p:6.5}}>
+          <Grid item xs={4} >
+            <Box>
               <Paper
                   sx = {{
-                    height: 550,
-                    width: 350,
+                    height: 700,
+                    width: 400,
                     backgroundColor: (theme) =>
-                        theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+                        theme.palette.mode === 'dark' ? 'rgba(147, 158, 213, 0.5)' : '#b2b9e1',
                   }}
                 >
               <item>
@@ -213,8 +214,6 @@ function MachinePage() {
             </Box>
           </Grid>
 
-          
-       
       </Grid>
   </div>
   );
