@@ -25,7 +25,10 @@ function Header(props) {
   
   // 현재 관리자 가져오기
   const currentUser = authContext.currentUser
-  const name = authContext.currentUser?.name // 로그인 api로 가져온 name
+  //const name = authContext.currentUser?.name // 로그인 api로 가져온 name
+  const name = authContext.currentUser && authContext.currentUser.name //javascript
+  console.log(name)
+
 
   const navigate = useNavigate()
   const [open,setOpen] = useState(false)
@@ -122,7 +125,7 @@ function Header(props) {
                               <span style={{ color: 'black' }} >현재 관리자 : {name}</span>
                             </Box>
                           }
-                          style={{textDecoration: "none", color: "black", marginLeft:"15rem"}}
+                          style={{textDecoration: "none", color: "black", marginLeft:"19rem"}}
                           />
                       </>
                     )}
