@@ -11,7 +11,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useState } from 'react';
-import { Tabs, Tab } from '@mui/material';
+import { Tabs, Tab, useTheme, useMediaQuery} from '@mui/material';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import DrawerComp from './DrawerComp';
 
 
 function Header(props) {
@@ -27,8 +30,10 @@ function Header(props) {
   const navigate = useNavigate()
   const [open,setOpen] = useState(false)
 
+  // const theme = useTheme(theme.breakpoints.down('sm'))
+  // const isMatch = useMediaQuery()
   // 활성 탭을 업데이트하는 구간
-  const [value, setValue] = React.useState('')
+  const [value, setValue] = useState()
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -56,96 +61,100 @@ function Header(props) {
 
    return (
      <header className="header">
-        <AppBar position="static" sx={{ backgroundColor: 'transparent'}} className="headerapp">
+      <AppBar position="static" sx={{ backgroundColor: 'transparent'}} className="headerapp">
        <div className="container">
-         <Toolbar>
-           <Tabs value={value} 
-                 onChange={handleChange} 
-                 aria-label="nav tabs example"
-                //  textColor='#3f51b5'
-                //  indicatorColor='#3f51b5'
-            >
-            {isAuthenticated && (
-              <>
-                <Tab
-                  label="Home"
-                  value={`/Landing/${currentUser.name}`}
-                  component={Link}
-                  to={`/Landing/${currentUser.name}`}
-                  style={{ textDecoration: 'none', color: '#3f51b5', marginRight: '4rem' ,  }}
-                />
-                <Tab
-                  label="기계"
-                  value="/MachinePage"
-                  component={Link}
-                  to="/MachinePage"
-                  style={{ textDecoration: 'none', color: 'black', marginRight: '4rem' }}
-                />
-                <Tab
-                  label="온도"
-                  value="/TemperaturePage"
-                  component={Link}
-                  to="/TemperaturePage"
-                  style={{ textDecoration: 'none', color: 'black', marginRight: '4rem' }}
-                />
-                <Tab
-                  label="불량품"
-                  value="/Computervision"
-                  component={Link}
-                  to="/Computervision"
-                  style={{ textDecoration: 'none', color: 'black', marginRight: '4rem' }}
-                />
-                <Tab
-                  label="관리자DB"
-                  value="/Administrator"
-                  component={Link}
-                  to="/Administrator"
-                  style={{ textDecoration: 'none', color: 'black', marginRight: '4rem' }}
-                />
-              </>
-            )}
-          </Tabs>
+            <Toolbar>
 
-           <ul className="navbar-nav" style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center' }}>
-             {/* <li style={{marginRight: '1rem'}} className="nav-item">
-              {!isAuthenticated && <Button onClick={handleLoginClick}>Login</Button>}</li> */}
+             <Grid sx={{placeItems: "center"}} container>
+                <Grid item xs={11}>
+                  <Tabs value={value} 
+                        onChange={handleChange} 
+                        aria-label="nav tabs example"
+                        textColor="inherit"
+                        indicatorColor="secondary"
+                    >
+                    {isAuthenticated && (
+                      <>
+                        <Tab
+                          label="Home"
+                          value={`/Landing/${currentUser.name}`}
+                          component={Link}
+                          to={`/Landing/${currentUser.name}`}
+                          style={{ textDecoration: 'none', color: '#3f51b5', marginRight: '4rem' ,  }}
+                        />
+                        <Tab
+                          label="기계"
+                          value="/MachinePage"
+                          component={Link}
+                          to="/MachinePage"
+                          style={{ textDecoration: 'none', color: 'black', marginRight: '4rem' }}
+                        />
+                        <Tab
+                          label="온도"
+                          value="/TemperaturePage"
+                          component={Link}
+                          to="/TemperaturePage"
+                          style={{ textDecoration: 'none', color: 'black', marginRight: '4rem' }}
+                        />
+                        <Tab
+                          label="불량품"
+                          value="/Computervision"
+                          component={Link}
+                          to="/Computervision"
+                          style={{ textDecoration: 'none', color: 'black', marginRight: '4rem' }}
+                        />
+                        <Tab
+                          label="관리자DB"
+                          value="/Administrator"
+                          component={Link}
+                          to="/Administrator"
+                          style={{ textDecoration: 'none', color: 'black', marginRight: '4rem' }}
+                        />
+                      </>
+                    )}
+           
+                    {isAuthenticated && currentUser && (
+                      <>
+                        <Tab 
+                          label={
+                            <Box display="flex" alignItems="center">
+                              <AccountCircleIcon style={{ marginRight: '0.5rem' }} />
+                              <span style={{ color: 'black' }} >현재 관리자 : {name}</span>
+                            </Box>
+                          }
+                          style={{textDecoration: "none", color: "black", marginLeft:"15rem"}}
+                          />
+                      </>
+                    )}
 
-              <div
-              className="nav-item"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                marginRight: '1rem',
-                padding: '0.5rem',
-                backgroundColor: 'rgba(0, 0, 255, 0.5)',
-                borderRadius: '10px'
-              }}
-              >
-                {isAuthenticated && currentUser && (
-                  <>
-                    <AccountCircleIcon style={{ marginRight: '0.5rem' }} />
-                    <span style={{ color: 'black' }} >현재 관리자 : {name}</span>
-                  </>
-                )}
-              </div>
-             <li className="nav-item">
-              {isAuthenticated && <Button onClick={handleSubmitLogout}>Logout</Button>}</li>
-           </ul>
-         </Toolbar>
+                </Tabs>
+                
+                </Grid>
+               
+                <Grid item xs={1}>
+                  <Box display="flex">
+                    {isAuthenticated && 
+                    <Button onClick={handleSubmitLogout}>Logout</Button>}
+                   </Box>
+                </Grid>  
+              </Grid>
+            
+              <DrawerComp />
+            </Toolbar>
        </div>
 
      </AppBar>
     
-     <Dialog open={open}>
-      <DialogTitle>로그아웃</DialogTitle>
-      <DialogContent>
-        정말 로그아웃 하시겠습니까?
-      </DialogContent>
-      <DialogActions>
-           <Button variant="contained" style={{ backgroundColor: '#5C6AC4', color: 'white' }} size="small" onClick={handleLogoutConfirm}>yes</Button>
-           <Button variant="contained" style={{ backgroundColor: '#5C6AC4', color: 'white' }} size="small" onClick={handleLogoutCancel}>cancel</Button>
-      </DialogActions>
-     </Dialog>
+            <Dialog open={open}>
+              <DialogTitle>로그아웃</DialogTitle>
+              <DialogContent>
+                정말 로그아웃 하시겠습니까?
+              </DialogContent>
+              <DialogActions>
+                  <Button variant="contained" style={{ backgroundColor: '#5C6AC4', color: 'white' }} size="small" onClick={handleLogoutConfirm}>yes</Button>
+                  <Button variant="contained" style={{ backgroundColor: '#5C6AC4', color: 'white' }} size="small" onClick={handleLogoutCancel}>cancel</Button>
+              </DialogActions>
+            </Dialog>
     </header>
  
    )
