@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import FormDialog from './FormDialog';
 import Paper from '@mui/material/Paper';
+import WebSocketComponent from '../websocket/WebsocketComp';
 // import './MachinePage.css';
 
 
@@ -35,6 +36,7 @@ function MachinePage() {
 
   return (
     <div className="MachinePage" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <WebSocketComponent />
        <Grid container spacing={2}>
     
         <Grid item xs={4}

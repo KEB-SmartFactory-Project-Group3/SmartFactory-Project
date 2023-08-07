@@ -17,12 +17,10 @@ function useMachineCount() {
     retrieveCount()
       .then((response) => {
         console.log("API 응답 데이터:", response)
-        if (response && response.data && response.data.count !== undefined){
+        if (response !== undefined){
             successfulResponse(response) 
-        } else if (response == 0) {
-          console.log("count 0: ",response)
-        }else {
-          errorResponse(new Error("API 응답 없음"))
+        } else {
+          errorResponse(new Error("count 0 또는 API 응답 없음"))
         }
       })
       .catch((error) => errorResponse(error))

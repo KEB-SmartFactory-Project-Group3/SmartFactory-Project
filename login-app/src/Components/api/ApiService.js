@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: 'http://165.246.116.139:8080',
+  baseURL: 'http://165.246.116.128:8080',
   withCredentials: true, //쿠키 자동 포함
 });
 
@@ -33,7 +33,7 @@ export const retrieveCount = async () => {
       },
     };
     const response = await apiClient.get("/api/display/count", config);
-    console.log(response.data)
+    console.log("count: ",response.data)
     return response.data.production
   } catch (error) {
     console.log("API 호출 오류:", error);

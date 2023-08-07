@@ -22,7 +22,7 @@ function AuthProvider( {children}) {
 
     try {
       // 백엔드 api 호출해서 로그인 인증
-      const response = await axios.post('http://165.246.116.139:8080/api/auth/login', {
+      const response = await axios.post('http://165.246.116.128:8080/api/auth/login', {
         id: id,
         password: password,
         name: name,
@@ -38,11 +38,11 @@ function AuthProvider( {children}) {
         const { token, name } = response.data; //토큰, 관리자이름 추출
         setAuthenticated(true);
         setCookie('accessToken',token, {path: '/', maxAge: 36000})
-        setCurrentUser({ name: name });
+        setCurrentUser({ name: name })
         return true
       } else {
-        setAuthenticated(false);
-        setCurrentUser(null);
+        setAuthenticated(false)
+        setCurrentUser(null)
         return false;
       }
     } 
