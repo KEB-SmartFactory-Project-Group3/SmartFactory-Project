@@ -19,7 +19,9 @@ function useMachineCount() {
         console.log("API 응답 데이터:", response)
         if (response && response.data && response.data.count !== undefined){
             successfulResponse(response) 
-        } else {
+        } else if (response == 0) {
+          console.log("count 0: ",response)
+        }else {
           errorResponse(new Error("API 응답 없음"))
         }
       })

@@ -23,7 +23,8 @@ function useMachine() {
   }
 
   function successfulResponse(response) {
-    setOperationTime(response.data);
+    // setOperationTime(response.data);
+    setOperationTime(response)
   }
 
   function errorResponse(error) {

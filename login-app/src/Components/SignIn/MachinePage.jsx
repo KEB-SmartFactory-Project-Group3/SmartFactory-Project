@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import FormDialog from './FormDialog';
 import Paper from '@mui/material/Paper';
+// import './MachinePage.css';
 
 
 function MachinePage() {
@@ -35,16 +36,19 @@ function MachinePage() {
   return (
     <div className="MachinePage" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
        <Grid container spacing={2}>
-        <Grid item xs={4}>
+    
+        <Grid item xs={4}
+           width={{xs:"350px", sm: "450px", md: "600px", lg:"800px", xl: "1000px"}} 
+           height={{xs:"500px", sm:"500px", md:"600px", lg:"700px"}}>
           <Box>
             <Paper 
                 sx={{
                   height: 700,
                   width: 400,
                   backgroundColor: (theme) =>
-                      theme.palette.mode === 'dark' ?  'rgba(147, 158, 213, 0.5)' : '#b2b9e1',
+                      theme.palette.mode === 'dark' ?  '#fffdeb' : '#fffdeb',
                 }}
-            >
+              >
               <item>
                 <Box sx={{ '& button': { m: 0.5 } }}>
                   <h1>A</h1>
@@ -53,7 +57,7 @@ function MachinePage() {
                   <div className="operation-info">총 가동 시간 : {operationTime}</div>
                   <div className="production-info">생산량 : {production}</div> 
                   <p>가동중지: {formatTime(elapsedTime)}</p>
-                <div>
+              <div>
                 {isRunning ? (
                   <Button
                     variant="contained"
@@ -89,19 +93,22 @@ function MachinePage() {
                   Reset
                 </Button>
                 </div>
-              </Box>
+                </Box>
               </item>
           </Paper>
           </Box>
         </Grid>
-          <Grid item xs={4}>
+ 
+          <Grid item xs={4}
+             width={{xs:"350px", sm: "450px", md: "600px", lg:"800px", xl: "1000px"}} 
+             height={{xs:"500px", sm:"500px", md:"600px", lg:"700px"}}>
             <Box>
               <Paper
                   sx = {{
                     height: 700,
                     width: 400,
                     backgroundColor: (theme) =>
-                         theme.palette.mode === 'dark' ? 'rgba(147, 158, 213, 0.5)' : '#b2b9e1',
+                         theme.palette.mode === 'dark' ? '#fffdeb' : '#fffdeb',
                          border: 'none',
                   }}
                 >
@@ -154,14 +161,17 @@ function MachinePage() {
               </Paper>
             </Box>
           </Grid>
-          <Grid item xs={4} >
+      
+          <Grid item xs={4} 
+            width={{xs:"350px", sm: "450px", md: "600px", lg:"800px", xl: "1000px"}} 
+            height={{xs:"500px", sm:"500px", md:"600px", lg:"700px"}}>
             <Box>
               <Paper
                   sx = {{
                     height: 700,
                     width: 400,
                     backgroundColor: (theme) =>
-                        theme.palette.mode === 'dark' ? 'rgba(147, 158, 213, 0.5)' : '#b2b9e1',
+                        theme.palette.mode === 'dark' ? '#fffdeb' : '#fffdeb',
                   }}
                 >
               <item>
