@@ -1,4 +1,4 @@
-package com.SpringServer.config;
+package com.SpringServer.config.auth;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

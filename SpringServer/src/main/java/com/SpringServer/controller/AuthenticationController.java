@@ -1,10 +1,9 @@
 package com.SpringServer.controller;
 
-import com.SpringServer.model.dto.AuthenticationRequest;
-import com.SpringServer.model.dto.AuthenticationResponse;
-import com.SpringServer.service.AuthenticationService;
-import com.SpringServer.model.dto.RegisterRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import com.SpringServer.model.dto.auth.AuthenticationRequest;
+import com.SpringServer.model.dto.auth.AuthenticationResponse;
+import com.SpringServer.service.auth.AuthenticationService;
+import com.SpringServer.model.dto.auth.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

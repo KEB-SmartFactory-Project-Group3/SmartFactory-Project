@@ -1,4 +1,4 @@
-package com.SpringServer.model.dto;
+package com.SpringServer.model.dto.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
+public class AuthenticationRequest {
 
     private String id;
     private String password;
-    private String name;
 }

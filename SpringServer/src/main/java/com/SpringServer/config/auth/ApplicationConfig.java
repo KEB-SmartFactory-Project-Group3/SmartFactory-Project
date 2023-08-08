@@ -1,4 +1,4 @@
-package com.SpringServer.config;
+package com.SpringServer.config.auth;
 
 import com.SpringServer.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
