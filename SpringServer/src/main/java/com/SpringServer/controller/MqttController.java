@@ -3,7 +3,6 @@ package com.SpringServer.controller;
 import com.SpringServer.service.MqttService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.annotation.ServiceActivator;
-import org.springframework.integration.mqtt.support.MqttHeaders;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;
@@ -26,7 +25,7 @@ public class MqttController implements MessageHandler {
     }
 
     // 리액트(웹 애플리케이션)로부터 전달된 명령을 처리하고 MQTT 토픽에 해당 명령을 전송
-    @MessageMapping("/send-command/{machineNumber}")
+    @MessageMapping("/send-command/{machineNumber}")    // react쪽 stop/start 버튼와 연결된 주소
     public void sendCommandToMqtt(@DestinationVariable String machineNumber, String command) {
         String topic = "esp32/machine/" + machineNumber + "/command";
         mqttService.sendCommand(topic, command);

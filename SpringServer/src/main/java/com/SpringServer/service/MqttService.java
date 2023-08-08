@@ -2,7 +2,6 @@ package com.SpringServer.service;
 
 import com.SpringServer.model.entity.Products;
 import com.SpringServer.repository.ProductsRepository;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +20,7 @@ public class MqttService{
 
     // ObjectMapper 객체를 사용하여 JSON 문자열을 Java 객체로 변환
     private final ObjectMapper objectMapper = new ObjectMapper();
+
 
     // payload로 전달받은 온도 정보를 Products 객체로 변환하여 저장
     public void saveProductFromPayload(String payload) {
