@@ -1,63 +1,56 @@
-import React, { useEffect, useState } from 'react';
-import SockJS from 'sockjs-client';
-import { Client, Stomp } from '@stomp/stompjs';
-import Cookies from 'js-cookie';
+import React, { useRef, useEffect } from 'react';
+import { Client } from '@stomp/stompjs';
 
-const WebsocketComp = () => {
-  const socketUrl = 'http://165.246.116.152:8080/ws';
-  const topics = ['/topic/machines_info/Machine A', '/topic/machines_info/Machine B', '/topic/machines_info/Machine C']
-
-  // JWT 토큰을 쿠키에서 가져옴
-  const authToken = 'Bearer ' + Cookies.get('token');
-
-  const [receivedInfo, setReceivedInfo] = useState([])
+function WebsocketComp() {
+  const clientRef = useRef(null);
 
   useEffect(() => {
-    const socket = new SockJS(client);
-    const stompClient = new Client({
-      webSocketFactory: () => socket,
-      connectHeaders: {
-        'Authorization': authToken,
+    const socketUrl = 'ws://165.246.116.110:8080/ws';
+    const topics = ['/topic/machines_info/Machine A', '/topic/machines_info/Machine B', '/topic/machines_info/Machine C'];
+
+    const client = new Client({
+      brokerURL: socketUrl,
+      debug: function (str) {
+        console.log(str);
       },
+      reconnectDelay: 5000,
+      heartbeatIncoming: 4000,
+      heartbeatOutgoing: 4000,
     });
 
-    stompClient.onConnect = (frame) => {
-      console.log('Connected: ', frame);
+    client.onConnect = function (frame) {
+      console.log('Connected:', frame);
       topics.forEach(topic => {
-        stompClient.subscribe(topic, (message) => {
-          const machineInfo = JSON.parse(message.body);
-          console.log(machineInfo);
-          setReceivedInfo(prevInfo => [...prevInfo,machineInfo])
+        client.subscribe(topic, message => {
+          console.log('Message received:', message.body);
         });
       });
     };
 
-    stompClient.activate();
+    client.onStompError = function (frame) {
+      console.log('Broker reported error:', frame.headers['message']);
+      console.log('Additional details:', frame.body);
+    };
+
+    client.activate();
+    clientRef.current = client;
 
     return () => {
-      if (stompClient.connected) {
-        stompClient.deactivate();
-      }
+      client.deactivate();
     };
   }, []);
 
-  function handlesubscribe() {
-    console.log(receivedInfo);
-  }
-  
+  const handleClickSendTo = () => {
+    const destination = '/app/someDestination'; // 적절한 목적지로 변경
+    const message = 'Yaya';
+    clientRef.current.publish({ destination, body: message });
+  };
 
   return (
     <div>
-      <button onClick={handlesubscribe}>send to</button>
-      <div>
-        {receivedInfo.map((info,index) => (
-          <div key={index}>
-            {JSON.stringify(info)}
-          </div>
-        ))}
-      </div>
+      <button onClick={handleClickSendTo}>Send To Server</button>
     </div>
   );
-};
+}
 
 export default WebsocketComp;
