@@ -77,7 +77,7 @@ function SignIncomponent() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            backgroundColor: '#c5cae9',
+            backgroundColor: 'white',
             padding: '20px',
             borderRadius: '20px',
           }}
@@ -142,7 +142,7 @@ function SignIncomponent() {
       </form>
       <Grid container >
         <Grid item sx={{ mt: 2, ml: 11 }}>
-          <Link style={{ color: 'white' }}>비밀번호를 잊어버리셨나요?</Link>
+          <Link className="linkWrapper" style={{ textDecoration: "none"}}>비밀번호를 잊어버리셨나요?</Link>
         </Grid>
       </Grid>
     </Box>
