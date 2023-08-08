@@ -13,9 +13,9 @@ import WebSocketComponent from '../websocket/WebsocketComp';
 
 function MachinePage() {
 
-  const { isRunning, elapsedTime, handleStart, handleStop, resetTimer} = useTimeRecorder();
-  const operationTime = useMachine()
-  const {production, targetAchievement, targetProduction, handleTargetProductionChange} = useMachineCount()
+  // const { isRunning, elapsedTime, handleStart, handleStop, resetTimer} = useTimeRecorder();
+  // const operationTime = useMachine()
+  // const {production, targetAchievement, targetProduction, handleTargetProductionChange} = useMachineCount()
 
   const [formOpen, setFormOpen] = useState(false)
 
@@ -37,7 +37,7 @@ function MachinePage() {
   return (
     <div className="MachinePage" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <WebSocketComponent />
-       <Grid container spacing={2}>
+       {/* <Grid container spacing={2}>
     
         <Grid item xs={4}
            width={{xs:"350px", sm: "450px", md: "600px", lg:"800px", xl: "1000px"}} 
@@ -226,7 +226,7 @@ function MachinePage() {
             </Box>
           </Grid>
 
-      </Grid>
+      </Grid> */}
   </div>
   );
 }
