@@ -9,6 +9,8 @@ import {useNavigate} from 'react-router-dom';
 import { useAuth } from './security/AuthContext';
 import Button from '@mui/material/Button';
 import styled from 'styled-components';
+import TextField from '@mui/material/TextField'
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import './SignIn.css'
 
 const StyledSignInContainer = styled.div`
@@ -17,12 +19,16 @@ const StyledSignInContainer = styled.div`
   align-items: flex-start;
   background: radial-gradient(
     circle,
-    rgba(199,174,238,0.2606516290726817) 0%,
-    rgba(129,138,242,0.5463659147869675) 43%
+    rgba(199,174,238,0.2606516290726817) 0%, 
+    rgba(84,92,192,0.5463659147869675) 48%
   );
   min-height: 100vh; 
 `;
-
+const StyledGridItem = styled(Grid)`
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px; /* 사이의 여백 조정 */
+`;
 function SignIncomponent() {
 
   const [id,setId] = useState('')
@@ -85,13 +91,15 @@ function SignIncomponent() {
     <Container component="main" maxWidth="xs">
       <Box
           sx={{
-            marginTop: 8,
+            marginTop: 20,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            backgroundColor: 'white',
-            padding: '20px',
-            borderRadius: '20px',
+            backgroundColor: 'rgba(255, 255, 255, 0.3)',
+            padding: '30px',
+            borderRadius: '15px',
+            width: '350px',
+            height: '275px'
           }}
         >
       <Avatar sx={{ m: 1}}>
@@ -99,33 +107,54 @@ function SignIncomponent() {
       </Avatar>
   
       <form className="loginform">
-        {/* 로그인 인증 하드코딩 --세션으로 나중에 수정 */}
-        {/* {loginFailed && <div className="erro">Failed</div> } */}
         <div sx = {{
             margin: '20px',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            width: '250px',
+            width: '300px',
           }}
         >
-          <Grid container spacing={2} alignItems="center">
-            <Grid item sx={ {mt: 1, ml: 8}}>
-              <label style={{ color: '#1f2454'}}>Username : </label>
-              <input type="text" name="id" placeholder="아이디" required value={id} onChange={handleUsername} />
-            </Grid>
-            <Grid item sx={ {ml: 8, mb:1}}>
-              <label style={{ color: '#1f2454'}}>Password : </label>
-              <input 
+            <StyledGridItem item>
+              <AccountBoxIcon sx={{ color: '#5b7bb2', fontSize: 70  }} />
+              <TextField 
+                label="Username"
+                required
+                name = "id"
+                value ={id}
+                placeholder="아이디"
+                onChange={handleUsername}
+                sx={{
+                  width: '250px',
+                  borderRadius: '5px', 
+                  '& input': {
+                    backgroundColor: 'rgba(255, 255, 255)', //필드 내부 색상
+                    borderRadius: '5px'
+                  },
+                }}/>
+  
+            </StyledGridItem>
+            <StyledGridItem>
+              <LockIcon sx={{ color: '#5b7bb2', fontSize: 70  }} />
+              <TextField 
+                label="Password"
                 type="password"
+                required
                 name="password"
                 placeholder="비밀번호"
-                required
                 value={password}
                 onChange={handlePassword}
-              />
-            </Grid>
-          </Grid>
+                sx={{
+                  width: '250px', 
+                  borderRadius: '5px',
+                  '& input': {
+                    backgroundColor: 'rgba(255, 255, 255)', //필드 내부 색상
+                    borderRadius: '5px'
+                  },
+                }}
+                />
+              </StyledGridItem>
+      
           {/* 비밀번호를 기억하는 옵션 */}
           {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" checked={rememberMe} onChange={handelRememberMe} sx={{mt: 1, ml: 8}}/>}
@@ -139,11 +168,12 @@ function SignIncomponent() {
             style={{
               backgroundColor: '#5C6AC4',
               color: '#c6caee',
-              width: '80px',
+              width: '310px',
               height: '30px',
               marginTop: '10px',
-              borderRadius: '10px',
-              marginLeft: '145px'
+              marginBottom: '15px',
+              borderRadius: '5px',
+              marginLeft: '12px'
             }}
             size="small"
             onClick={handleSubmit}
@@ -153,11 +183,11 @@ function SignIncomponent() {
       
         </div>
       </form>
-      <Grid container >
+      {/* <Grid container >
         <Grid item sx={{ mt: 2, ml: 11 }}>
           <Link className="linkWrapper" style={{ textDecoration: "none"}}>비밀번호를 잊어버리셨나요?</Link>
         </Grid>
-      </Grid>
+      </Grid> */}
     </Box>
   </Container>
   </StyledSignInContainer>
