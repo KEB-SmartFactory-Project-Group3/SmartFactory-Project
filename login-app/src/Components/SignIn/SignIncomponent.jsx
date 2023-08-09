@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import LockIcon from '@mui/icons-material/Lock';
@@ -10,7 +8,20 @@ import Container from '@mui/material/Container';
 import {useNavigate} from 'react-router-dom';
 import { useAuth } from './security/AuthContext';
 import Button from '@mui/material/Button';
+import styled from 'styled-components';
 import './SignIn.css'
+
+const StyledSignInContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background: radial-gradient(
+    circle,
+    rgba(199,174,238,0.2606516290726817) 0%,
+    rgba(129,138,242,0.5463659147869675) 43%
+  );
+  min-height: 100vh; 
+`;
 
 function SignIncomponent() {
 
@@ -70,6 +81,7 @@ function SignIncomponent() {
   }
 
   return (
+    <StyledSignInContainer>
     <Container component="main" maxWidth="xs">
       <Box
           sx={{
@@ -138,6 +150,7 @@ function SignIncomponent() {
           >
             Login
           </Button>
+      
         </div>
       </form>
       <Grid container >
@@ -147,6 +160,7 @@ function SignIncomponent() {
       </Grid>
     </Box>
   </Container>
+  </StyledSignInContainer>
   );
 }
 
