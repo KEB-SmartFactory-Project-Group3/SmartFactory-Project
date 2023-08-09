@@ -1,14 +1,10 @@
 import React, { useState } from 'react';
-import Link from '@mui/material/Link';
 import LockIcon from '@mui/icons-material/Lock';
-import Avatar from '@mui/material/Avatar';
-import Container from '@mui/material/Container';
 import {useNavigate} from 'react-router-dom';
 import { useAuth } from './security/AuthContext';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField'
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import Box from '@mui/material/Box';
 import {StyledSignInContainer, StyledGridItem, StyledBox, colorAnimation} from '../stylescomp/SignInStyles'
 
 
@@ -26,9 +22,9 @@ function SignIncomponent() {
   const navigate = useNavigate();
   const authContext = useAuth()
 
-  function handelRememberMe(e) {
-    setRememberMe(e.target.checked)
-  }
+  // function handelRememberMe(e) {
+  //   setRememberMe(e.target.checked)
+  // }
 
   function handleUsername(e) {
     setId(e.target.value)
@@ -71,22 +67,9 @@ function SignIncomponent() {
 
   return (
     <StyledSignInContainer>
-    <Container component="main" maxWidth="xs">
-    <StyledBox>
-      {/* <Avatar sx={{ m: 1}}>
-        <LockIcon />
-      </Avatar> */}
-      <h2>Login</h2>
-  
       <form className="loginform">
-        <div sx = {{
-            margin: '20px',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            width: '300px',
-          }}
-        >
+      <StyledBox>
+        <h2>Login</h2>
             <StyledGridItem item>
               <AccountBoxIcon sx={{ color: 'rgba(91, 123, 178, 0.7)', fontSize: 70   }} />
               <TextField 
@@ -123,7 +106,6 @@ function SignIncomponent() {
                     borderRadius: '5px'
                   },
                 }}
-
                 />
               </StyledGridItem>
       
@@ -153,16 +135,13 @@ function SignIncomponent() {
             Login
           </Button>
       
-        </div>
+        </StyledBox>
       </form>
       {/* <Grid container >
         <Grid item sx={{ mt: 2, ml: 11 }}>
           <Link className="linkWrapper" style={{ textDecoration: "none"}}>비밀번호를 잊어버리셨나요?</Link>
         </Grid>
       </Grid> */}
-
-    </StyledBox>
-  </Container>
   </StyledSignInContainer>
   );
 }
