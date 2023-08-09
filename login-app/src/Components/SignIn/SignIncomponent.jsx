@@ -1,34 +1,16 @@
 import React, { useState } from 'react';
 import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
 import LockIcon from '@mui/icons-material/Lock';
 import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import {useNavigate} from 'react-router-dom';
 import { useAuth } from './security/AuthContext';
 import Button from '@mui/material/Button';
-import styled from 'styled-components';
 import TextField from '@mui/material/TextField'
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import './SignIn.css'
+import {StyledSignInContainer, StyledGridItem, StyledBox} from '../stylescomp/SignInStyles'
 
-const StyledSignInContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  background: radial-gradient(
-    circle,
-    rgba(199,174,238,0.2606516290726817) 0%, 
-    rgba(84,92,192,0.5463659147869675) 48%
-  );
-  min-height: 100vh; 
-`;
-const StyledGridItem = styled(Grid)`
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px; /* 사이의 여백 조정 */
-`;
+
 function SignIncomponent() {
 
   const [id,setId] = useState('')
@@ -89,19 +71,7 @@ function SignIncomponent() {
   return (
     <StyledSignInContainer>
     <Container component="main" maxWidth="xs">
-      <Box
-          sx={{
-            marginTop: 20,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            backgroundColor: 'rgba(255, 255, 255, 0.3)',
-            padding: '30px',
-            borderRadius: '15px',
-            width: '350px',
-            height: '275px'
-          }}
-        >
+    <StyledBox>
       <Avatar sx={{ m: 1}}>
         <LockIcon />
       </Avatar>
@@ -188,7 +158,8 @@ function SignIncomponent() {
           <Link className="linkWrapper" style={{ textDecoration: "none"}}>비밀번호를 잊어버리셨나요?</Link>
         </Grid>
       </Grid> */}
-    </Box>
+
+    </StyledBox>
   </Container>
   </StyledSignInContainer>
   );
