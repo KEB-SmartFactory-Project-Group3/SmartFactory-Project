@@ -8,7 +8,8 @@ import { useAuth } from './security/AuthContext';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField'
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import {StyledSignInContainer, StyledGridItem, StyledBox} from '../stylescomp/SignInStyles'
+import Box from '@mui/material/Box';
+import {StyledSignInContainer, StyledGridItem, StyledBox, colorAnimation} from '../stylescomp/SignInStyles'
 
 
 function SignIncomponent() {
@@ -72,9 +73,10 @@ function SignIncomponent() {
     <StyledSignInContainer>
     <Container component="main" maxWidth="xs">
     <StyledBox>
-      <Avatar sx={{ m: 1}}>
+      {/* <Avatar sx={{ m: 1}}>
         <LockIcon />
-      </Avatar>
+      </Avatar> */}
+      <h2>Login</h2>
   
       <form className="loginform">
         <div sx = {{
@@ -86,7 +88,7 @@ function SignIncomponent() {
           }}
         >
             <StyledGridItem item>
-              <AccountBoxIcon sx={{ color: '#5b7bb2', fontSize: 70  }} />
+              <AccountBoxIcon sx={{ color: 'rgba(91, 123, 178, 0.7)', fontSize: 70   }} />
               <TextField 
                 label="Username"
                 required
@@ -98,14 +100,13 @@ function SignIncomponent() {
                   width: '250px',
                   borderRadius: '5px', 
                   '& input': {
-                    backgroundColor: 'rgba(255, 255, 255)', //필드 내부 색상
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)', //필드 내부 색상
                     borderRadius: '5px'
                   },
                 }}/>
-  
             </StyledGridItem>
             <StyledGridItem>
-              <LockIcon sx={{ color: '#5b7bb2', fontSize: 70  }} />
+              <LockIcon sx={{ color: 'rgba(91, 123, 178, 0.7)', fontSize: 70  }} />
               <TextField 
                 label="Password"
                 type="password"
@@ -118,10 +119,11 @@ function SignIncomponent() {
                   width: '250px', 
                   borderRadius: '5px',
                   '& input': {
-                    backgroundColor: 'rgba(255, 255, 255)', //필드 내부 색상
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)', //필드 내부 색상
                     borderRadius: '5px'
                   },
                 }}
+
                 />
               </StyledGridItem>
       
