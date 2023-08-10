@@ -4,7 +4,7 @@ import cv2
 import urllib.request
 import numpy as np
 import base64
-from flask import Flask, jsonify
+from flask import Flask, jsonify,request
 from flask_cors import CORS
 import torch
 
@@ -50,6 +50,30 @@ def get_live_transmission():
     encoded_img = base64.b64encode(byte_im).decode('utf-8')
 
     return jsonify({'image': encoded_img})
+
+
+@app.route('/capture-image', methods=['POST'])
+def capture_image():
+    data = request.get_json()
+    captured_image = data.get('liveImage', None)
+
+    if captured_image:
+        # imageData 접두사 및 데이터 URL 스키마 제거
+        base64_image_data = captured_image.split(",")[1]
+        decoded_image = base64.b64decode(base64_image_data)
+
+        # bytearray를 numpy 배열로 변환, OpenCV를 사용하여 이미지를 decode
+        image_np = np.frombuffer(decoded_image, dtype=np.uint8)
+        img_cv2 = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
+
+        # 이미지를 화면에 표시
+        cv2.imshow("Captured Image", img_cv2)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+
+        return jsonify({'message': 'Image displayed'})
+    else:
+        return jsonify({'error': 'No image received'}), 400
 
 
 if __name__ == '__main__':
