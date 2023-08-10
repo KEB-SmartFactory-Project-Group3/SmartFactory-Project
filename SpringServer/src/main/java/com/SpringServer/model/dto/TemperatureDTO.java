@@ -9,7 +9,7 @@
 //@Builder
 //@AllArgsConstructor
 //@NoArgsConstructor
-//public class CountDTO {
-//    private int count;
+//public class TemperatureDTO {
 //
+//    private double temperature;
 //}
