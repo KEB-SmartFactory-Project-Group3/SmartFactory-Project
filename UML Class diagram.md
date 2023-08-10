@@ -1,3 +1,4 @@
+```mermaid
 classDiagram
       SensorController -- TemperatureSensor
       SensorController -- HumiditySensor
