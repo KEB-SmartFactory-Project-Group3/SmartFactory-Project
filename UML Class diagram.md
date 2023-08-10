@@ -1,66 +1,71 @@
-```mermaid
 classDiagram
       SensorController -- TemperatureSensor
       SensorController -- HumiditySensor
+      SensorController -- UltrasonicSensor
       SensorController -- LightSensor
-      SensorController -- Clock
-      SensorController -- ObjectDetection
-      SensorController : -GetSensorData()
-      SensorController : -GetCommandFromClient()
+      SensorController -- Camera
+      SensorController : -getSensorData()
 
-      TemperatureSensor : -GetTemperature()
-      HumiditySensor : -GetHumidity()
-      LightSensor : -GetLightIntensity()
-      Clock : -GetTime()
+      TemperatureSensor : -getTemperature()
+      HumiditySensor : -getHumidity()
+      UltrasonicSensor : -getDistance()
+      LightSensor : -getLightIntensity()
 
-      ObjectDetection -- VisionAI
-      ObjectDetection : -DetectObject()
+      Camera -- ObjectDetection
+      Camera : -captureImage()
       
-      VisionAI : -ProcessImageData()
+      ObjectDetection : -detectObjects()
 
-      BackendController -- JsonResponseParser
-      BackendController -- DatabaseHandler
-      BackendController -- VideoMonitoring
-      BackendController -- WasteDisposal
-      BackendController -- Optimization
-      BackendController -- Alert
-      BackendController : -RequestSensorData()
-      BackendController : -SendCommandToServer()
-      BackendController : -CalculateHourlyAverage()
-      BackendController : -SaveSensorDataToDB()
-      BackendController : -GetSensorDataFromDB()
-      BackendController : -SendLiveDataToFrontend()
-      BackendController : -IdentifyObjectQuality()
-      BackendController : -OptimizeProductionLine()
-      BackendController : -HandleWasteDisposal()
-      BackendController : -SendAlerts()
+      AlarmController -- Buzzer
+      AlarmController -- Led
+      AlarmController : -triggerAlarm()
+      Buzzer : -sound()
+      Led : -blink()
+      
 
-      DatabaseHandler : -ConnectToDB()
-      DatabaseHandler : -InsertData()
-      DatabaseHandler : -FetchData()
-      DatabaseHandler : -CalculateData()
+      User -- UserData
+      User : +getRoles()
+      UserData : -id
+      UserData : -password
+      UserData : -name
 
-      JsonResponseParser : -ParseJsonResponse()
+      OperationController -- Button
+      OperationController : -startFactoryOperation()
+      OperationController : -stopFactoryOperation()
+      OperationController : -getElapsedTime()
 
-      FrontendController -- LoginPage
-      FrontendController -- SignUpPage
-      FrontendController -- HomePage
-      FrontendController -- LiveStatusPage
-      FrontendController -- Graph
-      FrontendController -- Button
-      FrontendController -- AlertDisplay
-      FrontendController : -Login()
-      FrontendController : -SignUp()
-      FrontendController : -GetLiveData()
-      FrontendController : -RequestCommand()
-      FrontendController : -DisplayObjectQuality()
-      FrontendController : -DisplayAlerts()
+      Button : +onClick()
 
-      VideoMonitoring : -StreamVideo()
-      WasteDisposal : -ProcessWaste()
-      Optimization : -RunOptimizationAlgorithm()
-      Alert : -TriggerAlert()
+      OperationStopRecord -- Machine
+      OperationStopRecord : -stopTimes
+      OperationStopRecord : -restartTimes
+      OperationStopRecord : -reason
 
-      Graph : -DisplayGraph()
-      Button : -onClick()
-      AlertDisplay : -ShowAlert()
+      ProductRecord -- Machine
+      ProductRecord : -times
+      ProductRecord : -temperature
+      ProductRecord : -count
+
+      Machine : -machineNumber
+
+      MonitoringPlatformController -- MonitoringPlatformView
+      MonitoringPlatformController -- DataCollector
+      MonitoringPlatformController -- DataAnalyzer
+      MonitoringPlatformController : +showLiveStatus()
+
+      FactoryInfo : 
+      
+      MonitoringPlatformView : +displayElapsedTime()
+
+      DataCollector -- DatabaseHandler
+      DataCollector : -collectData()
+      DataCollector : -saveDataToDB()
+
+      DataAnalyzer -- DatabaseHandler
+      DataAnalyzer : -analyzeData()
+      DataAnalyzer : -getStatistics()
+
+      DatabaseHandler : -connectToDB()
+      DatabaseHandler : -insertData()
+      DatabaseHandler : -fetchData()
+      DatabaseHandler : -updateData()
