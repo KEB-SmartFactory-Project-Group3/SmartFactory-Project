@@ -29,7 +29,6 @@ function Monitoring() {
         <BrowserRouter>
           <Routes>
             <Route path='/' element={<SignIncomponent />}/>
-            {/* <Route path='/Signin' element={<SignIncomponent />} /> */}
             <Route path='/Landing/:id' element={
                   <AuthenticatedRoute>
                       <Header />

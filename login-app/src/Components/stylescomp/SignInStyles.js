@@ -17,9 +17,9 @@ const colorAnimation = keyframes`
 export const StyledSignInContainer = styled.div`
   display: flex;
   justify-content: center;
-  // align-items: flex-start;
+  align-items: flex-start;
 
-  background: linear-gradient(45deg,#b39ddb,#7462ff,#221266,#9fa8da);
+  background: linear-gradient(45deg,#b39ddb,#7462ff,#311b92,#9fa8da);
   background-size: 300% 300%;
   animation: ${colorAnimation}  12s ease-in-out infinite;
   background-position: center;
@@ -38,8 +38,8 @@ export const StyledSignInContainer = styled.div`
 `;
 
 export const StyledGridItem = styled(Grid)`
-  // display: flex;
-  // align-items: center;
+  display: flex;
+  align-items: center;
   margin-bottom: 10px; 
 `;
 

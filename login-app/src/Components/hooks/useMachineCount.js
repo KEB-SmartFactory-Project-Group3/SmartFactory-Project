@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { retrieveCount } from '../api/ApiService';
+import { retrieveData } from '../api/ApiService';
 
 function useMachineCount() {
-  const [production, setProduction] = useState(0);
-  const [targetProduction,setTargetProduction] = useState(0)
+  const [count, setCount] = useState(0);
+  const [targetCount,setTargetCount] = useState(0)
 
   useEffect(() => {
     const intervalTime = setInterval(callCountApi, 1000);
@@ -11,12 +11,12 @@ function useMachineCount() {
     return () => {
       clearInterval(intervalTime);
     };
-  }, [production]);
+  }, [count]);
 
   function callCountApi() {
-    retrieveCount()
+    retrieveData('count')
       .then((response) => {
-        console.log("API 응답 데이터:", response)
+        // console.log("API count 응답 데이터:", response)
         if (response !== undefined){
             successfulResponse(response) 
         } else {
@@ -29,21 +29,22 @@ function useMachineCount() {
 
   function successfulResponse(response) {
     const count = response.data.count
-    setProduction(count); //production 상태 업데이트
+    setCount(count) //production 상태 업데이트
+    setTargetCount(response.data.targetCount)
   }
 
   function errorResponse(error) {
     console.log(error);
   }
 
-  function handleTargetproductionChange(e) {
-    setTargetProduction(e.target.value)
+  function handleTargetcountChange(e) {
+    setTargetCount(e.target.value)
   }
 
-  const targetAchievement = targetProduction
-    ? ((production / targetProduction) * 100).toFixed(2)
+  const targetAchievement = targetCount
+    ? ((count / targetCount) * 100).toFixed(2)
     : ''
-  return {production, targetProduction, targetAchievement, handleTargetproductionChange}
+  return {count: count, targetCount: targetCount, targetAchievement, handleTargetcountChange}
 }
 
 export default useMachineCount;

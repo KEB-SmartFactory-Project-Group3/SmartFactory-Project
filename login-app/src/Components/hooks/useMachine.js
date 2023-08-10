@@ -1,9 +1,9 @@
 // hooks/useOperationTime.js
 import { useEffect, useState } from 'react';
-import { retrieveOperation } from '../api/ApiService';
+import { retrieveData } from '../api/ApiService';
 
 function useMachine() {
-  const [operationTime, setOperationTime] = useState('');
+  const [operationStartTime, setOperationTime] = useState('');
 
   useEffect(() => {
     const intervalTime = setInterval(callTimeApi, 1000);
@@ -11,12 +11,12 @@ function useMachine() {
     return () => {
       clearInterval(intervalTime);
     };
-  }, [operationTime]);
+  }, [operationStartTime]);
 
   function callTimeApi() {
-    retrieveOperation()
+    retrieveData('operationStartTime')
       .then((response) => {
-        console.log("API 응답 데이터:", response)
+        // console.log("API oper 응답 데이터:", response)
         successfulResponse(response)})
       .catch((error) => errorResponse(error))
       .finally(() => console.log('cleanup'));
@@ -31,7 +31,7 @@ function useMachine() {
     console.log(error);
   }
 
-  return operationTime;
+  return operationStartTime;
 }
 
 export default useMachine;

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {  useNavigate, Link } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -8,10 +8,9 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useState } from 'react';
-import { Tabs, Tab, useTheme, useMediaQuery} from '@mui/material';
+import { useState, useEffect } from 'react';
+import { Tabs, Tab} from '@mui/material';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import DrawerComp from './DrawerComp';
@@ -20,23 +19,27 @@ import DrawerComp from './DrawerComp';
 function Header(props) {
    
   const authContext = useAuth()
-  //authContext에서 인증 정보를 가져와서 지역 변수에 넣음
   const isAuthenticated = authContext.isAuthenticated
-  
   // 현재 관리자 가져오기
   const currentUser = authContext.currentUser
   //const name = authContext.currentUser?.name // 로그인 api로 가져온 name
   const name = authContext.currentUser && authContext.currentUser.name //javascript
-  console.log(name)
-
 
   const navigate = useNavigate()
   const [open,setOpen] = useState(false)
-
-  // const theme = useTheme(theme.breakpoints.down('sm'))
-  // const isMatch = useMediaQuery()
-  // 활성 탭을 업데이트하는 구간
   const [value, setValue] = useState()
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(()=>{
+    if (window.innerWidth <= 768) {
+      setIsMobile(true)
+    }else {
+      setIsMobile(false)
+    }
+  },[])
+
+  //drawer을 여닫는 함수 구현
+  const handleDrawerToggle = () => {}
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -65,10 +68,9 @@ function Header(props) {
    return (
      <header className="header">
       <AppBar position="static" sx={{ backgroundColor: 'transparent'}} className="headerapp">
-       <div className="container">
+       {/* <div className="container"> */}
             <Toolbar>
-
-             <Grid sx={{placeItems: "center"}} container>
+             <Grid container alignItems="center">
                 <Grid item xs={11}>
                   <Tabs value={value} 
                         onChange={handleChange} 
@@ -144,7 +146,7 @@ function Header(props) {
             
               <DrawerComp />
             </Toolbar>
-       </div>
+       {/* </div> */}
 
      </AppBar>
     

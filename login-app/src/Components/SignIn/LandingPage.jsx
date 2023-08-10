@@ -1,10 +1,9 @@
-import { useParams } from 'react-router-dom';
 import React from 'react';
-import useMachine from '../hooks/useMachine';
 import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
+import useMachine from '../hooks/useMachine';
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -18,12 +17,11 @@ const Item = styled(Paper)(({ theme }) => ({
 
 function LandingPage() {
 
-  // const {id} = useParams()
   const operationtime = useMachine()
 
   return (
     <div className="landing">
-      {/* <h1>Welcome {id}</h1> */}
+      {/* <h1>Welcome {id}</h1>  */}
       <div className="operation-info">총 가동 시간 : {operationtime}</div>
 
       <Box sx={{ flexGrow: 10 }}>

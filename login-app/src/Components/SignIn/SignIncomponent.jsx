@@ -5,6 +5,7 @@ import { useAuth } from './security/AuthContext';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField'
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import Typography from '@mui/material/Typography';
 import {StyledSignInContainer, StyledGridItem, StyledBox, colorAnimation} from '../stylescomp/SignInStyles'
 
 
@@ -69,9 +70,9 @@ function SignIncomponent() {
     <StyledSignInContainer>
       <form className="loginform">
       <StyledBox>
-        <h2>Login</h2>
+       <Typography variant="h5" sx={{ fontFamily: 'Moirai One, cursive', fontWeight: 'bold', color: '#ffffff', marginBottom: '20px', marginTop: '5px' }}>Login</Typography>
             <StyledGridItem item>
-              <AccountBoxIcon sx={{ color: 'rgba(91, 123, 178, 0.7)', fontSize: 70   }} />
+              <AccountBoxIcon sx={{ color: 'rgba(255, 255, 255, 0.3)', fontSize: 70, marginBottom: 0}} />
               <TextField 
                 label="Username"
                 required
@@ -89,7 +90,7 @@ function SignIncomponent() {
                 }}/>
             </StyledGridItem>
             <StyledGridItem>
-              <LockIcon sx={{ color: 'rgba(91, 123, 178, 0.7)', fontSize: 70  }} />
+              <LockIcon sx={{ color: 'rgba(255, 255, 255, 0.3)', fontSize: 70  }} />
               <TextField 
                 label="Password"
                 type="password"
@@ -120,7 +121,7 @@ function SignIncomponent() {
             name="loginbtn"
             variant="contained"
             style={{
-              backgroundColor: '#5C6AC4',
+              backgroundColor: '#311b92',
               color: '#c6caee',
               width: '310px',
               height: '30px',
