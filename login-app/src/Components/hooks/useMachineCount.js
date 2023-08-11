@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { retrieveData } from '../api/ApiService';
+import axios from 'axios';
 
 function useMachineCount() {
   const [count, setCount] = useState(0)
-  const [targetCount,setTargetCount] = useState('')
+  const [targetCount,setTargetCount] = useState(0)
 
   useEffect(() => {
     const intervalTime = setInterval(callCountApi, 1000);
@@ -44,12 +45,37 @@ function useMachineCount() {
     setTargetCount(newValue)
   }
 
+  const apiServer = axios.create({
+    baseURL: 'http://172.20.10.3:8080',
+    withCredentials: true, //쿠키 자동 포함
+  })
+
   //목표 생산량 전송
-  const handleTargetCountSubmit = () => {
+  const handleTargetCountSubmit = async() => {
     //나중에 서버로 보낼 값
     console.log("목표 생산량:",targetCount)
-  }
-
+    try {
+      const token = document.cookie.split('=')[1]; // 쿠키에서 토큰 가져오기
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+        console.log(targetCount)
+        const requestRateData = {
+          goal : targetCount
+        }
+        const response = await apiServer.post('/api/display/goal',requestRateData, config)
+        if (response.status === 200) {
+         console.log('Data posted successfully:', response.data);
+         } else {
+           console.log('Error while posting data');
+         }
+       } catch (error) {
+         console.error('Error while posting data:', error)
+       } 
+    }
+    
   const targetAchievement = targetCount
     ? ((count / targetCount) * 100).toFixed(2)
     : ''

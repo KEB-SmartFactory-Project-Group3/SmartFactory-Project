@@ -6,14 +6,16 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import FormDialog from './FormDialog';
 import Paper from '@mui/material/Paper';
+import { TextField } from '@mui/material';
+import useMachineRate from '../hooks/useMachineRate';
 // import './MachinePage.css';
 
 
 function MachinePage() {
 
-  const { isRunning, elapsedTime, handleStart, handleStop, resetTimer} = useTimeRecorder();
-  const {count, targetAchievement, targetCount, handleTargetcountChange} = useMachineCount()
-
+  const { isRunning, elapsedTime, startTime, handleStart, handleStop, resetTimer} = useTimeRecorder();
+  const {count, targetAchievement, targetCount, setTargetCount, handleTargetcountChange, handleTargetCountSubmit} = useMachineCount()
+  const {nowRate} = useMachineRate()
   const [formOpen, setFormOpen] = useState(false)
 
   const handleOpenForm = () => {
@@ -25,10 +27,11 @@ function MachinePage() {
   };
 
   const formatTime = (time) => {
-    // 시간을 분:초 형식으로 포맷팅하는 함수
-    const minutes = Math.floor(time / 60000);
-    const seconds = ((time % 60000) / 1000).toFixed(0);
-    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    const hours = Math.floor(time / 3600000); // 시간
+    const minutes = Math.floor((time % 3600000) / 60000); // 분
+    const seconds = ((time % 60000) / 1000).toFixed(0); // 초
+  
+    return `${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   };
 
   return (
@@ -41,7 +44,7 @@ function MachinePage() {
           <Box>
             <Paper 
                 sx={{
-                  height: 700,
+                  height: 300,
                   width: 400,
                   backgroundColor: (theme) =>
                       theme.palette.mode === 'dark' ?  '#fffdeb' : '#fffdeb',
@@ -50,8 +53,24 @@ function MachinePage() {
               <item>
                 <Box sx={{ '& button': { m: 0.5 } }}>
                   <h1>A</h1>
-                  <div className="targetAchievement-info">도달량 : {targetAchievement}</div>
-                  <div className="targetProduction-info">목표 생산량 : {targetCount}</div>
+                  <div className="targetAchievement-info">도달량 : {nowRate}</div>
+                  <div className="targetProduction-info">
+                      목표 생산량 : {''}
+                      <TextField 
+                        value={targetCount}
+                        onChange={(e) => handleTargetcountChange(e.target.value)}
+                        variant='outlined'
+                        size='small'
+                        />
+                        <Button
+                          variant="contained"
+                          style={{ backgroundColor: '#5C6AC4', color: 'white', marginLeft: '10px' }}
+                          size="small"
+                          onClick={handleTargetCountSubmit}
+                        >
+                          전송
+                        </Button>
+                        </div>
                   <div className="operation-info">가동 시간 : {formatTime(elapsedTime)}</div>
                   <div className="production-info">생산량 : {count}</div> 
                   {/* <p>가동중지: {formatTime(elapsedTime)}</p> */}
@@ -95,7 +114,7 @@ function MachinePage() {
                   </Button>
                   </>
                 )}
-                <FormDialog open={formOpen} handleClose={handleCloseForm} />
+                <FormDialog open={formOpen} handleClose={handleCloseForm} elapsedTime={elapsedTime} />
                 <Button
                   variant="contained"
                   style={{ backgroundColor: '#5C6AC4', color: 'white' }}
