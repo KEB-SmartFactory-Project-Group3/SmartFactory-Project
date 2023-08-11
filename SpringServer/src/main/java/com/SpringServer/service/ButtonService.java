@@ -10,25 +10,23 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 @RequiredArgsConstructor
-public class StopService {
-    private final int GOAL = 500;
+public class ButtonService {
+
+    private final GoalService goalService;
+
     private final String URL = "http://172.20.10.11";
     private final StopRepository stopRepository;
-
-    public double calculateNowGoal(int count){
-        return ((double)count / GOAL) * 100;
-    }
 
     public ButtonResponse saveStopReason(ButtonRequest request){
         var stopReason = StopReason.builder()
                 .operationStopTime(request.getOperationStopTime())
                 .operationTime(request.getOperationTime())
                 .userName(request.getUserName())
-                .machineNumber(request.getMachineNumber())
                 .reason(request.getReason())
-                .nowGoal(calculateNowGoal(request.getCount()))
+                .nowGoal(goalService.calculateNowRate(request.getCount()))
                 .build();
-        onOffEsp32Board(request);
+        System.out.println(request.getUserName() + request.getState());
+//        onOffEsp32Board(request);
         stopRepository.save(stopReason);
         return ButtonResponse.builder()
                 .result("saved")

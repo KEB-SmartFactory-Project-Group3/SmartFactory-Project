@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MachineInfoDTO {
-
-    private double nowRate;
-    private int count;
+public class GoalDTO {
+    private int goal;
 }

@@ -4,13 +4,11 @@ package com.SpringServer.controller;
 //import com.SpringServer.model.dto.CountDTO;
 //import com.SpringServer.model.dto.TemperatureDTO;
 //import com.SpringServer.model.dto.TimesDTO;
-import com.SpringServer.model.dto.ButtonRequest;
-import com.SpringServer.model.dto.ButtonResponse;
-import com.SpringServer.model.dto.MachineInfoDTO;
-import com.SpringServer.model.dto.RegisterRequest;
+import com.SpringServer.model.dto.*;
 import com.SpringServer.service.DisplayService;
+import com.SpringServer.service.ButtonService;
+import com.SpringServer.service.GoalService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +17,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/display")
 public class DisplayController {
 
+    private final GoalService goalService;
     private final DisplayService displayService;
+    private final ButtonService buttonService;
 
 
 
@@ -28,27 +28,19 @@ public class DisplayController {
         return ResponseEntity.ok(displayService.getMachineInfo());
     }
 
-    @PostMapping("/button")
-    public ResponseEntity<ButtonResponse> OnOffEsp32Board(@RequestBody ButtonRequest request){
-        return  ResponseEntity.ok(displayService.onOffEsp32Board(request));
+    @PostMapping("/goal")
+    public ResponseEntity<Integer> saveGoalAmount(@RequestBody GoalDTO goalDTO){
+        return ResponseEntity.ok(goalService.saveGoalAmount(goalDTO));
     }
 
-//    @GetMapping("/operationtime")
-//    public ResponseEntity<TimesDTO> displayOperationTime() {
-//        return ResponseEntity.ok(displayService.getOperationTime());
-//    }
-//
-//    @GetMapping("/count")
-//    public ResponseEntity<CountDTO> displayCount(){
-//        return ResponseEntity.ok(displayService.getCount());
-//    }
-//
-//    @GetMapping("/temperature")
-//    public ResponseEntity<TemperatureDTO> displayTemperature(){
-//        return ResponseEntity.ok(displayService.getTemperature());
-//    }
+    @PostMapping("/button")
+    public ResponseEntity<ButtonResponse> controlEsp32Board(@RequestBody ButtonRequest request){
+        return  ResponseEntity.ok(buttonService.saveStopReason(request));
+    }
 
-
-
+    @GetMapping("/factoryinfo")
+    public ResponseEntity<FactoryInfoDTO> displayFactoryInfo(){
+        return ResponseEntity.ok(displayService.getFactoryInfo());
+    }
 
 }

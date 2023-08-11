@@ -1,5 +1,6 @@
 package com.SpringServer.model.dto;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,8 +10,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MachineInfoDTO {
+public class FactoryInfoDTO {
 
-    private double nowRate;
-    private int count;
+    private double temperature;
+    private double humidity;
 }

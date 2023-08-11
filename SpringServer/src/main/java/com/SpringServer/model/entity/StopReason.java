@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 
@@ -26,7 +27,6 @@ public class StopReason {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:MM:SS")
     private Time operationTime;
     private String userName;
-    private String machineNumber;
     private String reason;
     private double nowGoal;
 
