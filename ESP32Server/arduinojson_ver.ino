@@ -7,8 +7,8 @@
 
 
 //------------------------ global variables ------------------------------------------------------------------
-const char* ssid = "Dohwan"; // "KT_GiGA_F2EA"; //  "SmartFactory"; //                  // 와이파이 아이디
-const char* password =  "dh990921"; // "ffk8ebb167"; //  "inha4885"; //     // 와이파이 비밀번호
+const char* ssid = "Dohwan"; // "SmartFactory"; // "KT_GiGA_F2EA"; //                   // 와이파이 아이디
+const char* password =   "dh990921"; // "inha4885"; // "ffk8ebb167"; //     // 와이파이 비밀번호
 
 WebServer server(80);
 OLED_U8G2 oled; // create oled object
@@ -32,6 +32,9 @@ int reset_pin = D6;
 // counting_var : to store the previous value
 int count = 0;        // 카운터용 변수
 int pre_time = 0;     // 이전에 물건이 지나간 시간
+
+// ESP32Board OnOff
+boolean state = true;
 
 
 //--------------------------- setup --------------------------------------------------------------------------
@@ -67,6 +70,9 @@ void setup() {
 
   server.on("/", handleRootEvent);
   server.on("/data", handleDataRequest);
+  server.on("/red_led_on", handleRedledOn);
+  server.on("/red_led_off", handleRedledOff);
+  server.on("/reset", handleReset);
 
   server.begin();  
   Serial.println("Web server started!");
@@ -76,13 +82,36 @@ void setup() {
 //---------------------------- roop --------------------------------------------------------------------------
 void loop() {
   server.handleClient();
-  counting();
+  if(state == true){
+    counting();
+  }
   oled_display();
   delay(500); // 500/1000 sec
 }
 
 
 //--------------------------- functions ----------------------------------------------------------------------
+void handleRedledOn(){
+  Serial.println("Red_led On");
+  digitalWrite(red_led, HIGH);
+  state = true;
+  server.send(200);
+}
+
+void handleRedledOff(){
+  Serial.println("Red_led Off");
+  digitalWrite(red_led, Low);
+  state = false;
+  server.send(200);
+}
+
+void handleReset(){
+  Serial.println("reset");
+  count = 0;
+  server.send(200);
+}
+
+
 void handleRootEvent() {
   String clientIP = server.client().remoteIP().toString();  // client's ip addr
   int octet1, octet2, octet3, octet4;

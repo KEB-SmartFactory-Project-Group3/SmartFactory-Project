@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ButtonRequest {
+public class OperationButtonRequest {
 
     private String userName;
     private String machineNumber;
@@ -21,6 +21,8 @@ public class ButtonRequest {
     private Time operationTime;
     private String reason;
     private int count;
+
+    private String state;
 
 
 
