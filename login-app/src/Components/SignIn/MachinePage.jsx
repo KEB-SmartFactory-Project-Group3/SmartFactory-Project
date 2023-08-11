@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
-import useMachine from '../hooks/useMachine';
+import {useMachine,formatOperationTime} from '../hooks/useMachine';
 import useTimeRecorder from '../hooks/customMachine';
 import useMachineCount from '../hooks/useMachineCount';
 import Button from '@mui/material/Button';
@@ -54,7 +54,7 @@ function MachinePage() {
                   <h1>A</h1>
                   <div className="targetAchievement-info">도달량 : {targetAchievement}</div>
                   <div className="targetProduction-info">목표 생산량 : {targetCount}</div>
-                  <div className="operation-info">총 가동 시간 : {operationStartTime}</div>
+                  <div className="operation-info">총 가동 시간 : {operationStartTime ? formatOperationTime(operationStartTime) : '로딩 중...'}</div>
                   <div className="production-info">생산량 : {count}</div> 
                   <p>가동중지: {formatTime(elapsedTime)}</p>
               <div>
@@ -66,7 +66,7 @@ function MachinePage() {
                     size="small"
                     onClick={handleStop}
                   >
-                    Stop
+                    재가동
                   </Button>
                   ) : (
                   <Button
@@ -79,7 +79,7 @@ function MachinePage() {
                       handleOpenForm();
                     }}
                   >
-                    Start
+                    가동 중지
                   </Button>
                 )}
                 <FormDialog open={formOpen} handleClose={handleCloseForm} />
