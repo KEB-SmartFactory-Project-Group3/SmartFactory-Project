@@ -1,72 +1,62 @@
 ```mermaid
 classDiagram
-      SensorController -- TemperatureSensor
-      SensorController -- HumiditySensor
-      SensorController -- UltrasonicSensor
-      SensorController -- LightSensor
-      SensorController -- Camera
-      SensorController : -getSensorData()
+    class User {
+        - user_id: String
+        - username: String
+        - password: String
+        + login(): void
+        + logout(): void
+    }
 
-      TemperatureSensor : -getTemperature()
-      HumiditySensor : -getHumidity()
-      UltrasonicSensor : -getDistance()
-      LightSensor : -getLightIntensity()
+    class Machine {
+        # status: String
+        # machine_id: String
+        - user_id: String
+        + restart(): void
+        + stop(): void
+        + reset(): void
+        + calculate_production(output: int): void
+    }
 
-      Camera -- ObjectDetection
-      Camera : -captureImage()
-      
-      ObjectDetection : -detectObjects()
+    class VisionInspectionSystem{
+        + inspection_resolution: String
+        + defect_threshold: double
+        + capture_image(target: Products): void
+        + analyze_image(image_data: ImageData): void
+    }
 
-      AlarmController -- Buzzer
-      AlarmController -- Led
-      AlarmController : -triggerAlarm()
-      Buzzer : -sound()
-      Led : -blink()
-      
+    class Products{
+        - serialNumber: String
+        - quality: String
+        - manufacturingDate: String
+        + getSerialNumber(): String
+        + getStatus(): String
+        + getManufacturingDate(): String
+    }
 
-      User -- UserData
-      User : +getRoles()
-      UserData : -id
-      UserData : -password
-      UserData : -name
+    class EnvironmentalMonitoringSensor{
+        - temperature: Float
+        - humidity: Float
+        + readTemperature(): void
+        + readHumidity(): void
+        + getTemperature(): Float
+        + getHumidity(): Float
+    }
 
-      OperationController -- Button
-      OperationController : -startFactoryOperation()
-      OperationController : -stopFactoryOperation()
-      OperationController : -getElapsedTime()
+    class ProductionMachine {
+        # production_count: int
+        + getProductionCount(): int
+    }
 
-      Button : +onClick()
 
-      OperationStopRecord -- Machine
-      OperationStopRecord : -stopTimes
-      OperationStopRecord : -restartTimes
-      OperationStopRecord : -reason
+    Machine <|-- VisionInspectionSystem : is a
+    Machine <|-- EnvironmentalMonitoringSensor : is a
+    Machine <|-- ProductionMachine : is a
+    VisionInspectionSystem --> Products: captures
+    Machine --> User : has a
 
-      ProductRecord -- Machine
-      ProductRecord : -times
-      ProductRecord : -temperature
-      ProductRecord : -count
+    
+    
+    
 
-      Machine : -machineNumber
-
-      MonitoringPlatformController -- MonitoringPlatformView
-      MonitoringPlatformController -- DataCollector
-      MonitoringPlatformController -- DataAnalyzer
-      MonitoringPlatformController : +showLiveStatus()
-
-      FactoryInfo : 
-      
-      MonitoringPlatformView : +displayElapsedTime()
-
-      DataCollector -- DatabaseHandler
-      DataCollector : -collectData()
-      DataCollector : -saveDataToDB()
-
-      DataAnalyzer -- DatabaseHandler
-      DataAnalyzer : -analyzeData()
-      DataAnalyzer : -getStatistics()
-
-      DatabaseHandler : -connectToDB()
-      DatabaseHandler : -insertData()
-      DatabaseHandler : -fetchData()
-      DatabaseHandler : -updateData()
+ 
