@@ -16,7 +16,7 @@ model.conf = 0.60  # 검출 임계값(Threshold) 설정
 app = Flask(__name__)
 CORS(app, resources={r"*": {"origins": ["http://localhost:3000"]}})
 
-url = 'http://192.168.0.76/'  # Arduino webserver URL
+url = 'http://165.246.116.50/'  # Arduino webserver URL
 
 
 @app.route('/get-live-transmission', methods=['GET'])
@@ -66,6 +66,15 @@ def capture_image():
         image_np = np.frombuffer(decoded_image, dtype=np.uint8)
         img_cv2 = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
 
+        # 객체 검출 수행
+        results = model(img_cv2, size=640)
+
+        # 검출된 객체에 대한 클래스 이름 가져오기
+        detected_object_names = [results.names[int(cls)] for cls in results.xyxy[0][:, -1]]
+
+        # 검출된 객체의 클래스 이름을 콘솔에 출력
+        print("Detected objects:", detected_object_names)
+
         # 이미지를 화면에 표시
         cv2.imshow("Captured Image", img_cv2)
         cv2.waitKey(0)
@@ -78,4 +87,3 @@ def capture_image():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
-
