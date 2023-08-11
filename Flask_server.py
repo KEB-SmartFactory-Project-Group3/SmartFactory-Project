@@ -7,6 +7,7 @@ import base64
 from flask import Flask, jsonify,request
 from flask_cors import CORS
 import torch
+import requests
 
 
 # YOLOv5 모델 불러옴 (로컬에 저장된 best.pt 또는 last.pt 파일 불러옴)
@@ -16,7 +17,7 @@ model.conf = 0.60  # 검출 임계값(Threshold) 설정
 app = Flask(__name__)
 CORS(app, resources={r"*": {"origins": ["http://localhost:3000"]}})
 
-url = 'http://165.246.116.50/'  # Arduino webserver URL
+url = 'http://165.246.116.5/'  # Arduino webserver URL
 
 
 @app.route('/get-live-transmission', methods=['GET'])
@@ -72,8 +73,18 @@ def capture_image():
         # 검출된 객체에 대한 클래스 이름 가져오기
         detected_object_names = [results.names[int(cls)] for cls in results.xyxy[0][:, -1]]
 
-        # 검출된 객체의 클래스 이름을 콘솔에 출력
-        print("Detected objects:", detected_object_names)
+        # # 검출된 객체의 클래스 이름을 콘솔에 출력
+        # print("Detected objects:", detected_object_names)
+
+        # 클래스 이름을 자바 스프링 백엔드 서버로 전송
+        backend_url = 'http://172.20.10.3:8080/api/defective'
+        payload = {'defective': ', '.join(detected_object_names)}
+        print(payload)
+        response = requests.post(backend_url, json=payload)
+        print(response)
+
+        # 응답을 콘솔에 출력
+        print("Backend Response:", response.text)
 
         # 이미지를 화면에 표시
         cv2.imshow("Captured Image", img_cv2)
