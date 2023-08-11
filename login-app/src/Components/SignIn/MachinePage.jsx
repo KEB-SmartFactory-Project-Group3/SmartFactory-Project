@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
-import {useMachine,formatOperationTime} from '../hooks/useMachine';
 import useTimeRecorder from '../hooks/customMachine';
 import useMachineCount from '../hooks/useMachineCount';
 import Button from '@mui/material/Button';
@@ -13,7 +12,6 @@ import Paper from '@mui/material/Paper';
 function MachinePage() {
 
   const { isRunning, elapsedTime, handleStart, handleStop, resetTimer} = useTimeRecorder();
-  const operationStartTime = useMachine()
   const {count, targetAchievement, targetCount, handleTargetcountChange} = useMachineCount()
 
   const [formOpen, setFormOpen] = useState(false)
@@ -54,9 +52,9 @@ function MachinePage() {
                   <h1>A</h1>
                   <div className="targetAchievement-info">도달량 : {targetAchievement}</div>
                   <div className="targetProduction-info">목표 생산량 : {targetCount}</div>
-                  <div className="operation-info">총 가동 시간 : {operationStartTime ? formatOperationTime(operationStartTime) : '로딩 중...'}</div>
+                  <div className="operation-info">가동 시간 : {formatTime(elapsedTime)}</div>
                   <div className="production-info">생산량 : {count}</div> 
-                  <p>가동중지: {formatTime(elapsedTime)}</p>
+                  {/* <p>가동중지: {formatTime(elapsedTime)}</p> */}
               <div>
                 {isRunning ? (
                   <Button
@@ -64,11 +62,15 @@ function MachinePage() {
                     style={{ backgroundColor: '#5C6AC4', color: 'white' }}
                     sx={{ width: '20px' }}
                     size="small"
-                    onClick={handleStop}
+                    onClick={() => {
+                      handleStop()
+                      handleOpenForm();
+                    }}
                   >
-                    재가동
+                    가동중지
                   </Button>
                   ) : (
+                    <>
                   <Button
                     variant="contained"
                     style={{ backgroundColor: '#5C6AC4', color: 'white' }}
@@ -76,11 +78,22 @@ function MachinePage() {
                     size="small"
                     onClick={() => {
                       handleStart();
-                      handleOpenForm();
                     }}
                   >
-                    가동 중지
+                    가동 시작
                   </Button>
+            
+                  <Button
+                    variant="contained"
+                    style={{ backgroundColor: '#5C6AC4', color: 'white' }}
+                    size="small"
+                    onClick={()=> {
+                      handleStart()
+                    }} // Start the timer
+                  >
+                  재가동
+                  </Button>
+                  </>
                 )}
                 <FormDialog open={formOpen} handleClose={handleCloseForm} />
                 <Button

@@ -3,16 +3,19 @@ import { useState, useEffect } from 'react';
 function useTimeRecorder() {
   const [isRunning, setIsRunning] = useState(false);
   const [startTime, setStartTime] = useState(null);
-  const [elapsedTime, setElapsedTime] = useState(0); //경과시간
-
+  const [elapsedTime, setElapsedTime] = useState(0); // 경과시간
 
   const handleStart = () => {
-    setIsRunning((prevIsRunning) => !prevIsRunning);
+    if (!isRunning) {
+      setStartTime(Date.now() - elapsedTime);
+      setIsRunning(true);
+    }
   };
 
-
   const handleStop = () => {
-    setIsRunning((prevIsRunning) => !prevIsRunning);
+    if (isRunning) {
+      setIsRunning(false);
+    }
   };
 
   const resetTimer = () => {
@@ -24,7 +27,6 @@ function useTimeRecorder() {
   useEffect(() => {
     let intervalId;
     if (isRunning) {
-      setStartTime(Date.now() - elapsedTime);
       intervalId = setInterval(() => {
         setElapsedTime(Date.now() - startTime);
       }, 1000);
@@ -32,10 +34,9 @@ function useTimeRecorder() {
       clearInterval(intervalId);
     }
     return () => clearInterval(intervalId);
-  }, [isRunning, elapsedTime, startTime]);
+  }, [isRunning, startTime]);
 
-
-  return { isRunning, elapsedTime, handleStart, handleStop, resetTimer }
+  return { isRunning, elapsedTime, handleStart, handleStop, resetTimer };
 }
 
 export default useTimeRecorder;
