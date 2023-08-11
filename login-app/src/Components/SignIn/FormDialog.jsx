@@ -19,6 +19,23 @@ export default function FormDialog({ open, handleClose, name }) {
   const [selectedReason, setSelectedReason] = useState('')
   const [formattedOperationTime, setFormattedOperationTime] = useState('')
 
+  const operationStopTimeMillis = Date.now(); // 밀리초로 현재 시간 가져오기
+  const operationStopDate = new Date(operationStopTimeMillis);
+
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  };
+
+  const formattedOperationStopTime = formatDate(operationStopDate);
+
+
   const formatTime = (time) => {
     // 시간을 분:초 형식으로 포맷팅하는 함수
     const minutes = Math.floor(time / 60000);
@@ -36,20 +53,46 @@ export default function FormDialog({ open, handleClose, name }) {
     setSelectedReason(event.target.value);
   }
 
+  const apiServer = axios.create({
+    baseURL: 'http://172.20.10.3:8080',
+    withCredentials: true, //쿠키 자동 포함
+  })
+
   //백엔드 api데이터 전송
   const handleReasonSubmit = async () => {
     // 선택된 항목을 처리하는 로직 추가
     if (selectedReason) {
       try {
+        const token = document.cookie.split('=')[1]; // 쿠키에서 토큰 가져오기
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
         console.log('Selected reason:', selectedReason)
         const name = authContext.currentUser && authContext.currentUser.name
-        const response = await axios.post('/api/display/button', {
-          selectedReason,
-          name,
-          elapsedTime: customMachineElapsedTime,
-          // count,
-          reason: 'start'
-       })
+        const operationStopTime = formattedOperationStopTime;
+        const operationTime = customMachineElapsedTime;
+        // const operationTime = '04:05:30'; 
+        const reason = selectedReason;
+        const countValue = 0; 
+        const state = 'start';
+
+        console.log(name)
+        console.log(operationStopTime)
+        console.log(operationTime)
+        console.log(reason)
+
+        const requestData = {
+          userName: name,
+          operationStopTime,
+          operationTime,
+          reason,
+          count: countValue,
+          state,
+        };
+
+        const response = await apiServer.post('/api/display/button',requestData, config)
        if (response.status === 200) {
         console.log('Data posted successfully:', response.data);
         } else {
