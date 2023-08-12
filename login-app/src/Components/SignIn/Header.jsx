@@ -10,10 +10,10 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useState, useEffect } from 'react';
-import { Tabs, Tab} from '@mui/material';
-import Grid from '@mui/material/Grid';
+import { Tabs, Tab, useMediaQuery, useTheme, Typography} from '@mui/material';
 import Box from '@mui/material/Box';
 import DrawerComp from './DrawerComp';
+import AndroidIcon from '@mui/icons-material/Android';
 
 
 function Header(props) {
@@ -29,6 +29,8 @@ function Header(props) {
   const [open,setOpen] = useState(false)
   const [value, setValue] = useState()
   const [isMobile, setIsMobile] = useState(false)
+
+  const isMatch = useMediaQuery(useTheme().breakpoints.down("md"))
 
   useEffect(()=>{
     if (window.innerWidth <= 768) {
@@ -64,92 +66,99 @@ function Header(props) {
 
   if (window.location.pathname === '/')
       return null
+  
 
    return (
      <header className="header">
-      <AppBar position="static" sx={{ backgroundColor: 'transparent'}} className="headerapp">
-       {/* <div className="container"> */}
-            <Toolbar>
-             <Grid container alignItems="center">
-                <Grid item xs={11}>
+      <AppBar  sx={{ backgroundColor: 'transparent', boxShadow:0 ,position: 'sticky'}} className="headerapp">
+        {isMatch ? (
+          <Box display='flex'>
+          <AndroidIcon sx={{color: 'black', padding: 1}}/>
+          <Typography sx={{padding:0.5 ,color:'black'}} variant='h6' fontFamily='fantasy'>
+            gugu
+          </Typography>
+            <DrawerComp />
+          </Box>
+        ): (  
+          <Toolbar>
+            <Box sx={{display: 'flex', width: '100%', justifyContent:'center', alignItems:'center'}} >
+              <AndroidIcon sx={{color: 'black'}}/>
+                <Box>
                   <Tabs value={value} 
-                        onChange={handleChange} 
-                        aria-label="nav tabs example"
-                        textColor="inherit"
-                        indicatorColor="secondary"
-                    >
+                      onChange={handleChange} 
+                      aria-label="nav tabs example"
+                      textColor="inherit"
+                      indicatorColor="secondary"
+                  >
                     {isAuthenticated && (
-                      <>
-                        <Tab
-                          label="Home"
-                          value={`/Landing/${currentUser.name}`}
-                          component={Link}
-                          to={`/Landing/${currentUser.name}`}
-                          style={{ textDecoration: 'none', color: '#3f51b5', marginRight: '4rem' ,  }}
-                        />
-                        <Tab
-                          label="기계"
-                          value="/MachinePage"
-                          component={Link}
-                          to="/MachinePage"
-                          style={{ textDecoration: 'none', color: 'black', marginRight: '4rem' }}
-                        />
-                        <Tab
-                          label="온도"
-                          value="/TemperaturePage"
-                          component={Link}
-                          to="/TemperaturePage"
-                          style={{ textDecoration: 'none', color: 'black', marginRight: '4rem' }}
-                        />
-                        <Tab
-                          label="불량품"
-                          value="/Computervision"
-                          component={Link}
-                          to="/Computervision"
-                          style={{ textDecoration: 'none', color: 'black', marginRight: '4rem' }}
-                        />
-                        <Tab
-                          label="관리자DB"
-                          value="/Administrator"
-                          component={Link}
-                          to="/Administrator"
-                          style={{ textDecoration: 'none', color: 'black', marginRight: '4rem' }}
-                        />
-                      </>
-                    )}
-           
-                    {isAuthenticated && currentUser && (
-                      <>
-                        <Tab 
-                          label={
-                            <Box display="flex" alignItems="center">
-                              <AccountCircleIcon style={{ marginRight: '0.5rem' }} />
-                              <span style={{ color: 'black' }} >현재 관리자 : {name}</span>
-                            </Box>
-                          }
-                          style={{textDecoration: "none", color: "black", marginLeft:"19rem"}}
+                        <>
+                          <Tab
+                            label="Home"
+                            value={`/Landing/${currentUser.name}`}
+                            component={Link}
+                            to={`/Landing/${currentUser.name}`}
+                            style={{ textDecoration: 'none', ":hover":{textDecoration:"underline"},
+                                    fontWeight:"bold", color: '#3f51b5', marginRight: '4rem' ,  }}
                           />
-                      </>
-                    )}
-
-                </Tabs>
-                
-                </Grid>
-               
-                <Grid item xs={1}>
-                  <Box display="flex">
-                    {isAuthenticated && 
-                    <Button onClick={handleSubmitLogout}>Logout</Button>}
-                   </Box>
-                </Grid>  
-              </Grid>
+                          <Tab
+                            label="기계"
+                            value="/MachinePage"
+                            component={Link}
+                            to="/MachinePage"
+                            style={{ textDecoration: 'none', ":hover":{textDecoration:"underline"},
+                            fontWeight:"bold", color: 'black', marginRight: '4rem' ,  }}
+                          />
+                          <Tab
+                            label="온도"
+                            value="/TemperaturePage"
+                            component={Link}
+                            to="/TemperaturePage"
+                            style={{ textDecoration: 'none', ":hover":{textDecoration:"underline"},
+                            fontWeight:"bold", color: 'black', marginRight: '4rem' ,  }}
+                          />
+                          <Tab
+                            label="불량품"
+                            value="/Computervision"
+                            component={Link}
+                            to="/Computervision"
+                            style={{ textDecoration: 'none', ":hover":{textDecoration:"underline"},
+                            fontWeight:"bold", color: 'black', marginRight: '4rem' ,  }}
+                          />
+                          <Tab
+                            label="관리자DB"
+                            value="/Administrator"
+                            component={Link}
+                            to="/Administrator"
+                            style={{ textDecoration: 'none', ":hover":{textDecoration:"underline"},
+                            fontWeight:"bold", color: 'black', marginRight: '4rem' ,  }}
+                          />
+                        </>
+                      )}
             
-              <DrawerComp />
-            </Toolbar>
-       {/* </div> */}
-
-     </AppBar>
-    
+                      {isAuthenticated && currentUser && (
+                        <>
+                          <Tab 
+                            label={
+                              <Box display="flex" alignItems="center">
+                                <AccountCircleIcon style={{ marginRight: '0.5rem' }} />
+                                <span style={{ color: 'black', fontWeight:'bold'}} >현재 관리자 : {name}</span>
+                              </Box>
+                            }
+                            style={{textDecoration: "none", color: "black", marginLeft:"10rem"}}
+                            />
+                        </>
+                      )}
+                      <Box display='flex' marginLeft={'auto'}>
+                        {isAuthenticated && 
+                        <Button onClick={handleSubmitLogout}>Logout</Button>}
+                      </Box>
+                  </Tabs>
+                </Box>
+            </Box>
+          </Toolbar>
+          )}
+          </AppBar>
+              
             <Dialog open={open}>
               <DialogTitle>로그아웃</DialogTitle>
               <DialogContent>
