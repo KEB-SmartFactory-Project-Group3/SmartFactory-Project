@@ -4,28 +4,23 @@ classDiagram
         - user_id: String
         - username: String
         - password: String
-        + login(): void
-        + logout(): void
     }
 
     class Machine {
         # status: String
-        # machine_id: String
-        - user_id: String
         + restart(): void
         + stop(): void
         + reset(): void
-        + calculate_production(output: int): void
     }
 
     class VisionInspectionSystem{
         + inspection_resolution: String
         + defect_threshold: double
-        + capture_image(target: Products): void
-        + analyze_image(image_data: ImageData): void
+        + capture_image(target: Product): void
+        + analyze_image(image_data: ImageData): quality
     }
 
-    class Products{
+    class Product{
         - serialNumber: String
         - quality: String
         - manufacturingDate: String
@@ -37,23 +32,23 @@ classDiagram
     class EnvironmentalMonitoringSensor{
         - temperature: Float
         - humidity: Float
-        + readTemperature(): void
-        + readHumidity(): void
+        + readTemperature(): Float
+        + readHumidity(): Float
         + getTemperature(): Float
         + getHumidity(): Float
     }
 
-    class ProductionMachine {
-        # production_count: int
+    class ProductMachine {
+        # productionCount: int
         + getProductionCount(): int
+        + calculateProduction(): int
     }
 
 
-    Machine <|-- VisionInspectionSystem : is a
-    Machine <|-- EnvironmentalMonitoringSensor : is a
-    Machine <|-- ProductionMachine : is a
-    VisionInspectionSystem --> Products: captures
-    Machine --> User : has a
+    Machine <|-- ProductMachine : is a
+    VisionInspectionSystem --> Product: inspects
+    ProductMachine --> Product : produces
+    Machine "1" -- "0..1" User: is operated by
 
     
     
