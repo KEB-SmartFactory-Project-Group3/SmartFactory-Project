@@ -27,7 +27,7 @@ function Header(props) {
 
   const navigate = useNavigate()
   const [open,setOpen] = useState(false)
-  const [value, setValue] = useState()
+  const [value, setValue] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
 
   const isMatch = useMediaQuery(useTheme().breakpoints.down("md"))
@@ -39,9 +39,6 @@ function Header(props) {
       setIsMobile(false)
     }
   },[])
-
-  //drawer을 여닫는 함수 구현
-  const handleDrawerToggle = () => {}
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -70,11 +67,11 @@ function Header(props) {
 
    return (
      <header className="header">
-      <AppBar  sx={{ backgroundColor: 'transparent', boxShadow:0 ,position: 'sticky'}} className="headerapp">
+      <AppBar  sx={{ background:'transparent',boxShadow:0 ,position: 'sticky'}} className="headerapp">
         {isMatch ? (
           <Box display='flex'>
-          <AndroidIcon sx={{color: 'black', padding: 1}}/>
-          <Typography sx={{padding:0.5 ,color:'black'}} variant='h6' fontFamily='fantasy'>
+          <AndroidIcon sx={{color: 'white', padding: 1}}/>
+          <Typography sx={{padding:0.5 ,color:'white'}} variant='h6' fontFamily='Tektur, cursive'>
             gugu
           </Typography>
             <DrawerComp />
@@ -82,13 +79,13 @@ function Header(props) {
         ): (  
           <Toolbar>
             <Box sx={{display: 'flex', width: '100%', justifyContent:'center', alignItems:'center'}} >
-              <AndroidIcon sx={{color: 'black'}}/>
+              <AndroidIcon sx={{color: 'white', marginRight: '5rem'}}/>
                 <Box>
                   <Tabs value={value} 
                       onChange={handleChange} 
                       aria-label="nav tabs example"
                       textColor="inherit"
-                      indicatorColor="secondary"
+                      indicatorColor="transparent"
                   >
                     {isAuthenticated && (
                         <>
@@ -98,7 +95,11 @@ function Header(props) {
                             component={Link}
                             to={`/Landing/${currentUser.name}`}
                             style={{ textDecoration: 'none', ":hover":{textDecoration:"underline"},
-                                    fontWeight:"bold", color: '#3f51b5', marginRight: '4rem' ,  }}
+                                    fontWeight:"bold", color: 'white', marginRight: '4rem' ,
+                                    borderBottom: value === `/Landing/${currentUser.name}` ? '2px solid white' : 'none', 
+                                    transition: 'border-bottom 0.3s ease',  
+                                   }}
+                                   onClick={(e) => handleChange(e, `/Landing/${currentUser.name}`)}
                           />
                           <Tab
                             label="기계"
@@ -106,7 +107,11 @@ function Header(props) {
                             component={Link}
                             to="/MachinePage"
                             style={{ textDecoration: 'none', ":hover":{textDecoration:"underline"},
-                            fontWeight:"bold", color: 'black', marginRight: '4rem' ,  }}
+                            fontWeight:"bold", color: 'white', marginRight: '4rem' ,
+                            borderBottom: value === '/MachinePage' ? '2px solid white' : 'none', 
+                            transition: 'border-bottom 0.3s ease',   
+                           }}
+                            onClick={(e) => handleChange(e, '/MachinePage')}
                           />
                           <Tab
                             label="온도"
@@ -114,7 +119,11 @@ function Header(props) {
                             component={Link}
                             to="/TemperaturePage"
                             style={{ textDecoration: 'none', ":hover":{textDecoration:"underline"},
-                            fontWeight:"bold", color: 'black', marginRight: '4rem' ,  }}
+                            fontWeight:"bold", color: 'white', marginRight: '4rem' ,
+                            borderBottom: value === '/TemperaturePage' ? '2px solid white' : 'none', 
+                            transition: 'border-bottom 0.3s ease',   
+                           }}
+                            onClick={(e) => handleChange(e, '/TemperaturePage')}
                           />
                           <Tab
                             label="불량품"
@@ -122,7 +131,11 @@ function Header(props) {
                             component={Link}
                             to="/Computervision"
                             style={{ textDecoration: 'none', ":hover":{textDecoration:"underline"},
-                            fontWeight:"bold", color: 'black', marginRight: '4rem' ,  }}
+                            fontWeight:"bold", color: 'white', marginRight: '4rem' , 
+                            borderBottom: value === '/Computervision' ? '2px solid white' : 'none', 
+                            transition: 'border-bottom 0.3s ease',   
+                           }}
+                            onClick={(e) => handleChange(e, '/Computervision')} 
                           />
                           <Tab
                             label="관리자DB"
@@ -130,7 +143,11 @@ function Header(props) {
                             component={Link}
                             to="/Administrator"
                             style={{ textDecoration: 'none', ":hover":{textDecoration:"underline"},
-                            fontWeight:"bold", color: 'black', marginRight: '4rem' ,  }}
+                            fontWeight:"bold", color: 'white', marginRight: '4rem' ,  
+                            borderBottom: value === '/Administrator' ? '2px solid white' : 'none', 
+                            transition: 'border-bottom 0.3s ease',   
+                           }}
+                            onClick={(e) => handleChange(e, '/Administrator')}
                           />
                         </>
                       )}
@@ -141,16 +158,16 @@ function Header(props) {
                             label={
                               <Box display="flex" alignItems="center">
                                 <AccountCircleIcon style={{ marginRight: '0.5rem' }} />
-                                <span style={{ color: 'black', fontWeight:'bold'}} >현재 관리자 : {name}</span>
+                                <span style={{ color: 'white', fontWeight:'bold'}} >현재 관리자 : {name}</span>
                               </Box>
                             }
-                            style={{textDecoration: "none", color: "black", marginLeft:"10rem"}}
+                            style={{textDecoration: "none", color: "white", marginLeft:"10rem"}}
                             />
                         </>
                       )}
                       <Box display='flex' marginLeft={'auto'}>
                         {isAuthenticated && 
-                        <Button onClick={handleSubmitLogout}>Logout</Button>}
+                        <Button style={{ color: 'white'}} onClick={handleSubmitLogout}>Logout</Button>}
                       </Box>
                   </Tabs>
                 </Box>
