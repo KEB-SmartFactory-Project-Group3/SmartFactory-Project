@@ -11,6 +11,7 @@ import Computervison from './Computervision';
 import Administrator from './Administrator';
 import AuthProvider, { useAuth } from './security/AuthContext';
 import FormDialog from './FormDialog';
+import {StyledDiv} from '../stylescomp/AppStyle';
 
 function AuthenticatedRoute( {children} ) {
   const authContext = useAuth()
@@ -31,32 +32,42 @@ function Monitoring() {
             <Route path='/' element={<SignIncomponent />}/>
             <Route path='/Landing/:id' element={
                   <AuthenticatedRoute>
+                    <StyledDiv>
                       <Header />
                       <LandingPage />
+                      </StyledDiv>
                   </AuthenticatedRoute>}/>
 
             <Route path='/MachinePage' element={
                   <AuthenticatedRoute>
+                     <StyledDiv>
                       <Header />
                       <MachinePage />
+                      </StyledDiv>
                   </AuthenticatedRoute>}/>
 
             <Route path='/TemperaturePage' element={
                   <AuthenticatedRoute>
+                     <StyledDiv>
                       <Header />
                       <TemperaturePage />
+                     </StyledDiv>
                   </AuthenticatedRoute>}/>
 
             <Route path='/Computervision' element={
                   <AuthenticatedRoute>
+                     <StyledDiv>
                       <Header />
                       <Computervison />
+                      </StyledDiv>
                   </AuthenticatedRoute>}/>
 
             <Route path='/Administrator' element={
                   <AuthenticatedRoute>
+                     <StyledDiv>
                       <Header />
                       <Administrator />
+                      </StyledDiv>
                   </AuthenticatedRoute>}/>
 
             <Route path='/FormDialog' element={
