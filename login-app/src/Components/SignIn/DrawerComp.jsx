@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from './security/AuthContext';
-import { Drawer, IconButton, ListItemButton, ListItemIcon, ListItemText, List} from "@mui/material";
+import { IconButton, ListItemButton, ListItemIcon, List, ListItemText} from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import HomeMaxIcon from '@mui/icons-material/HomeMax';
 import ThermostatIcon from '@mui/icons-material/Thermostat';
@@ -8,8 +8,13 @@ import BuildIcon from '@mui/icons-material/Build';
 import StorageIcon from '@mui/icons-material/Storage';
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
 import { Link } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import { Backdrop, CustomDrawer, WhiteListItemText } from "../stylescomp/DrawerStyle";
+import LogoutIcon from '@mui/icons-material/Logout';
+import Avatar from '@mui/material/Avatar';
 
-function DrawerComp({onClose}) {
+function DrawerComp({onClose, onLogout}) {
 
   const authContext = useAuth()
   // 현재 관리자 가져오기
@@ -27,48 +32,57 @@ function DrawerComp({onClose}) {
 
   return (
     <React.Fragment>
-      <Drawer open={open} onClose={handleDrawerClose}>
+      {open && <Backdrop onClick={handleDrawerClose} />}
+      <CustomDrawer open={open} onClose={handleDrawerClose}>
         <List>
         <ListItemButton component={Link} to={`/Landing/${currentUser.name}`} onClick={handleDrawerClose}>
             <ListItemIcon>
-              <HomeMaxIcon />
+              <HomeMaxIcon sx={{ color: "white" }} />
             </ListItemIcon>
-            <ListItemText primary="HOME" />
+            <WhiteListItemText primary="HOME" />
           </ListItemButton>
           
           <ListItemButton component={Link} to="/MachinePage" onClick={handleDrawerClose}>
             <ListItemIcon>
-              <BuildIcon />
+              <BuildIcon sx={{ color: "white" }}/>
             </ListItemIcon>
-            <ListItemText primary="기계" />
+            <WhiteListItemText primary="기계" />
           </ListItemButton>
           
           <ListItemButton component={Link} to="/TemperaturePage" onClick={handleDrawerClose}>
             <ListItemIcon>
-              <ThermostatIcon />
+              <ThermostatIcon sx={{ color: "white" }}/>
             </ListItemIcon>
-            <ListItemText primary="온도" />
+            <WhiteListItemText primary="온도" />
           </ListItemButton>
           
           <ListItemButton component={Link} to="/Computervision" onClick={handleDrawerClose}>
             <ListItemIcon>
-              <ReportGmailerrorredIcon />
+              <ReportGmailerrorredIcon sx={{ color: "white" }}/>
             </ListItemIcon>
-            <ListItemText primary="불량품" />
+            <WhiteListItemText primary="불량품" />
           </ListItemButton>
 
           <ListItemButton component={Link} to="/Administrator" onClick={handleDrawerClose}>
             <ListItemIcon>
-              <StorageIcon />
+              <StorageIcon sx={{ color: "white" }}/>
             </ListItemIcon>
-            <ListItemText primary="관리자 DB" />
+            <WhiteListItemText primary="관리자 DB" />
           </ListItemButton>
+        </List> 
 
-        </List>
-        </Drawer>
-      <IconButton sx={{marginLeft:"auto"}} onClick={()=>setOpen(!open)}>
-        <MenuIcon color="white"/>
+      </CustomDrawer>
+
+      <IconButton sx={{ marginLeft: 'auto' }} onClick={onLogout}>
+        <LogoutIcon sx={{ color: 'white', borderColor: 'white' }} />
       </IconButton>
+      <IconButton
+        sx={{ color: 'white', marginLeft: 'auto', marginLeft: { xs: 0, md: 'auto' } }}
+        onClick={() => setOpen(!open)}
+      >
+        <MenuIcon />
+      </IconButton>
+  
     </React.Fragment>
 
   )
