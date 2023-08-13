@@ -8,15 +8,20 @@ import FormDialog from './FormDialog';
 import Paper from '@mui/material/Paper';
 import { TextField } from '@mui/material';
 import useMachineRate from '../hooks/useMachineRate';
-// import './MachinePage.css';
+import { styled } from '@mui/material/styles';
+import { StyledMachinePage , StyledMachineLanding} from '../stylescomp/MachineStyle';
+import './MachinePage.css';
+import CircularProgressWithLabel from '../Data/MachineData'
 
 
 function MachinePage() {
 
   const { isRunning, elapsedTime, startTime, handleStart, handleStop, resetTimer} = useTimeRecorder();
   const {count, targetAchievement, targetCount, setTargetCount, handleTargetcountChange, handleTargetCountSubmit} = useMachineCount()
-  const {nowRate} = useMachineRate()
+  // const {nowRate} = useMachineRate()
   const [formOpen, setFormOpen] = useState(false)
+
+  const nowRate = 17;
 
   const handleOpenForm = () => {
     setFormOpen(true)
@@ -34,48 +39,103 @@ function MachinePage() {
     return `${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   };
 
+  const Item = styled(Paper)(({ theme }) => ({
+    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+    ...theme.typography.body2,
+    padding: theme.spacing(1),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  }))
+
   return (
-    <div className="MachinePage" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-       <Grid container spacing={2}>
-    
-        <Grid item xs={4}
-           width={{xs:"350px", sm: "450px", md: "600px", lg:"800px", xl: "1000px"}} 
-           height={{xs:"500px", sm:"500px", md:"600px", lg:"700px"}}>
-          <Box>
-            <Paper 
-                sx={{
-                  height: 300,
-                  width: 400,
-                  backgroundColor: (theme) =>
-                      theme.palette.mode === 'dark' ?  '#fffdeb' : '#fffdeb',
-                }}
-              >
-              <item>
-                <Box sx={{ '& button': { m: 0.5 } }}>
-                  <h1>A</h1>
-                  <div className="targetAchievement-info">도달량 : {nowRate}</div>
-                  <div className="targetProduction-info">
-                      목표 생산량 : {''}
-                      <TextField 
-                        value={targetCount}
-                        onChange={(e) => handleTargetcountChange(e.target.value)}
-                        variant='outlined'
-                        size='small'
-                        />
-                        <Button
-                          variant="contained"
-                          style={{ backgroundColor: '#5C6AC4', color: 'white', marginLeft: '10px' }}
-                          size="small"
-                          onClick={handleTargetCountSubmit}
-                        >
-                          전송
-                        </Button>
-                        </div>
-                  <div className="operation-info">가동 시간 : {formatTime(elapsedTime)}</div>
-                  <div className="production-info">생산량 : {count}</div> 
-                  {/* <p>가동중지: {formatTime(elapsedTime)}</p> */}
-              <div>
-                {isRunning ? (
+    <StyledMachineLanding className='Machinepagelanding'>
+    <StyledMachinePage className="MachinePage">
+      <Box sx={{flexGrow:1}}>
+        <Grid container spacing={2} sx={{ background: 'transparent', border: 'none' , boxShadow: 'none',}}>
+          <Grid item xs={4}>
+            <Item  sx={{
+                        background: 'transparent',
+                        border: '1px solid #8E24AA',
+                        boxShadow: 'none', // 그림자 제거
+                        marginTop: '10px',  
+                        marginLeft: '15px',
+                        borderRadius: '5px'
+            }}>도달량:  <CircularProgressWithLabel value={nowRate} />
+            </Item>
+          </Grid>
+          <Grid item xs={4}>
+            <Item sx={{
+                        background: 'transparent',
+                        border: '1px solid #8E24AA',
+                        boxShadow: 'none', // 그림자 제거
+                        marginTop: '10px',  
+                        marginLeft: '15px',
+                        borderRadius: '5px'
+            }}>
+              목표 생산량 : {''}
+              <TextField 
+                value={targetCount}
+                onChange={(e) => handleTargetcountChange(e.target.value)}
+                variant='outlined'
+                size='small'
+                />
+                <Button
+                  variant="contained"
+                  style={{ backgroundColor: '#5C6AC4', color: 'white', marginLeft: '10px' }}
+                  size="small"
+                  onClick={handleTargetCountSubmit}
+                >
+                  전송
+                </Button>
+            </Item>
+          </Grid>
+          <Grid item xs={4}>
+            <Item sx={{
+                        background: 'transparent',
+                        border: '1px solid #8E24AA',
+                        boxShadow: 'none', // 그림자 제거
+                        marginTop: '10px',  
+                        marginRight: '15px',
+                        borderRadius: '5px'
+            }}>
+              현재 생산량: {count}
+            </Item>
+          </Grid>
+          <Grid item xs={12}>
+            <Item sx={{
+                        background: 'transparent',
+                        border: '1px solid #8E24AA',
+                        boxShadow: 'none', // 그림자 제거
+                        marginTop: '10px',  
+                        marginLeft: '15px',
+                        marginRight: '15px',
+                        borderRadius: '5px'
+            }}>
+              차트
+            </Item>
+          </Grid>
+          <Grid item xs={12}>
+            <Item  sx={{
+                        background: 'transparent',
+                        border: '1px solid #8E24AA',
+                        boxShadow: 'none', // 그림자 제거
+                        marginTop: '300px',  
+                        marginLeft: '15px',
+                        marginRight: '15px',
+                        borderRadius: '5px'
+            }}>가동시간:{formatTime(elapsedTime)}</Item>
+          </Grid>
+          <Grid item xs={12}>
+            <Item  sx={{
+                        background: 'transparent',
+                        border: '1px solid #8E24AA',
+                        boxShadow: 'none', // 그림자 제거
+                        marginTop: '10px', 
+                        marginLeft: '15px',
+                        marginRight: '15px',
+                        borderRadius: '5px'
+            }}>
+            {isRunning ? (
                   <Button
                     variant="contained"
                     style={{ backgroundColor: '#5C6AC4', color: 'white' }}
@@ -124,14 +184,14 @@ function MachinePage() {
                 >
                   Reset
                 </Button>
-                </div>
-                </Box>
-              </item>
-          </Paper>
-          </Box>
+
+            </Item>
+          </Grid>
+       
         </Grid>
-      </Grid>
-  </div>
+      </Box>
+   </StyledMachinePage>
+   </StyledMachineLanding>
   );
 }
 
