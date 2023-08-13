@@ -7,18 +7,19 @@ export const StyledSignInContainer = styled.div`
   justify-content: center;
   align-items: flex-start;
   width: 100%; 
-  min-height: 100vh;
-  viewport-fit: contain;
+  -webkit-min-height: 100vh; //safari 여백 조정
+  viewport-fit: cover;
   overflow: hidden;
+  padding: 0;
 
   @media (max-width: 375px) {
      //화면 크기가 375px 이하일 때 변경사항
      overflow: hidden; 
-    //  margin: 0; 
-    //  padding: 0;
-    //  width: 100%; 
-    //  height: 100%;
-    //  viewport-fit: cover; //safari 
+     margin: 0; 
+     padding: 0;
+     width: 100vw; 
+     height: 100vh;
+     viewport-fit: cover; //safari 
   
   } 
 `;
@@ -41,13 +42,13 @@ export const StyledBox = styled(Box)`
   background-size: contain;
   background-repeat: no-repeat;
   -webkit-backdrop-filter: blur(15px);
-  padding: 2vw;
+  padding: 4vw;
   border-radius: 15px;
   margin-top: 4vw; 
   font-size: 2vw;
 
-  @media (max-width: 390px) {
-    //화면 크기가 390px 이하일 때 Box 변경사항 
+  @media (max-width: 414px) {
+    //화면 크기가 414px 이하일 때 Box 변경사항 
     viewport-fit: cover; //safari 
     padding: 4vw;
     margin-top: 40vw;
