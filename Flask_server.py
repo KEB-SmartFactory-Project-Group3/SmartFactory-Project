@@ -24,20 +24,21 @@ model.conf = 0.60  # 검출 임계값(Threshold) 설정
 
 last_time = 0
 print_interval = 5  # 출력 간격
+latest_detected_object_names = None  # 직전에 검출된 클래스 이름을 저장하기 위한 변수
+latest_detected_time = 0    # 직전에 검출된 시간을 저장하기 위한 변수
+first_detection_done = False   # 첫 번째 객체 검출 완료 여부를 나타내는 변수 추가
 
 
 @app.route('/get-live-transmission', methods=['GET'])
 def get_live_transmission():
-    global last_time
+    global last_time, latest_detected_object_names, latest_detected_time, first_detection_done
 
     img_resp = urllib.request.urlopen(url + 'cam-hi.jpg')
     img_np = np.array(bytearray(img_resp.read()), dtype=np.uint8)
     img = cv2.imdecode(img_np, -1)
-
     new_width = 800
     new_height = 600
     img = cv2.resize(img, (new_width, new_height), interpolation=cv2.INTER_LINEAR)
-
     blurred_image = cv2.GaussianBlur(img, (5, 5), 0)
     sharpened_image = cv2.addWeighted(img, 1.5, blurred_image, -0.5, 0)
 
@@ -61,20 +62,32 @@ def get_live_transmission():
     # 검출된 객체에 대한 클래스 이름 가져오기
     detected_object_names = [model.names[int(cls)] for cls in results.pred[0][:, -1]]
 
-    current_time = time.time()
-    if current_time - last_time >= print_interval:
-        # # 검출된 객체의 클래스 이름을 콘솔에 출력하여 확인
-        # print("Detected objects:", detected_object_names)
+    current_time = time.time()  # 현재 시각
 
-        # 클래스 이름을 자바 스프링 백엔드 서버로 전송
-        # backend_url = 'http://172.20.10.3:8080/api/defective'
-        payload = {'defective': ', '.join(detected_object_names)}
-        print(payload)
-        # response = requests.post(backend_url, json=payload)
-        # print(response)
-        # # 응답을 콘솔에 출력
-        # print("Backend Response:", response.text)
-        last_time = current_time
+    if not first_detection_done and detected_object_names:
+        first_detection_done = True
+
+    if first_detection_done:  # 첫 번째 객체 검출이 완료된 경우에만 다음 작업을 수행
+        # 클래스가 검출되지 않고 직전에 검출된 시간이 5초 이내이면 직전에 검출된 클래스 이름을 사용
+        if not detected_object_names and latest_detected_object_names and (current_time - latest_detected_time <= 5):
+            detected_object_names = latest_detected_object_names
+        else:
+            latest_detected_object_names = detected_object_names  # 검출된 클래스 이름을 저장
+            latest_detected_time = current_time  # 검출된 시간을 저장
+
+        if current_time - last_time >= print_interval:
+            # # 검출된 객체의 클래스 이름을 콘솔에 출력하여 확인
+            # print("Detected objects:", detected_object_names)
+
+            # 클래스 이름을 자바 스프링 백엔드 서버로 전송
+            # backend_url = 'http://172.20.10.3:8080/api/defective'
+            payload = {'defective': ', '.join(detected_object_names)}
+            print(payload)
+            # response = requests.post(backend_url, json=payload)
+            # print(response)
+            # # 응답을 콘솔에 출력
+            # print("Backend Response:", response.text)
+            last_time = current_time
 
     return jsonify({'image': encoded_img})
 
