@@ -52,6 +52,12 @@ function useMachineCount() {
 
   //목표 생산량 전송
   const handleTargetCountSubmit = async() => {
+
+    // 숫자가 아니거나 빈 문자열일 경우
+    if (isNaN(targetCount) || String(targetCount).trim() === '') { 
+      alert("유효한 값을 입력하세요.");
+      return;
+    }
     //나중에 서버로 보낼 값
     console.log("목표 생산량:",targetCount)
     try {
@@ -79,7 +85,8 @@ function useMachineCount() {
   const targetAchievement = targetCount
     ? ((count / targetCount) * 100).toFixed(2)
     : ''
-  return {count: count, targetCount: targetCount, targetAchievement, handleTargetcountChange: handleTargetcountChange, handleTargetCountSubmit: handleTargetCountSubmit, }
+  return {count : count, setCount: setCount, targetCount: targetCount, targetAchievement, handleTargetcountChange: handleTargetcountChange, handleTargetCountSubmit: handleTargetCountSubmit }
+   
 }
 
 export default useMachineCount

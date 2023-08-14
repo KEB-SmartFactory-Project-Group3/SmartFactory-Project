@@ -26,30 +26,6 @@ function MachinePage() {
  
   const [isCardOpen,setIsCardOpen] = useState(false)
 
-  const modalStyle = {
-    //중앙배치
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-
-    position: 'absolute',
-    width: '600px',
-    padding: '16px',
-    outline: 'none',
-   
-    '&:hover': {
-      background: 'rgba(255, 255, 255, 0.2)',
-    },
-    transition: 'opacity 0.5s ease, transform 0.5s ease',
-    // opacity: 0,
-    '&.open': {
-      opacity: isCardOpen ? 1 : 0,
-      transform: 'translate(-50%, -50%) scale(1)',
-    }
-  };
-
-
-
   const handleCardClick = () => {
     setIsCardOpen(!isCardOpen)
   }
@@ -98,6 +74,18 @@ function MachinePage() {
               onChange={(e) => handleTargetcountChange(e.target.value)}
               variant='outlined'
               size='small'
+              helperText="목표 생산량을 입력해주세요"
+              label="목표 생산량"
+              InputLabelProps={{ style: { color: 'white' } }} // 라벨 색상 변경
+              InputProps={{ // 아웃라인, 헬퍼텍스트 색상 변경
+                style: { color: 'white' },
+                classes: {
+                  notchedOutline: {
+                    borderColor: 'white'
+                  },
+                }
+              }}
+              FormHelperTextProps={{ style: { color: 'white' } }}
               />
               <Button
                 variant="contained"
