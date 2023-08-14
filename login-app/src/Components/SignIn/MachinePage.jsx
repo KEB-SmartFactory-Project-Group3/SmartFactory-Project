@@ -9,12 +9,11 @@ import Paper from '@mui/material/Paper';
 import { TextField } from '@mui/material';
 import useMachineRate from '../hooks/useMachineRate';
 import { styled } from '@mui/material/styles';
-import { StyledMachinePage , StyledMachineLanding, StyledGrid, customTheme} from '../stylescomp/MachineStyle';
+import { StyledBackground, StyledFactor } from '../stylescomp/BackgroundStyle';
 import './MachinePage.css';
 import CircularProgressWithLabel from '../Data/MachineData'
 import { ThemeProvider } from 'styled-components';
-
-
+import {OutlinedCard} from '../card/MachineCards';
 
 
 function MachinePage() {
@@ -23,8 +22,13 @@ function MachinePage() {
   const {count, targetAchievement, targetCount, setTargetCount, handleTargetcountChange, handleTargetCountSubmit} = useMachineCount()
   const {nowRate} = useMachineRate()
   const [formOpen, setFormOpen] = useState(false)
+ 
+  const [isCardOpen,setIsCardOpen] = useState(false)
 
-
+  const handleCardClick = () => {
+    setIsCardOpen(!isCardOpen)
+  }
+  
   const handleOpenForm = () => {
     setFormOpen(true)
   }
@@ -50,30 +54,60 @@ function MachinePage() {
   }))
 
   return (
-    <StyledMachineLanding className='Machinepagelanding'>
-    <StyledMachinePage className="MachinePage">
+    <StyledBackground className='Machinepagelanding'>
+    <StyledFactor className="MachinePage">
       <Box sx={{flexGrow:1}}>
         <Grid container spacing={2} sx={{ background: 'transparent', border: 'none' , boxShadow: 'none',}}>
-          <Grid item xs={4}>
+        <Grid item xs={12} sm={4} md={4}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backdropFilter = 'blur(15px)';
+                  e.currentTarget.style.transform = 'scale(1.1)';
+                  e.currentTarget.style.transition = 'transform 0.3s, backdrop-filter 0.3s';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.backdropFilter = 'none';
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.transition = 'transform 0.3s, backdrop-filter 0.3s';
+                }}>
             <Item  sx={{
                         background: 'transparent',
                         border: '1px solid white',
                         boxShadow: 'none', // 그림자 제거
                         marginTop: '10px',  
                         marginLeft: '15px',
-                        borderRadius: '5px'
+                        marginRight: '15px',
+                        borderRadius: '5px',
+                        background: 'rgba(255, 255, 255, 0.1)',
+                        backdropFilter: 'blur(8px)',
+                        color: 'white'
             }}>도달량:  <CircularProgressWithLabel value={nowRate} />
             </Item>
           </Grid>
-          <Grid item xs={4}>
-            <Item sx={{
+          <Grid item xs={12} sm={4} md={4}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backdropFilter = 'blur(15px)';
+                  e.currentTarget.style.transform = 'scale(1.1)';
+                  e.currentTarget.style.transition = 'transform 0.3s, backdrop-filter 0.3s';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.backdropFilter = 'none';
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.transition = 'transform 0.3s, backdrop-filter 0.3s';
+                }}>
+              <Item sx={{
                         background: 'transparent',
                         border: '1px solid white',
                         boxShadow: 'none', // 그림자 제거
                         marginTop: '10px',  
                         marginLeft: '15px',
-                        borderRadius: '5px'
-            }}>
+                        marginRight: '15px',
+                        borderRadius: '5px',
+                        background: 'rgba(255, 255, 255, 0.1)',
+                        backdropFilter: 'blur(8px)',
+                        color: 'white'
+                }}>
               목표 생산량 : {''}
               <TextField 
                 value={targetCount}
@@ -92,19 +126,20 @@ function MachinePage() {
             </Item>
           </Grid>
 
-       
-          <Grid item xs={4}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backdropFilter = 'blur(15px)';
-                e.currentTarget.style.transform = 'scale(1.13)';
-                e.currentTarget.style.transition = 'transform 0.3s, backdrop-filter 0.3s';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent';
-                e.currentTarget.style.backdropFilter = 'none';
-                e.currentTarget.style.transform = 'scale(1)';
-                e.currentTarget.style.transition = 'transform 0.3s, backdrop-filter 0.3s';
-              }}>
+
+          <Grid item xs={12} sm={4} md={4}
+                onClick={handleCardClick}
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  '&:hover': {
+                    transform: 'scale(1.3)',
+                    transition: 'transform 0.3s',
+                  },
+                }}
+                >
+              {!isCardOpen && (
               <Item sx={{
                         background: 'transparent',
                         border: '1px solid white',
@@ -113,12 +148,26 @@ function MachinePage() {
                         marginLeft: '15px',
                         marginRight: '15px',
                         borderRadius: '5px',
-                        background: 'rgba(255, 255, 255, 0.2)',
-                        backdropFilter: 'blur(15px)',
+                        background: 'rgba(255, 255, 255, 0.1)',
+                        backdropFilter: 'blur(8px)',
+                        color: 'white',
+                        transition: 'background 0.3s, backdrop-filter 0.3s',
+                        padding: '1rem',
+                        width: '100%',
+                        textAlign: 'center',
+                        cursor: 'pointer',
+                        overflow: 'hidden',
+                        // maxHeight: isCardOpen ? '1000px' : '45px',
+                        '&:hover': {
+                          background: 'rgba(255, 255, 255, 0.2)',
+                        },
                 }}>
                 현재 생산량: {count}
               </Item> 
+              )}
+              {isCardOpen && <OutlinedCard />}
           </Grid>
+
       
   
           <Grid item xs={12}>
@@ -130,8 +179,9 @@ function MachinePage() {
                         marginLeft: '15px',
                         marginRight: '15px',
                         borderRadius: '5px',
-                        background: 'rgba(255, 255, 255, 0.2)',
-                        backdropFilter: 'blur(15px)',
+                        background: 'rgba(255, 255, 255, 0.1)',
+                        backdropFilter: 'blur(8px)',
+                        color: 'white'
             }}>
               차트
             </Item>
@@ -144,7 +194,8 @@ function MachinePage() {
                         marginTop: '300px',  
                         marginLeft: '15px',
                         marginRight: '15px',
-                        borderRadius: '5px'
+                        borderRadius: '5px',
+                        color: 'white'
             }}>가동시간:{formatTime(elapsedTime)}</Item>
           </Grid>
           <Grid item xs={12}>
@@ -209,8 +260,8 @@ function MachinePage() {
        
         </Grid>
       </Box>
-   </StyledMachinePage>
-   </StyledMachineLanding>
+   </StyledFactor>
+   </StyledBackground>
   );
 }
 
