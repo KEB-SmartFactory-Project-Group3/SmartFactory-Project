@@ -15,12 +15,14 @@ import CircularProgressWithLabel from '../Data/MachineData'
 import {OutlinedCard} from '../card/MachineCards';
 import { Modal } from '@mui/material';
 import { ModalStyled, ItemStyled , GridItemStyled} from '../stylescomp/MachineStyle';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/lab/Alert';
 
 
 function MachinePage() {
 
   const { isRunning, elapsedTime, startTime, handleStart, handleStop, resetTimer} = useTimeRecorder();
-  const {count, targetAchievement, targetCount, setTargetCount, handleTargetcountChange, handleTargetCountSubmit} = useMachineCount()
+  const {count, showAlert, setShowAlert,targetAchievement, targetCount, setTargetCount, handleTargetcountChange, handleTargetCountSubmit} = useMachineCount()
   const {nowRate} = useMachineRate()
   const [formOpen, setFormOpen] = useState(false)
  
@@ -97,6 +99,22 @@ function MachinePage() {
               </Button>
           </ItemStyled>
         </GridItemStyled>
+
+        <Snackbar 
+            open={showAlert} 
+            autoHideDuration={6000} 
+            onClose={() => setShowAlert(false)}
+            style={{ 
+                position: 'fixed', 
+                top: '50%', 
+                left: '50%', 
+                transform: 'translate(-50%, -50%)' 
+            }}
+        >
+            <Alert onClose={() => setShowAlert(false)} severity="error" variant="filled">
+                유효한 값을 입력하세요.
+            </Alert>
+        </Snackbar>
 
         <GridItemStyled item xs={12} sm={4} md={4} onClick={handleCardClick}>
         {!isCardOpen && (

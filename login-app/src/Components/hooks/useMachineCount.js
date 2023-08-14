@@ -5,6 +5,7 @@ import axios from 'axios';
 function useMachineCount() {
   const [count, setCount] = useState(0)
   const [targetCount,setTargetCount] = useState(0)
+  const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
     const intervalTime = setInterval(callCountApi, 1000);
@@ -55,8 +56,9 @@ function useMachineCount() {
 
     // 숫자가 아니거나 빈 문자열일 경우
     if (isNaN(targetCount) || String(targetCount).trim() === '') { 
-      alert("유효한 값을 입력하세요.");
-      return;
+      // alert("유효한 값을 입력하세요.");
+      setShowAlert(true)
+      return
     }
     //나중에 서버로 보낼 값
     console.log("목표 생산량:",targetCount)
@@ -85,7 +87,7 @@ function useMachineCount() {
   const targetAchievement = targetCount
     ? ((count / targetCount) * 100).toFixed(2)
     : ''
-  return {count : count, setCount: setCount, targetCount: targetCount, targetAchievement, handleTargetcountChange: handleTargetcountChange, handleTargetCountSubmit: handleTargetCountSubmit }
+  return {count : count, setCount: setCount, showAlert, setShowAlert, targetCount: targetCount, targetAchievement, handleTargetcountChange: handleTargetcountChange, handleTargetCountSubmit: handleTargetCountSubmit }
    
 }
 
