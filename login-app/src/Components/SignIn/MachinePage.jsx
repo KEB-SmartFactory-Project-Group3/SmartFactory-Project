@@ -14,9 +14,10 @@ import './MachinePage.css';
 import CircularProgressWithLabel from '../Data/MachineData'
 import {OutlinedCard} from '../card/MachineCards';
 import { Modal } from '@mui/material';
-import { ModalStyled, ItemStyled , GridItemStyled, SubmitContainer, StyledTextField} from '../stylescomp/MachineStyle';
+import { ModalStyled, ItemStyled , GridItemStyled, SubmitContainer, StyledTextField, ItemStyledChart, GridItemStyledChart, ItemStyledCount } from '../stylescomp/MachineStyle';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/lab/Alert';
+import BasicColor from '../Chart/TargetCounChart';
 
 
 function MachinePage() {
@@ -78,14 +79,14 @@ function MachinePage() {
       <Box sx={{flexGrow:1}}>
         <Grid container spacing={2} sx={{ background: 'transparent', border: 'none' , boxShadow: 'none',}}>
         <GridItemStyled item xs={12} sm={4} md={4}>
-            <ItemStyled>
+            <ItemStyledCount>
               도달량:  
               <CircularProgressWithLabel value={nowRate} />
-            </ItemStyled>
+            </ItemStyledCount>
         </GridItemStyled>
 
         <GridItemStyled item xs={12} sm={4} md={4}>
-            <ItemStyled>
+            <ItemStyledCount>
             <Typography variant="h6" sx={{marginBottom: '1rem'}}>
               목표 생산량
             </Typography>
@@ -125,7 +126,7 @@ function MachinePage() {
               </SubmitContainer>
               </>
             )}
-          </ItemStyled>
+          </ItemStyledCount>
         </GridItemStyled>
 
         <Snackbar 
@@ -146,9 +147,9 @@ function MachinePage() {
 
         <GridItemStyled item xs={12} sm={4} md={4} onClick={handleCardClick}>
         {!isCardOpen && (
-            <ItemStyled>
+            <ItemStyledCount>
             현재 생산량: {count}
-            </ItemStyled>
+            </ItemStyledCount>
           )}
         </GridItemStyled>
 
@@ -157,35 +158,21 @@ function MachinePage() {
             <OutlinedCard onClose={handleCardClick} />
           </ModalStyled>
         </Modal>
+          
+        <GridItemStyledChart item xs={8} sm={8} md={8}>
+          <ItemStyledChart>
+            차트
+            <BasicColor />
+          </ItemStyledChart>
+        </GridItemStyledChart>
 
-          <GridItemStyled item xs={12}>
-            <ItemStyled>
-              차트
-            </ItemStyled>
-          </GridItemStyled>
-
-          <Grid item xs={12}>
-            <Item  sx={{
-                        background: 'transparent',
-                        border: '1px solid white',
-                        boxShadow: 'none', // 그림자 제거
-                        marginTop: '300px',  
-                        marginLeft: '15px',
-                        marginRight: '15px',
-                        borderRadius: '5px',
-                        color: 'white'
-            }}>가동시간:{formatTime(elapsedTime)}</Item>
-          </Grid>
-          <Grid item xs={12}>
-            <Item  sx={{
-                        background: 'transparent',
-                        border: '1px solid white',
-                        boxShadow: 'none', // 그림자 제거
-                        marginTop: '10px', 
-                        marginLeft: '15px',
-                        marginRight: '15px',
-                        borderRadius: '5px'
-            }}>
+        <Grid item xs={4} sm={4} md={4}>
+          <Grid container direction='column'>
+            <GridItemStyled item xs={12}>
+              <ItemStyled>가동시간:{formatTime(elapsedTime)}</ItemStyled>
+            </GridItemStyled> 
+            <GridItemStyled  item xs={12}>
+            <ItemStyled >
             {isRunning ? (
                   <Button 
                     variant="outlined"
@@ -233,10 +220,12 @@ function MachinePage() {
                   Reset
                 </Button>
 
-            </Item>
+            </ItemStyled>
+          </GridItemStyled>
+
           </Grid>
-       
         </Grid>
+      </Grid>
       </Box>
    </StyledFactor>
    </StyledBackground>
