@@ -12,8 +12,9 @@ import { styled } from '@mui/material/styles';
 import { StyledBackground, StyledFactor } from '../stylescomp/BackgroundStyle';
 import './MachinePage.css';
 import CircularProgressWithLabel from '../Data/MachineData'
-import { ThemeProvider } from 'styled-components';
 import {OutlinedCard} from '../card/MachineCards';
+import { Modal } from '@mui/material';
+
 
 
 function MachinePage() {
@@ -24,6 +25,28 @@ function MachinePage() {
   const [formOpen, setFormOpen] = useState(false)
  
   const [isCardOpen,setIsCardOpen] = useState(false)
+
+  const modalStyle = {
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    position: 'absolute',
+    width: '80%',
+    padding: '16px',
+    outline: 'none',
+   
+    '&:hover': {
+      background: 'rgba(255, 255, 255, 0.2)',
+    },
+    transition: 'opacity 0.5s ease, transform 0.5s ease',
+    // opacity: 0,
+    '&.open': {
+      opacity: isCardOpen ? 1 : 0,
+      transform: 'translate(-50%, -50%) scale(1)',
+    }
+  };
+
+ 
 
   const handleCardClick = () => {
     setIsCardOpen(!isCardOpen)
@@ -126,8 +149,44 @@ function MachinePage() {
             </Item>
           </Grid>
 
+          <Grid item xs={12} sm={4} md={4} onClick={handleCardClick}>
+          {!isCardOpen && (
+            <Item sx={{
+              background: 'transparent',
+              border: '1px solid white',
+              boxShadow: 'none', // 그림자 제거
+              marginTop: '10px',  
+              marginLeft: '15px',
+              marginRight: '15px',
+              borderRadius: '5px',
+              background: 'rgba(255, 255, 255, 0.1)',
+              backdropFilter: 'blur(8px)',
+              color: 'white',
+              transition: 'background 0.3s, backdrop-filter 0.3s',
+              padding: '1rem',
+              width: '100%',
+              textAlign: 'center',
+              cursor: 'pointer',
+              overflow: 'hidden',
+              '&:hover': {
+                background: 'rgba(255, 255, 255, 0.2)',
+              },
+      }}>
+              현재 생산량: {count}
+            </Item>
+            )}
+          </Grid>
+          <Modal
+            open={isCardOpen}
+            onClose={handleCardClick} // Close the modal when backdrop is clicked.
+          >
+            <div style={modalStyle} className={isCardOpen ? 'open' : ''}>
+              <OutlinedCard />
+            </div>
+          </Modal>
 
-          <Grid item xs={12} sm={4} md={4}
+
+          {/* <Grid item xs={12} sm={4} md={4}
                 onClick={handleCardClick}
                 sx={{
                   display: 'flex',
@@ -166,7 +225,7 @@ function MachinePage() {
               </Item> 
               )}
               {isCardOpen && <OutlinedCard />}
-          </Grid>
+          </Grid> */}
 
       
   
