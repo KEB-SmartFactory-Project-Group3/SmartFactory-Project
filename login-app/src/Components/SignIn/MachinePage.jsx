@@ -14,7 +14,7 @@ import './MachinePage.css';
 import CircularProgressWithLabel from '../Data/MachineData'
 import {OutlinedCard} from '../card/MachineCards';
 import { Modal } from '@mui/material';
-
+import { ModalStyled, ItemStyled , GridItemStyled} from '../stylescomp/MachineStyle';
 
 
 function MachinePage() {
@@ -27,11 +27,13 @@ function MachinePage() {
   const [isCardOpen,setIsCardOpen] = useState(false)
 
   const modalStyle = {
+    //중앙배치
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
+
     position: 'absolute',
-    width: '80%',
+    width: '600px',
     padding: '16px',
     outline: 'none',
    
@@ -46,7 +48,7 @@ function MachinePage() {
     }
   };
 
- 
+
 
   const handleCardClick = () => {
     setIsCardOpen(!isCardOpen)
@@ -81,154 +83,47 @@ function MachinePage() {
     <StyledFactor className="MachinePage">
       <Box sx={{flexGrow:1}}>
         <Grid container spacing={2} sx={{ background: 'transparent', border: 'none' , boxShadow: 'none',}}>
-        <Grid item xs={12} sm={4} md={4}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backdropFilter = 'blur(15px)';
-                  e.currentTarget.style.transform = 'scale(1.1)';
-                  e.currentTarget.style.transition = 'transform 0.3s, backdrop-filter 0.3s';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'transparent';
-                  e.currentTarget.style.backdropFilter = 'none';
-                  e.currentTarget.style.transform = 'scale(1)';
-                  e.currentTarget.style.transition = 'transform 0.3s, backdrop-filter 0.3s';
-                }}>
-            <Item  sx={{
-                        background: 'transparent',
-                        border: '1px solid white',
-                        boxShadow: 'none', // 그림자 제거
-                        marginTop: '10px',  
-                        marginLeft: '15px',
-                        marginRight: '15px',
-                        borderRadius: '5px',
-                        background: 'rgba(255, 255, 255, 0.1)',
-                        backdropFilter: 'blur(8px)',
-                        color: 'white'
-            }}>도달량:  <CircularProgressWithLabel value={nowRate} />
-            </Item>
-          </Grid>
-          <Grid item xs={12} sm={4} md={4}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backdropFilter = 'blur(15px)';
-                  e.currentTarget.style.transform = 'scale(1.1)';
-                  e.currentTarget.style.transition = 'transform 0.3s, backdrop-filter 0.3s';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'transparent';
-                  e.currentTarget.style.backdropFilter = 'none';
-                  e.currentTarget.style.transform = 'scale(1)';
-                  e.currentTarget.style.transition = 'transform 0.3s, backdrop-filter 0.3s';
-                }}>
-              <Item sx={{
-                        background: 'transparent',
-                        border: '1px solid white',
-                        boxShadow: 'none', // 그림자 제거
-                        marginTop: '10px',  
-                        marginLeft: '15px',
-                        marginRight: '15px',
-                        borderRadius: '5px',
-                        background: 'rgba(255, 255, 255, 0.1)',
-                        backdropFilter: 'blur(8px)',
-                        color: 'white'
-                }}>
-              목표 생산량 : {''}
-              <TextField 
-                value={targetCount}
-                onChange={(e) => handleTargetcountChange(e.target.value)}
-                variant='outlined'
-                size='small'
-                />
-                <Button
-                  variant="contained"
-                  style={{ backgroundColor: '#5C6AC4', color: 'white', marginLeft: '10px' }}
-                  size="small"
-                  onClick={handleTargetCountSubmit}
-                >
-                  전송
-                </Button>
-            </Item>
-          </Grid>
+        <GridItemStyled item xs={12} sm={4} md={4}>
+            <ItemStyled>
+              도달량:  
+              <CircularProgressWithLabel value={nowRate} />
+            </ItemStyled>
+        </GridItemStyled>
 
-          <Grid item xs={12} sm={4} md={4} onClick={handleCardClick}>
-          {!isCardOpen && (
-            <Item sx={{
-              background: 'transparent',
-              border: '1px solid white',
-              boxShadow: 'none', // 그림자 제거
-              marginTop: '10px',  
-              marginLeft: '15px',
-              marginRight: '15px',
-              borderRadius: '5px',
-              background: 'rgba(255, 255, 255, 0.1)',
-              backdropFilter: 'blur(8px)',
-              color: 'white',
-              transition: 'background 0.3s, backdrop-filter 0.3s',
-              padding: '1rem',
-              width: '100%',
-              textAlign: 'center',
-              cursor: 'pointer',
-              overflow: 'hidden',
-              '&:hover': {
-                background: 'rgba(255, 255, 255, 0.2)',
-              },
-      }}>
-              현재 생산량: {count}
-            </Item>
-            )}
-          </Grid>
-          <Modal
-            open={isCardOpen}
-            onClose={handleCardClick} // Close the modal when backdrop is clicked.
-          >
-            <div style={modalStyle} className={isCardOpen ? 'open' : ''}>
-              <OutlinedCard />
-            </div>
-          </Modal>
+        <GridItemStyled item xs={12} sm={4} md={4}>
+            <ItemStyled>
+            목표 생산량 : {''}
+            <TextField 
+              value={targetCount}
+              onChange={(e) => handleTargetcountChange(e.target.value)}
+              variant='outlined'
+              size='small'
+              />
+              <Button
+                variant="contained"
+                style={{ backgroundColor: '#5C6AC4', color: 'white', marginLeft: '10px' }}
+                size="small"
+                onClick={handleTargetCountSubmit}
+              >
+                전송
+              </Button>
+          </ItemStyled>
+        </GridItemStyled>
 
+        <GridItemStyled item xs={12} sm={4} md={4} onClick={handleCardClick}>
+        {!isCardOpen && (
+            <ItemStyled>
+            현재 생산량: {count}
+            </ItemStyled>
+          )}
+        </GridItemStyled>
 
-          {/* <Grid item xs={12} sm={4} md={4}
-                onClick={handleCardClick}
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  '&:hover': {
-                    transform: 'scale(1.3)',
-                    transition: 'transform 0.3s',
-                  },
-                }}
-                >
-              {!isCardOpen && (
-              <Item sx={{
-                        background: 'transparent',
-                        border: '1px solid white',
-                        boxShadow: 'none', // 그림자 제거
-                        marginTop: '10px',  
-                        marginLeft: '15px',
-                        marginRight: '15px',
-                        borderRadius: '5px',
-                        background: 'rgba(255, 255, 255, 0.1)',
-                        backdropFilter: 'blur(8px)',
-                        color: 'white',
-                        transition: 'background 0.3s, backdrop-filter 0.3s',
-                        padding: '1rem',
-                        width: '100%',
-                        textAlign: 'center',
-                        cursor: 'pointer',
-                        overflow: 'hidden',
-                        // maxHeight: isCardOpen ? '1000px' : '45px',
-                        '&:hover': {
-                          background: 'rgba(255, 255, 255, 0.2)',
-                        },
-                }}>
-                현재 생산량: {count}
-              </Item> 
-              )}
-              {isCardOpen && <OutlinedCard />}
-          </Grid> */}
+        <Modal open={isCardOpen}>
+          <ModalStyled isOpen={isCardOpen}>
+            <OutlinedCard onClose={handleCardClick} />
+          </ModalStyled>
+        </Modal>
 
-      
-  
           <Grid item xs={12}>
             <Item sx={{
                         background: 'transparent',

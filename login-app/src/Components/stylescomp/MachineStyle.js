@@ -1,38 +1,60 @@
 import styled from 'styled-components';
+import Grid from '@mui/material/Grid';
 
-export const StyledMachineLanding = styled.div`
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
+export const ModalStyled = styled.div`
+ //중앙배치
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 
-export const StyledMachinePage = styled.div`
-  display : grid;
-  height: 97%;
-  width: 97%;
-  border-radius: 2rem;
-  background-color: #C0C0C0;
-  overflow: hidden;
-  // gird-template-columns: 11rem auto;
-`;
+  position: absolute;
+  width: 600px;
+  padding: 16px;
+  outline: none;
 
-const StyledButton = styled(Button)`
-  //공통 스타일
-  border: 1px solid #8E24AA;
-  border-radius: 5px;
-  box-shadow: none;
-  padding: 10px 20px;
-  font-weight: bold;
-  
-  //가동 시작버튼에만 적용되는 스타일 
-  &.start-button {
-    color: red;
-  일
+  &:hover {
+   
+  }
 
-  //reset 버튼에만 적용되는 스타일
-  &.reset-button {
-    background-color: #5C6AC4;
-    color: white;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+
+  &.open {
+    opacity: ${props => props.isOpen ? 1 : 0};
+    transform: translate(-50%, -50%) scale(1);
   }
 `;
+
+export const GridItemStyled = styled(Grid)`
+  // 기본 스타일을 여기에 작성합니다.
+  transition: transform 0.3s, backdrop-filter 0.3s;
+
+  &:hover {
+    backdrop-filter: blur(15px);
+    transform: scale(1.1);
+  }
+
+`;
+
+export const ItemStyled = styled.div`
+  background: transparent;
+  border: 1px solid white;
+  box-shadow: none; 
+  margin-top: 30px; 
+  margin-left: 10px;
+  margin-right: 10px;
+  border-radius: 5px; // borderRadius 대신 border-radius 사용
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  color: white;
+  transition: background 0.3s, backdrop-filter 0.3s;
+  padding: 1rem;
+  width: 90%;
+  text-align: center; 
+  cursor: pointer;
+  overflow: hidden;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+`;
+
