@@ -16,15 +16,20 @@ app = Flask(__name__)
 CORS(app, resources={r"*": {"origins": ["http://165.246.116.73:3001", "http://localhost:3000"]}})
 # CORS(app, resources={r"*": {"origins": "*"}})
 
-url = 'http://172.30.1.12/'  # Arduino webserver URL
+url = 'http://172.30.1.2/'  # Arduino webserver URL
 
 # YOLOv5 모델 불러옴 (로컬에 저장된 best.pt 또는 last.pt 파일 불러옴)
 model = torch.hub.load('ultralytics/yolov5', 'custom', path='C:/YOLOv5_model/best.pt')
 model.conf = 0.60  # 검출 임계값(Threshold) 설정
 
+last_time = 0
+print_interval = 5  # 출력 간격
+
 
 @app.route('/get-live-transmission', methods=['GET'])
 def get_live_transmission():
+    global last_time
+
     img_resp = urllib.request.urlopen(url + 'cam-hi.jpg')
     img_np = np.array(bytearray(img_resp.read()), dtype=np.uint8)
     img = cv2.imdecode(img_np, -1)
@@ -56,17 +61,20 @@ def get_live_transmission():
     # 검출된 객체에 대한 클래스 이름 가져오기
     detected_object_names = [model.names[int(cls)] for cls in results.pred[0][:, -1]]
 
-    # # 검출된 객체의 클래스 이름을 콘솔에 출력하여 확인
-    # print("Detected objects:", detected_object_names)
+    current_time = time.time()
+    if current_time - last_time >= print_interval:
+        # # 검출된 객체의 클래스 이름을 콘솔에 출력하여 확인
+        # print("Detected objects:", detected_object_names)
 
-    # 클래스 이름을 자바 스프링 백엔드 서버로 전송
-    # backend_url = 'http://172.20.10.3:8080/api/defective'
-    payload = {'defective': ', '.join(detected_object_names)}
-    print(payload)
-    # response = requests.post(backend_url, json=payload)
-    # print(response)
-    # # 응답을 콘솔에 출력
-    # print("Backend Response:", response.text)
+        # 클래스 이름을 자바 스프링 백엔드 서버로 전송
+        # backend_url = 'http://172.20.10.3:8080/api/defective'
+        payload = {'defective': ', '.join(detected_object_names)}
+        print(payload)
+        # response = requests.post(backend_url, json=payload)
+        # print(response)
+        # # 응답을 콘솔에 출력
+        # print("Backend Response:", response.text)
+        last_time = current_time
 
     return jsonify({'image': encoded_img})
 
