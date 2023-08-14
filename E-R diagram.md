@@ -1,28 +1,8 @@
-```mermaid
 erDiagram
   user{
-    id CHAR(8) PK
+    userId CHAR(8) PK
     password VARCHAR(20)
-    name VARCHAR(20)
-  }
-
-  operationStop{
-    stopTimes TIMESTAMP PK
-    restartTimes TIMESTAMP 
-    machineNumber VARCHAR(2) FK
-    userID CHAR(8) FK
-    reason VARCHAR
-  }
-
-  products{
-    times TIMESTAMP PK
-    machineNumber VARCHAR(2) PK,FK
-    temperature DOUBLE
-    count INT
-  }
-
-  machine{
-    machineNumber VARCHAR(2) PK
+    username VARCHAR(20) PK
   }
 
   factoryInfo{
@@ -30,12 +10,34 @@ erDiagram
     factoryTemperature DOUBLE
     factoryHumidity DOUBLE
   }
-  
-  camMachine{
-    times TIMESTAMP PK
-    defectStatus BOOLEAN
+
+  productionInfo{
+    username VARCHAR(20) PK, FK
+    count INT PK
+    timestamp TIMESTAMP PK
+    targetCount INT
+    nowRate DOUBLE
   }
 
-user }|..|| operationStop: ""
-machine }|..|| products: ""
-machine }|..|| operationStop: ""
+  stopInfo{
+    username VARCHAR(20) PK, FK
+    stopTimestamp TIMESTAMP PK, FK
+    stopReason VARCHAR(10)
+    nowRate DOUBLE  
+    operatingTime TIME
+  }
+  
+  productInfo{
+    order(count) INT PK, FK
+    serialNumber VARCHAR(15) PK
+    quality VARCHAR(10)
+    manufacturingDate TIME 
+  }
+
+
+ user ||--|{ stopInfo: ""
+ user ||--|{ productionInfo: ""
+ productionInfo ||--|| productInfo: ""
+ productionInfo ||--|{ stopInfo: "" 
+
+ 
