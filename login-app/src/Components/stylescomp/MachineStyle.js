@@ -31,18 +31,18 @@ export const GridItemStyled = styled(Grid)`
 
   &:hover {
     backdrop-filter: blur(15px);
-    transform: scale(1.1);
+    transform: scale(1.05);
   }
 
 `;
 
 export const ItemStyled = styled.div`
-
+  margin: 8px 0; // 각 그리드 마진 조정
   border: 1px solid white;
   box-shadow: none; 
   margin-top: 30px; 
-  margin-left: 10px;
-  margin-right: 10px;
+  // margin-left: 10px;
+  // margin-right: 10px;
   border-radius: 5px; 
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(8px);
