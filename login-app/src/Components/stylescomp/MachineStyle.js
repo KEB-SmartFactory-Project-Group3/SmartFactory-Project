@@ -36,22 +36,23 @@ export const GridItemStyled = styled(Grid)`
 `;
 
 export const ItemStyled = styled.div`
-  background: transparent;
+
   border: 1px solid white;
   box-shadow: none; 
   margin-top: 30px; 
   margin-left: 10px;
   margin-right: 10px;
-  border-radius: 5px; // borderRadius 대신 border-radius 사용
+  border-radius: 5px; 
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(8px);
   color: white;
   transition: background 0.3s, backdrop-filter 0.3s;
   padding: 1rem;
-  width: 90%;
+  width: 100%;
   text-align: center; 
   cursor: pointer;
   overflow: hidden;
+  box-sizing: border-box;
 
   &:hover {
     background: rgba(255, 255, 255, 0.2);
