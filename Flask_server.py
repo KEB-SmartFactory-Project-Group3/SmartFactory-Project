@@ -4,20 +4,23 @@ import cv2
 import urllib.request
 import numpy as np
 import base64
-from flask import Flask, jsonify,request
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 import torch
 import requests
+import time
 
+app = Flask(__name__)
+
+# React server & CORS
+CORS(app, resources={r"*": {"origins": ["http://165.246.116.73:3001", "http://localhost:3000"]}})
+# CORS(app, resources={r"*": {"origins": "*"}})
+
+url = 'http://172.30.1.12/'  # Arduino webserver URL
 
 # YOLOv5 모델 불러옴 (로컬에 저장된 best.pt 또는 last.pt 파일 불러옴)
 model = torch.hub.load('ultralytics/yolov5', 'custom', path='C:/YOLOv5_model/best.pt')
 model.conf = 0.60  # 검출 임계값(Threshold) 설정
-
-app = Flask(__name__)
-CORS(app, resources={r"*": {"origins": ["http://localhost:3000"]}})
-
-url = 'http://165.246.116.5/'  # Arduino webserver URL
 
 
 @app.route('/get-live-transmission', methods=['GET'])
@@ -50,50 +53,22 @@ def get_live_transmission():
     byte_im = im_buf_arr.tobytes()
     encoded_img = base64.b64encode(byte_im).decode('utf-8')
 
+    # 검출된 객체에 대한 클래스 이름 가져오기
+    detected_object_names = [model.names[int(cls)] for cls in results.pred[0][:, -1]]
+
+    # # 검출된 객체의 클래스 이름을 콘솔에 출력하여 확인
+    # print("Detected objects:", detected_object_names)
+
+    # 클래스 이름을 자바 스프링 백엔드 서버로 전송
+    # backend_url = 'http://172.20.10.3:8080/api/defective'
+    payload = {'defective': ', '.join(detected_object_names)}
+    print(payload)
+    # response = requests.post(backend_url, json=payload)
+    # print(response)
+    # # 응답을 콘솔에 출력
+    # print("Backend Response:", response.text)
+
     return jsonify({'image': encoded_img})
-
-
-@app.route('/capture-image', methods=['POST'])
-def capture_image():
-    data = request.get_json()
-    captured_image = data.get('liveImage', None)
-
-    if captured_image:
-        # imageData 접두사 및 데이터 URL 스키마 제거
-        base64_image_data = captured_image.split(",")[1]
-        decoded_image = base64.b64decode(base64_image_data)
-
-        # bytearray를 numpy 배열로 변환, OpenCV를 사용하여 이미지를 decode
-        image_np = np.frombuffer(decoded_image, dtype=np.uint8)
-        img_cv2 = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
-
-        # 객체 검출 수행
-        results = model(img_cv2, size=640)
-
-        # 검출된 객체에 대한 클래스 이름 가져오기
-        detected_object_names = [results.names[int(cls)] for cls in results.xyxy[0][:, -1]]
-
-        # # 검출된 객체의 클래스 이름을 콘솔에 출력
-        # print("Detected objects:", detected_object_names)
-
-        # 클래스 이름을 자바 스프링 백엔드 서버로 전송
-        backend_url = 'http://172.20.10.3:8080/api/defective'
-        payload = {'defective': ', '.join(detected_object_names)}
-        print(payload)
-        response = requests.post(backend_url, json=payload)
-        print(response)
-
-        # 응답을 콘솔에 출력
-        print("Backend Response:", response.text)
-
-        # 이미지를 화면에 표시
-        cv2.imshow("Captured Image", img_cv2)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
-
-        return jsonify({'message': 'Image displayed'})
-    else:
-        return jsonify({'error': 'No image received'}), 400
 
 
 if __name__ == '__main__':
