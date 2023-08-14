@@ -14,7 +14,7 @@ import './MachinePage.css';
 import CircularProgressWithLabel from '../Data/MachineData'
 import {OutlinedCard} from '../card/MachineCards';
 import { Modal } from '@mui/material';
-import { ModalStyled, ItemStyled , GridItemStyled, SubmitContainer, StyledTextField, ItemStyledChart, GridItemStyledChart, ItemStyledCount } from '../stylescomp/MachineStyle';
+import { ModalStyled, ItemStyled , GridItemStyled, SubmitContainer, StyledTextField, ItemStyledChart, GridItemStyledChart, ItemStyledCount, ItemStyledButton } from '../stylescomp/MachineStyle';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/lab/Alert';
 import BasicColor from '../Chart/TargetCounChart';
@@ -22,7 +22,7 @@ import BasicColor from '../Chart/TargetCounChart';
 
 function MachinePage() {
 
-  const { isRunning, elapsedTime, startTime, handleStart, handleStop, resetTimer} = useTimeRecorder();
+  const { isRunning, elapsedTime, restartTimer, startTime, handleStart, handleStop, resetTimer} = useTimeRecorder();
   const {count, showAlert, setShowAlert,targetAchievement, targetCount, setTargetCount, handleTargetcountChange, handleTargetCountSubmit} = useMachineCount()
   const {nowRate} = useMachineRate()
   const [formOpen, setFormOpen] = useState(false)
@@ -171,56 +171,53 @@ function MachinePage() {
             <GridItemStyled item xs={12}>
               <ItemStyled>가동시간:{formatTime(elapsedTime)}</ItemStyled>
             </GridItemStyled> 
+
             <GridItemStyled  item xs={12}>
-            <ItemStyled >
+            <ItemStyledButton >
             {isRunning ? (
                   <Button 
-                    variant="outlined"
-                    style={{ color: 'white', flex: 5, marginRight: '10px' , borderColor: '#263238'}} 
+                    variant="contained"
+                    style={{ backgroundColor: 'rgba(255, 255, 255, 0.7)', color: 'black', flex: 5, marginRight: '10px', borderColor: '#263238'}} 
                     size="large"
-                    onClick={() => {
-                      handleStop()
-                      handleOpenForm();
-                    }}
+                    onClick={handleOpenForm}
                   >
                     가동중지
                   </Button>
+                  ) : formOpen ? (
+                    <>
+                      <Button
+                        variant="contained"
+                        style={{ backgroundColor: 'rgba(255, 255, 255, 0.7)', color: 'black', flex: 5, marginRight: '10px', borderColor: '#263238' }}
+                        size="large"
+                        onClick={handleStart}
+                      >
+                        재가동
+                      </Button>
+                    </>
                   ) : (
                     <>
-                  <Button
-                    variant="outlined"
-                    style={{ color: 'white', flex: 5, marginRight: '10px' ,borderColor: '#263238' }} 
-                    size="large"
-                    onClick={() => {
-                      handleStart();
-                    }}
-                  >
-                    가동 시작
-                  </Button>
-            
-                  <Button
-                    variant="outlined"
-                    style={{ color: 'white', flex: 5, marginRight: '10px' , borderColor: '#263238'}} 
-                    size="large"
-                    onClick={()=> {
-                      handleStart()
-                    }} // Start the timer
-                  >
-                  재가동
-                  </Button>
-                  </>
+                      <Button
+                        variant="contained"
+                        style={{ backgroundColor: 'rgba(255, 255, 255, 0.7)', color: 'black', flex: 5, marginRight: '10px', borderColor: '#263238' }}
+                        size="large"
+                        onClick={handleStart}
+                      >
+                        가동 시작
+                      </Button>
+                    </>
                 )}
-                <FormDialog open={formOpen} handleClose={handleCloseForm} elapsedTime={elapsedTime} />
                 <Button
-                  variant="outlined"
-                  style={{ color: 'white', flex: 5, marginRight: '10px' ,borderColor: '#263238' }} 
-                  size="large"
-                  onClick={resetTimer}
-                >
-                  Reset
-                </Button>
+                    variant="contained"
+                    style={{ backgroundColor: 'rgba(255, 255, 255, 0.7)', color: 'black', flex: 5, marginRight: '10px', borderColor: '#263238' }}
+                    size="large"
+                    onClick={resetTimer}
+                  >
+                    Reset
+                  </Button>
+                <FormDialog open={formOpen} handleClose={handleCloseForm} elapsedTime={elapsedTime} handleRestart={restartTimer} handleStop={handleStop}  />
+          
 
-            </ItemStyled>
+            </ItemStyledButton>
           </GridItemStyled>
 
           </Grid>

@@ -11,13 +11,14 @@ import { useAuth } from './security/AuthContext';
 import useTimeRecorder from '../hooks/customMachine'; 
 import axios from 'axios'
 
-export default function FormDialog({ open, handleClose, name }) {
+export default function FormDialog({ open, handleClose, handleRestart, handleStop, name , elapsedTime}) {
   // const operationStartTime = useMachine()
   const authContext = useAuth()
   // const {count} = useMachineCount()
-  const { elapsedTime: customMachineElapsedTime } = useTimeRecorder()
+  const { elapsedTime : customMachineElapsedTime} = useTimeRecorder()
   const [selectedReason, setSelectedReason] = useState('')
-  const [formattedOperationTime, setFormattedOperationTime] = useState('')
+  const [formattedOperationTime, setFormattedOperationTime] = useState('') 
+
 
   const operationStopTimeMillis = Date.now(); // 밀리초로 현재 시간 가져오기
   const operationStopDate = new Date(operationStopTimeMillis);
@@ -37,17 +38,18 @@ export default function FormDialog({ open, handleClose, name }) {
 
 
   const formatTime = (time) => {
-    // 시간을 분:초 형식으로 포맷팅하는 함수
-    const minutes = Math.floor(time / 60000);
-    const seconds = ((time % 60000) / 1000).toFixed(0);
-    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    const hours = Math.floor(time / 3600000); // 시간
+    const minutes = Math.floor((time % 3600000) / 60000); // 분
+    const seconds = ((time % 60000) / 1000).toFixed(0); // 초
+  
+    return `${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   };
 
   useEffect(() => {
     if (open) {
-      setFormattedOperationTime(formatTime(customMachineElapsedTime));
+      setFormattedOperationTime(formatTime(elapsedTime));
     }
-  }, [open,customMachineElapsedTime]);
+  }, [open,elapsedTime]);
 
   const handleReasonChange = (event) => {
     setSelectedReason(event.target.value);
@@ -57,6 +59,7 @@ export default function FormDialog({ open, handleClose, name }) {
     baseURL: 'http://172.20.10.3:8080',
     withCredentials: true, //쿠키 자동 포함
   })
+
 
   //백엔드 api데이터 전송
   const handleReasonSubmit = async () => {
@@ -72,7 +75,7 @@ export default function FormDialog({ open, handleClose, name }) {
         console.log('Selected reason:', selectedReason)
         const name = authContext.currentUser && authContext.currentUser.name
         const operationStopTime = formattedOperationStopTime;
-        const operationTime = customMachineElapsedTime;
+        const operationTime = formattedOperationTime; 
         // const operationTime = '04:05:30'; 
         const reason = selectedReason;
         const countValue = 0; 
@@ -142,8 +145,10 @@ export default function FormDialog({ open, handleClose, name }) {
         </RadioGroup>
       </DialogContent>
       <DialogActions>
-        <button onClick={handleClose}>취소</button>
-        <button onClick={handleReasonSubmit}>저장</button>
+        <button onClick={()=>{handleClose()
+                              handleRestart()}}>취소</button>
+        <button onClick={()=>{handleReasonSubmit()
+                              handleStop()}}>저장</button>
       </DialogActions>
     </Dialog>
   )
