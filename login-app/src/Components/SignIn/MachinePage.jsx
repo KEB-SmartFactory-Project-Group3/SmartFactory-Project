@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import FormDialog from './FormDialog';
 import Paper from '@mui/material/Paper';
-import { TextField } from '@mui/material';
+import { Typography } from '@mui/material';
 import useMachineRate from '../hooks/useMachineRate';
 import { styled } from '@mui/material/styles';
 import { StyledBackground, StyledFactor } from '../stylescomp/BackgroundStyle';
@@ -14,7 +14,7 @@ import './MachinePage.css';
 import CircularProgressWithLabel from '../Data/MachineData'
 import {OutlinedCard} from '../card/MachineCards';
 import { Modal } from '@mui/material';
-import { ModalStyled, ItemStyled , GridItemStyled} from '../stylescomp/MachineStyle';
+import { ModalStyled, ItemStyled , GridItemStyled, SubmitContainer, StyledTextField} from '../stylescomp/MachineStyle';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/lab/Alert';
 
@@ -27,6 +27,7 @@ function MachinePage() {
   const [formOpen, setFormOpen] = useState(false)
  
   const [isCardOpen,setIsCardOpen] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
 
   const handleCardClick = () => {
     setIsCardOpen(!isCardOpen)
@@ -39,6 +40,21 @@ function MachinePage() {
   const handleCloseForm = () => {
     setFormOpen(false)
   };
+
+  const handleTextSubmit = () => {
+
+    if (isNaN(targetCount) || targetCount === "") {
+      // 입력값이 숫자가 아닐 경우 경고를 표시
+      setShowAlert(true);
+      return;
+  }
+    handleTargetCountSubmit()
+    setSubmitted(true)
+  }
+
+  const handleTextReset = () => {
+    setSubmitted(false)
+  }
 
   const formatTime = (time) => {
     const hours = Math.floor(time / 3600000); // 시간
@@ -70,33 +86,45 @@ function MachinePage() {
 
         <GridItemStyled item xs={12} sm={4} md={4}>
             <ItemStyled>
-            목표 생산량 : {''}
-            <TextField 
+            <Typography variant="h6" sx={{marginBottom: '1rem'}}>
+              목표 생산량
+            </Typography>
+            {submitted ? (
+              <>
+                <div>{targetCount}</div>
+                <SubmitContainer>
+                  <Button
+                    variant="contained"
+                    style={{ backgroundColor: '#5C6AC4', color: 'white', marginLeft: '10px' }}
+                    size="small"
+                    onClick={handleTextReset}
+                  >
+                    재입력
+                  </Button>
+                </SubmitContainer>
+              </>
+            ) : (
+              <>
+            <StyledTextField 
               value={targetCount}
               onChange={(e) => handleTargetcountChange(e.target.value)}
               variant='outlined'
               size='small'
               helperText="목표 생산량을 입력해주세요"
               label="목표 생산량"
-              InputLabelProps={{ style: { color: 'white' } }} // 라벨 색상 변경
-              InputProps={{ // 아웃라인, 헬퍼텍스트 색상 변경
-                style: { color: 'white' },
-                classes: {
-                  notchedOutline: {
-                    borderColor: 'white'
-                  },
-                }
-              }}
-              FormHelperTextProps={{ style: { color: 'white' } }}
               />
+              <SubmitContainer>
               <Button
                 variant="contained"
                 style={{ backgroundColor: '#5C6AC4', color: 'white', marginLeft: '10px' }}
                 size="small"
-                onClick={handleTargetCountSubmit}
+                onClick={handleTextSubmit}
               >
                 전송
               </Button>
+              </SubmitContainer>
+              </>
+            )}
           </ItemStyled>
         </GridItemStyled>
 
@@ -130,22 +158,12 @@ function MachinePage() {
           </ModalStyled>
         </Modal>
 
-          <Grid item xs={12}>
-            <Item sx={{
-                        background: 'transparent',
-                        border: '1px solid white',
-                        boxShadow: 'none', // 그림자 제거
-                        marginTop: '10px',  
-                        marginLeft: '15px',
-                        marginRight: '15px',
-                        borderRadius: '5px',
-                        background: 'rgba(255, 255, 255, 0.1)',
-                        backdropFilter: 'blur(8px)',
-                        color: 'white'
-            }}>
+          <GridItemStyled item xs={12}>
+            <ItemStyled>
               차트
-            </Item>
-          </Grid>
+            </ItemStyled>
+          </GridItemStyled>
+
           <Grid item xs={12}>
             <Item  sx={{
                         background: 'transparent',

@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Grid from '@mui/material/Grid';
+import { TextField } from '@mui/material';
 
 export const ModalStyled = styled.div`
  //중앙배치
@@ -25,7 +26,7 @@ export const ModalStyled = styled.div`
 `;
 
 export const GridItemStyled = styled(Grid)`
-  // 기본 스타일을 여기에 작성합니다.
+  // 기본 스타일
   transition: transform 0.3s, backdrop-filter 0.3s;
 
   &:hover {
@@ -59,3 +60,26 @@ export const ItemStyled = styled.div`
   }
 `;
 
+export const SubmitContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+`;
+
+export const StyledTextField = styled(TextField)`
+  & .MuiInputLabel-root {
+    color: white;
+  }
+
+  & .MuiInputBase-root {
+    color: white;
+
+    & fieldset {
+      border-color: white;
+    }
+  }
+
+  & .MuiFormHelperText-root {
+    color: white;
+  }
+`;
