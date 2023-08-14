@@ -1,3 +1,4 @@
+```mermaid
 erDiagram
   user{
     userId CHAR(8) PK
