@@ -1,7 +1,7 @@
 package com.SpringServer.service;
 
-import com.SpringServer.model.entity.ESP32Data;
-import com.SpringServer.repository.ESP32Repository;
+import com.SpringServer.model.entity.FactoryInfo;
+import com.SpringServer.repository.FactoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,25 +12,24 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 @EnableScheduling
-public class ESP32ClientService {
+public class FactoryClientService {
 
-    private final ESP32Repository esp32Repository;
-
-    private static final String URL = "http://172.30.1.55/data";
+    private final FactoryRepository factoryRepository;
+    private static final String URL = "http://172.30.1.21";
 
     @Autowired
-    public ESP32ClientService(ESP32Repository esp32Repository) {
-        this.esp32Repository = esp32Repository;
+    public FactoryClientService(FactoryRepository factoryRepository){
+        this.factoryRepository = factoryRepository;
     }
 
     @Scheduled(fixedDelay = 1000)
     public void fetchDataAndSave() {
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<ESP32Data> response = restTemplate.getForEntity(URL, ESP32Data.class);
+        ResponseEntity<FactoryInfo> response = restTemplate.getForEntity(URL, FactoryInfo.class);
 
         if(response.getStatusCode() == HttpStatus.OK){
-            ESP32Data esp32Data = response.getBody();
-            esp32Repository.save(esp32Data);
+            FactoryInfo factoryInfo = response.getBody();
+            factoryRepository.save(factoryInfo);
         }else{
             throw new IllegalArgumentException("API 호출 실패");
         }

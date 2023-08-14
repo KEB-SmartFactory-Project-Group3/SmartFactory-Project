@@ -10,7 +10,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 
@@ -28,6 +27,6 @@ public class StopReason {
     private Time operationTime;
     private String userName;
     private String reason;
-    private double nowGoal;
+    private double nowRate;
 
 }

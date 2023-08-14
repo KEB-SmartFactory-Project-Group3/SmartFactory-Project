@@ -4,7 +4,9 @@ import com.SpringServer.model.dto.FactoryInfoDTO;
 import com.SpringServer.model.dto.GoalDTO;
 import com.SpringServer.model.dto.MachineInfoDTO;
 import com.SpringServer.model.entity.ESP32Data;
+import com.SpringServer.model.entity.FactoryInfo;
 import com.SpringServer.repository.ESP32Repository;
+import com.SpringServer.repository.FactoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 public class DisplayService {
 
     private final ESP32Repository esp32Repository;
+    private final FactoryRepository factoryRepository;
 
     private final GoalService goalService;
 
@@ -33,18 +36,18 @@ public class DisplayService {
     }
 
     public FactoryInfoDTO getFactoryInfo(){
-        ESP32Data latestRecode = esp32Repository.findFirstByOrderByTimesDesc();
+        FactoryInfo latestRecode = factoryRepository.findFirstByOrderByTimesDesc();
         if (latestRecode != null){
-            double latestTemperature = latestRecode.getTemperature();
-            double latestHumidity = latestRecode.getHumidity();
+            double latestTemperature = latestRecode.getFactoryTemperature();
+            int latestHumidity = latestRecode.getFactoryHumidity();
             return FactoryInfoDTO.builder()
-                    .temperature(latestTemperature)
-                    .humidity(latestHumidity)
+                    .factoryTemperature(latestTemperature)
+                    .factoryHumidity(latestHumidity)
                     .build();
         }
         return FactoryInfoDTO.builder()
-                .temperature(0.0)
-                .humidity(0.0)
+                .factoryTemperature(0.0)
+                .factoryHumidity(0)
                 .build();
     }
 

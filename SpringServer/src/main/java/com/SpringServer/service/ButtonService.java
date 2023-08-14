@@ -4,7 +4,10 @@ import com.SpringServer.model.dto.ButtonRequest;
 import com.SpringServer.model.dto.ButtonResponse;
 import com.SpringServer.model.entity.StopReason;
 import com.SpringServer.repository.StopRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONObject;
+import org.springframework.boot.json.JsonParser;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -23,10 +26,11 @@ public class ButtonService {
                 .operationTime(request.getOperationTime())
                 .userName(request.getUserName())
                 .reason(request.getReason())
-                .nowGoal(goalService.calculateNowRate(request.getCount()))
+                .nowRate(goalService.calculateNowRate(request.getCount()))
                 .build();
-        System.out.println(request.getUserName() + request.getState());
-//        onOffEsp32Board(request);
+
+        onOffSpring(onOffEsp32Board(request));
+
         stopRepository.save(stopReason);
         return ButtonResponse.builder()
                 .result("saved")
@@ -35,19 +39,33 @@ public class ButtonService {
 
     public String onOffEsp32Board(ButtonRequest request){
         RestTemplate restTemplate = new RestTemplate();
-        String responseMessage = null;
-        if(request.getState().equals("stop")){
+        String jsonResponse = null;
+        if (request.getState().equals("stop")) {
             String stopURL = URL + "/red_led_off";
-            responseMessage = restTemplate.getForObject(stopURL, String.class);
+            jsonResponse = restTemplate.getForObject(stopURL, String.class);
         } else if (request.getState().equals("start")) {
             String startURL = URL + "/red_led_on";
-            responseMessage = restTemplate.getForObject(startURL, String.class);
+            jsonResponse = restTemplate.getForObject(startURL, String.class);
         } else if (request.getState().equals("reset")) {
             String resetURL = URL + "/reset";
-            responseMessage = restTemplate.getForObject(resetURL, String.class);
+            jsonResponse = restTemplate.getForObject(resetURL, String.class);
+        } else {
+            throw new IllegalArgumentException("ESP32 command 실패");
+        }
+
+        JSONObject jsonObject = new JSONObject(jsonResponse);
+        return jsonObject.getString("message");
+    }
+
+    public void onOffSpring(String jsonResponse){
+        if(jsonResponse.equals("ESP32 Start")){
+
+        } else if (jsonResponse.equals("ESP32 Stop")) {
+
+        } else if (jsonResponse.equals("ESP32 Reset")) {
+
         } else{
             throw new IllegalArgumentException("ESP32 command 실패");
         }
-        return responseMessage;
     }
 }
