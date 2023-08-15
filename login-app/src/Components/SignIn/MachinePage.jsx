@@ -36,7 +36,12 @@ function MachinePage() {
 
   //현재 생산 속도
   const elapsedSeconds = elapsedTime / 1000 // 초 단위로 표시
-  
+  const currentRate = count / elapsedSeconds
+
+  // 목표 달성까지 남은 시간 = (목표 생산량 - 현재 생산량) / 현재 생산 속도
+  const remainingItems = targetCount - count
+  const remainingSeconds = remainingItems / currentRate // 후에 formatTime 함수를 사용하여 시간, 분, 초 변환
+
   const handleCardClick = () => {
     setIsCardOpen(!isCardOpen)
   }
@@ -108,7 +113,12 @@ function MachinePage() {
                 <div>
                   앞으로 남은 생산량 <br />
                   <span style={{ fontWeight: 'bold', color: '#0f0' }}>{targetCount - count}</span>
+
+                  <Typography variant="body1">
+                    예상 남은 시간: {formatTime(remainingSeconds * 1000)} 
+                  </Typography>
                 </div>
+             
               </CSSTransition>
 
                 <SubmitContainer>
