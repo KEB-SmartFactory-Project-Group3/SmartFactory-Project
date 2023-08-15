@@ -1,17 +1,39 @@
 import React, { useState ,  useEffect }from 'react';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, RadioGroup, FormControlLabel, Radio, Button as MuiButton } from '@mui/material';
 import { useAuth } from './security/AuthContext';
 import useTimeRecorder from '../hooks/customMachine'; 
-import axios from 'axios'
+import axios from 'axios';
+import { styled } from '@mui/material/styles';
+
+const StyledDialog = styled(Dialog)(({ theme }) => ({
+  '& .MuiPaper-root': {
+    backgroundColor: 'rgba(255,255,255,0.1)', 
+    backdropFilter: 'blur(8px)', 
+    borderRadius: '5px',  
+    color: 'white',
+  }
+}));
+
+const StyledButton = styled(MuiButton)({
+  backgroundColor: '#fff',
+  color: '#000',
+  '&:hover': {
+    backgroundColor: '#f2f2f2'
+  }
+});
+
+const WhiteRadio = styled(Radio)({
+  '&.Mui-checked': {
+    color: 'white',
+  },
+});
+
+const StyledDialogContentText = styled(DialogContentText)({
+  color: 'white',
+});
 
 export default function FormDialog({ open, handleClose, handleRestart, handleStop, name , elapsedTime}) {
+
   // const operationStartTime = useMachine()
   const authContext = useAuth()
   // const {count} = useMachineCount()
@@ -110,46 +132,46 @@ export default function FormDialog({ open, handleClose, handleRestart, handleSto
 
 
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <StyledDialog open={open} onClose={handleClose} >
       <DialogTitle>가동 중지 원인</DialogTitle>
       <DialogContent>
-        <DialogContentText>
+        <StyledDialogContentText>
           가동 중지하는 이유를 선택해주세요
-        </DialogContentText>
+        </StyledDialogContentText>
         <RadioGroup value={selectedReason} onChange={handleReasonChange}>
         <FormControlLabel
             value="휴식"
-            control={<Radio />}
+            control={<WhiteRadio />}
             label="휴식"
           />
           <FormControlLabel
             value="교대"
-            control={<Radio />}
+            control={<WhiteRadio />}
             label="교대"
           />
           <FormControlLabel
             value="고장"
-            control={<Radio />}
+            control={<WhiteRadio  />}
             label="고장"
           />
           <FormControlLabel
             value="점검"
-            control={<Radio />}
+            control={<WhiteRadio  />}
             label="점검"
           />
           <FormControlLabel
             value="사고"
-            control={<Radio />}
+            control={<WhiteRadio  />}
             label="사고"
           />
         </RadioGroup>
       </DialogContent>
       <DialogActions>
-        <button onClick={()=>{handleClose()
-                              handleRestart()}}>취소</button>
-        <button onClick={()=>{handleReasonSubmit()
-                              handleStop()}}>저장</button>
+        <StyledButton onClick={()=>{handleClose()
+                              handleRestart()}}>취소</StyledButton>
+        <StyledButton onClick={()=>{handleReasonSubmit()
+                              handleStop()}}>저장</StyledButton>
       </DialogActions>
-    </Dialog>
+    </StyledDialog>
   )
 }
