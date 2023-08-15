@@ -14,10 +14,11 @@ import './MachinePage.css';
 import CircularProgressWithLabel from '../Data/MachineData'
 import {OutlinedCard} from '../card/MachineCards';
 import { Modal } from '@mui/material';
-import { ModalStyled, ItemStyled , GridItemStyled, SubmitContainer, StyledTextField, ItemStyledChart, GridItemStyledChart, ItemStyledCount, ItemStyledButton } from '../stylescomp/MachineStyle';
+import { ModalStyled, ItemStyled , GridItemStyled, SubmitContainer, StyledTextField, ItemStyledChart, GridItemStyledChart, ItemStyledCount, ItemStyledButton, DigitalClockStyle, ItemStyledTime, ButtonStyled, GridContainerStyled} from '../stylescomp/MachineStyle';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/lab/Alert';
 import BasicColor from '../Chart/TargetCounChart';
+import {motion} from 'framer-motion';
 
 
 function MachinePage() {
@@ -74,6 +75,11 @@ function MachinePage() {
   }))
 
   return (
+    <motion.div 
+      initial={{opacity: 0}}
+      animate={{opacity: 1}}
+      transition={{duration: 1.5}}
+    >
     <StyledBackground className='Machinepagelanding'>
     <StyledFactor className="MachinePage">
       <Box sx={{flexGrow:1}}>
@@ -94,14 +100,14 @@ function MachinePage() {
               <>
                 <div>{targetCount}</div>
                 <SubmitContainer>
-                  <Button
-                    variant="contained"
-                    style={{ backgroundColor: '#5C6AC4', color: 'white', marginLeft: '10px' }}
+                  <ButtonStyled
+                    variant="outlined"
+                    style={{ color: 'white', borderColor:'white'}}
                     size="small"
                     onClick={handleTextReset}
                   >
                     재입력
-                  </Button>
+                  </ButtonStyled>
                 </SubmitContainer>
               </>
             ) : (
@@ -115,14 +121,14 @@ function MachinePage() {
               label="목표 생산량"
               />
               <SubmitContainer>
-              <Button
-                variant="contained"
-                style={{ backgroundColor: '#5C6AC4', color: 'white', marginLeft: '10px' }}
+              <ButtonStyled
+                variant="outlined"
+                style={{ color: 'white', borderColor:'white'}}
                 size="small"
                 onClick={handleTextSubmit}
               >
                 전송
-              </Button>
+              </ButtonStyled>
               </SubmitContainer>
               </>
             )}
@@ -167,65 +173,47 @@ function MachinePage() {
         </GridItemStyledChart>
 
         <Grid item xs={4} sm={4} md={4}>
-          <Grid container direction='column'>
+          <GridContainerStyled container direction='column'>
             <GridItemStyled item xs={12}>
-              <ItemStyled>가동시간:{formatTime(elapsedTime)}</ItemStyled>
+              <ItemStyledTime>
+                <DigitalClockStyle variant='h3'>
+                {formatTime(elapsedTime)}
+                </DigitalClockStyle>
+                </ItemStyledTime>
             </GridItemStyled> 
 
             <GridItemStyled  item xs={12}>
-            <ItemStyledButton >
             {isRunning ? (
-                  <Button 
-                    variant="contained"
-                    style={{ backgroundColor: 'rgba(255, 255, 255, 0.7)', color: 'black', flex: 5, marginRight: '10px', borderColor: '#263238'}} 
-                    size="large"
-                    onClick={handleOpenForm}
-                  >
+                  <ButtonStyled variant='outlined' style={{color:'white', borderColor: 'white'}}size='small' onClick={handleOpenForm}>
                     가동중지
-                  </Button>
+                  </ButtonStyled>
                   ) : formOpen ? (
                     <>
-                      <Button
-                        variant="contained"
-                        style={{ backgroundColor: 'rgba(255, 255, 255, 0.7)', color: 'black', flex: 5, marginRight: '10px', borderColor: '#263238' }}
-                        size="large"
-                        onClick={handleStart}
-                      >
+                      <ButtonStyled variant='outlined' style={{color:'white', borderColor: 'white'}}size="small"onClick={handleStart}>
                         재가동
-                      </Button>
+                      </ButtonStyled>
                     </>
                   ) : (
                     <>
-                      <Button
-                        variant="contained"
-                        style={{ backgroundColor: 'rgba(255, 255, 255, 0.7)', color: 'black', flex: 5, marginRight: '10px', borderColor: '#263238' }}
-                        size="large"
-                        onClick={handleStart}
-                      >
-                        가동 시작
-                      </Button>
+                     <ButtonStyled variant='outlined' style={{color:'white', borderColor: 'white'}}size="small" onClick={handleStart}>
+                          가동 시작
+                      </ButtonStyled> 
                     </>
                 )}
-                <Button
-                    variant="contained"
-                    style={{ backgroundColor: 'rgba(255, 255, 255, 0.7)', color: 'black', flex: 5, marginRight: '10px', borderColor: '#263238' }}
-                    size="large"
-                    onClick={resetTimer}
-                  >
+                 <ButtonStyled variant='outlined' style={{color:'white', borderColor: 'white'}}size='small' onClick={resetTimer}>
                     Reset
-                  </Button>
+                </ButtonStyled>
                 <FormDialog open={formOpen} handleClose={handleCloseForm} elapsedTime={elapsedTime} handleRestart={restartTimer} handleStop={handleStop}  />
-          
 
-            </ItemStyledButton>
           </GridItemStyled>
 
-          </Grid>
+          </GridContainerStyled>
         </Grid>
       </Grid>
       </Box>
    </StyledFactor>
    </StyledBackground>
+   </motion.div>
   );
 }
 

@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import Grid from '@mui/material/Grid';
 import { TextField } from '@mui/material';
+import { Card, CardContent, Typography } from '@mui/material';
+import Button from '@mui/material/Button';
 
 export const ModalStyled = styled.div`
  //중앙배치
@@ -131,4 +133,54 @@ export const StyledTextField = styled(TextField)`
   & .MuiFormHelperText-root {
     color: white;
   }
+`;
+
+// 가동시간  스타일
+// export const DigitalClockStyle = styled(Typography)({
+//   fontFamily: '"Orbitron", sans-serif', // 디지털 시계 폰트
+//   backgroundColor: '#333',
+//   color: '#0f0',
+//   padding: '1rem',
+//   borderRadius: '5px',
+//   border: '3px solid #0f0',
+//   display: 'inline-block',
+// });
+
+export const DigitalClockStyle = styled(Typography)`
+  font-family: 'Orbitron', sans-serif;
+  background-color: #333;
+  color: #0f0;
+  padding: 1rem;
+  border-radius: 5px;
+  border: 3px solid #0f0;
+  display: inline-block;
+`;
+
+export const ItemStyledTime = styled.div`
+  margin: 1px 0; // 각 그리드 마진 조정
+  box-shadow: none; 
+  margin-top: 25px; 
+  border-radius: 5px; 
+  color: white;
+  padding: 0rem;
+  width: 100%;
+  text-align: center; 
+  cursor: pointer;
+  overflow: hidden;
+  box-sizing: border-box;
+`;
+
+//버튼 디자인
+export const ButtonStyled = styled(Button)`
+  font-family: 'Orbitron', sans-serif !important;
+  margin: 0 7px !important;
+  
+  &:hover {
+    background-color: #555 !important;
+  }
+`;
+
+export const GridContainerStyled = styled(Grid)`
+  align-items: center; 
+  justify-content: center;
 `;
