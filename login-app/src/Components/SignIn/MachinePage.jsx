@@ -10,16 +10,15 @@ import { Typography } from '@mui/material';
 import useMachineRate from '../hooks/useMachineRate';
 import { styled } from '@mui/material/styles';
 import { StyledBackground, StyledFactor } from '../stylescomp/BackgroundStyle';
-import './MachinePage.css';
-import CircularProgressWithLabel from '../Data/MachineData'
 import {OutlinedCard} from '../card/MachineCards';
 import { Modal } from '@mui/material';
-import { ModalStyled, ItemStyled , GridItemStyled, SubmitContainer, StyledTextField, ItemStyledChart, GridItemStyledChart, ItemStyledCount, ItemStyledButton, DigitalClockStyle, ItemStyledTime, ButtonStyled, GridContainerStyled} from '../stylescomp/MachineStyle';
+import { ModalStyled, GridItemStyled, SubmitContainer, StyledTextField, ItemStyledChart, GridItemStyledChart, ItemStyledCount, RateLabel, DigitalClockStyle, ItemStyledTime, ButtonStyled, GridContainerStyled, GridItemStyledTime} from '../stylescomp/MachineStyle';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/lab/Alert';
-import BasicColor from '../Chart/TargetCounChart';
+import BasicColor from '../Chart/TargetCountChart';
 import { CSSTransition } from 'react-transition-group';
 import { FadeBox } from '../stylescomp/FadeinStyle';
+import TargetDonutChart from '../Chart/TargetCountChart';
 
 
 function MachinePage() {
@@ -32,6 +31,12 @@ function MachinePage() {
   const [isCardOpen,setIsCardOpen] = useState(false)
   const [submitted, setSubmitted] = useState(false)
 
+  // 목표생산량 animateText
+  const [animateText, setAnimateText] = useState(false)
+
+  //현재 생산 속도
+  const elapsedSeconds = elapsedTime / 1000 // 초 단위로 표시
+  
   const handleCardClick = () => {
     setIsCardOpen(!isCardOpen)
   }
@@ -53,6 +58,8 @@ function MachinePage() {
   }
     handleTargetCountSubmit()
     setSubmitted(true)
+    setAnimateText(true); // 애니메이션 시작
+    setTimeout(() => setAnimateText(false), 1000) // 지속 시간
   }
 
   const handleTextReset = () => {
@@ -83,9 +90,9 @@ function MachinePage() {
       <FadeBox sx={{flexGrow:1}}>
         <Grid container spacing={2} sx={{ background: 'transparent', border: 'none' , boxShadow: 'none',}}>
         <GridItemStyled item xs={12} sm={4} md={4}>
-            <ItemStyledCount>
-              도달량:  
-              <CircularProgressWithLabel value={nowRate} />
+            <ItemStyledCount borderColor="#b388ff">
+              <RateLabel>도달률 <br/> {nowRate}</RateLabel>
+              <TargetDonutChart nowRate={nowRate} />
             </ItemStyledCount>
         </GridItemStyled>
 
@@ -96,7 +103,14 @@ function MachinePage() {
             </Typography>
             {submitted ? (
               <>
-                <div>{targetCount}</div>
+              <CSSTransition in={animateText} timeout={1000} classNames="fade" appear>
+                {/* <div>{targetCount}</div> */}
+                <div>
+                  앞으로 남은 생산량 <br />
+                  <span style={{ fontWeight: 'bold', color: '#0f0' }}>{targetCount - count}</span>
+                </div>
+              </CSSTransition>
+
                 <SubmitContainer>
                   <ButtonStyled
                     variant="outlined"
@@ -166,19 +180,19 @@ function MachinePage() {
         <GridItemStyledChart item xs={8} sm={8} md={8}>
           <ItemStyledChart>
             차트
-            <BasicColor />
+            {/* <BasicColor /> */}
           </ItemStyledChart>
         </GridItemStyledChart>
 
         <Grid item xs={4} sm={4} md={4}>
           <GridContainerStyled container direction='column'>
-            <GridItemStyled item xs={12}>
+            <GridItemStyledTime item xs={12}>
               <ItemStyledTime>
                 <DigitalClockStyle variant='h3'>
                 {formatTime(elapsedTime)}
                 </DigitalClockStyle>
                 </ItemStyledTime>
-            </GridItemStyled> 
+            </GridItemStyledTime> 
 
             <GridItemStyled  item xs={12}>
             {isRunning ? (
