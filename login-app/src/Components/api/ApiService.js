@@ -5,7 +5,6 @@ const apiClient = axios.create({
   withCredentials: true, //쿠키 자동 포함
 });
 
-
 export const retrieveData = async (dataKey) => {
   try {
     const token = document.cookie.split('=')[1]; // 쿠키에서 토큰 가져오기
@@ -14,17 +13,25 @@ export const retrieveData = async (dataKey) => {
         Authorization: `Bearer ${token}`,
       },
     };
-    const response = await apiClient.get("/api/display/machineinfo", config);
-    if (dataKey === 'count') {
-      return response.data.count
-    } else if (dataKey ==='nowRate') {
-      return response.data.nowRate
+
+    let response;
+
+    if (dataKey === 'temperature') {
+      response = await apiClient.get("/api/display/temperature", config);
+      return response.data.temperature; // 가정: 반환된 데이터 객체에 temperature 필드가 있음
+    }else {
+      response = await apiClient.get("/api/display/machineinfo", config);
+      if (dataKey === 'count') {
+        return response.data.count
+      } else if (dataKey ==='nowRate') {
+        return response.data.nowRate
+      }
     }
-    return null 
-   } catch (error) {
-    console.log("API 호출 오류:", error)
-    throw error
-  }
+      return null 
+    } catch (error) {
+      console.log("API 호출 오류:", error)
+      throw error
+    }
 };
 
 
