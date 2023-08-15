@@ -18,7 +18,8 @@ import { ModalStyled, ItemStyled , GridItemStyled, SubmitContainer, StyledTextFi
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/lab/Alert';
 import BasicColor from '../Chart/TargetCounChart';
-import {motion} from 'framer-motion';
+import { CSSTransition } from 'react-transition-group';
+import { FadeBox } from '../stylescomp/FadeinStyle';
 
 
 function MachinePage() {
@@ -75,14 +76,11 @@ function MachinePage() {
   }))
 
   return (
-    <motion.div 
-      initial={{opacity: 0}}
-      animate={{opacity: 1}}
-      transition={{duration: 1.5}}
-    >
+
     <StyledBackground className='Machinepagelanding'>
     <StyledFactor className="MachinePage">
-      <Box sx={{flexGrow:1}}>
+      <CSSTransition in={true} timeout={1000} classNames="fade" appear>
+      <FadeBox sx={{flexGrow:1}}>
         <Grid container spacing={2} sx={{ background: 'transparent', border: 'none' , boxShadow: 'none',}}>
         <GridItemStyled item xs={12} sm={4} md={4}>
             <ItemStyledCount>
@@ -206,14 +204,14 @@ function MachinePage() {
                 <FormDialog open={formOpen} handleClose={handleCloseForm} elapsedTime={elapsedTime} handleRestart={restartTimer} handleStop={handleStop}  />
 
           </GridItemStyled>
-
           </GridContainerStyled>
         </Grid>
       </Grid>
-      </Box>
+      </FadeBox>
+      </CSSTransition>
    </StyledFactor>
    </StyledBackground>
-   </motion.div>
+
   );
 }
 
