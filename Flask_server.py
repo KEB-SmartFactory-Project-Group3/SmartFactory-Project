@@ -9,6 +9,7 @@ from flask_cors import CORS
 import torch
 import requests
 import time
+from collections import Counter
 
 app = Flask(__name__)
 
@@ -30,15 +31,18 @@ first_detection_done = False   # 첫 번째 객체 검출 완료 여부를 나�
 count = 0
 defective_count = 0
 
-# 공장 고유 번호
-prefix = 'A'
-
 # 물건의 일련번호 생성기
 serial_counter = 1  # 시리얼 넘버의 시작 숫자를 설정
 
 
-def generate_serial_number():
+def generate_serial_number(detected_object_names):
     global serial_counter
+
+    # detected_object_names에 따라 접두사 선택
+    if "Defective" in detected_object_names:
+        prefix = 'AD'
+    else:
+        prefix = 'AN'
 
     serial_number = f"{prefix}{serial_counter:04d}"  # 'A' 접두사와 4자리 숫자를 결합
     serial_counter += 1  # 다음 시리얼 넘버를 사용할 때 카운터를 증가
@@ -93,28 +97,40 @@ def get_live_transmission():
             latest_detected_time = current_time  # 검출된 시간을 저장
 
         if current_time - last_time >= print_interval:
-            count += 1  # 카운트 증가
-            serial_number = generate_serial_number()  # 일련번호 생성
+            if detected_object_names:  # 이 부분을 추가하여, detected_object_names가 빈 리스트가 아닌 경우에만 작업 수행
+                count += 1  # 카운트 증가
+                serial_number = generate_serial_number(detected_object_names)  # 일련번호 생성
 
-            # defective 아이템이 발견되었는지 확인하고 defectiveCount를 증가
-            if "Defective" in detected_object_names:  # 여기서 "defective"를 검출된 객체 이름에 맞게 수정하세요.
-                defective_count += 1
+                # defective 아이템이 발견되었는지 확인하고 defective_count를 증가시킴.
+                if "Defective" in detected_object_names:
+                    defective_count += 1
 
-            # # 검출된 객체의 클래스 이름을 콘솔에 출력하여 확인
-            # print("Detected objects:", detected_object_names)
+                # # 검출된 객체의 클래스 이름을 콘솔에 출력하여 확인
+                # print("Detected objects:", detected_object_names)
 
-            # 클래스 이름을 자바 스프링 백엔드 서버로 전송
-            backend_url = 'http://192.168.43.183:8080/api/defective'
-            payload = {'defective': ', '.join(detected_object_names),
-                       'count': count,
-                       'defectiveCount': defective_count,
-                       'serialNumber': serial_number}
-            print(payload)
-            # response = requests.post(backend_url, json=payload)
-            # print(response)
-            # # 응답을 콘솔에 출력
-            # print("Backend Response:", response.text)
-            last_time = current_time
+                # 가장 빈번한 클래스 이름을 선택
+                counter = Counter(detected_object_names)
+                most_common = counter.most_common(1)
+
+                if most_common:
+                    most_common_name = most_common[0][0]
+                else:
+                    # 빈 리스트의 경우 적절한 처리를 수행해야 합니다.
+                    most_common_name = None
+                    print("No objects detected")
+
+                # 클래스 이름을 자바 스프링 백엔드 서버로 전송
+                backend_url = 'http://192.168.43.183:8080/api/defective'
+                payload = {'state': most_common_name,
+                           'count': count,
+                           'defectiveCount': defective_count,
+                           'serialNumber': serial_number}
+                print(payload)
+                response = requests.post(backend_url, json=payload)
+                print(response)
+                # 응답을 콘솔에 출력
+                print("Backend Response:", response.text)
+                last_time = current_time
 
     return jsonify({'image': encoded_img})
 
