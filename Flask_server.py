@@ -35,11 +35,11 @@ defective_count = 0
 serial_counter = 1  # 시리얼 넘버의 시작 숫자를 설정
 
 
-def generate_serial_number(detected_object_names):
+def generate_serial_number(most_common_name):
     global serial_counter
 
-    # detected_object_names에 따라 접두사 선택
-    if "Defective" in detected_object_names:
+    # most_common_name에 따라 접두사 선택
+    if most_common_name == "Defective":
         prefix = 'AD'
     else:
         prefix = 'AN'
@@ -57,8 +57,8 @@ def get_live_transmission():
     img_resp = urllib.request.urlopen(url + 'cam-hi.jpg')
     img_np = np.array(bytearray(img_resp.read()), dtype=np.uint8)
     img = cv2.imdecode(img_np, -1)
-    new_width = 800
-    new_height = 600
+    new_width = 640
+    new_height = 480
     img = cv2.resize(img, (new_width, new_height), interpolation=cv2.INTER_LINEAR)
     blurred_image = cv2.GaussianBlur(img, (5, 5), 0)
     sharpened_image = cv2.addWeighted(img, 1.5, blurred_image, -0.5, 0)
@@ -76,7 +76,7 @@ def get_live_transmission():
             detected_frame = detected_frame.numpy().transpose(1, 2, 0)  # PyTorch 텐서를 OpenCV 형식으로 변환
 
     # 이미지 품질을 70으로 설정하여 압축과 최적화 적용
-    is_success, im_buf_arr = cv2.imencode(".jpg", detected_frame, [cv2.IMWRITE_JPEG_QUALITY, 70])
+    is_success, im_buf_arr = cv2.imencode(".jpg", detected_frame, [cv2.IMWRITE_JPEG_QUALITY, 50])
     byte_im = im_buf_arr.tobytes()
     encoded_img = base64.b64encode(byte_im).decode('utf-8')
 
@@ -99,11 +99,6 @@ def get_live_transmission():
         if current_time - last_time >= print_interval:
             if detected_object_names:  # 이 부분을 추가하여, detected_object_names가 빈 리스트가 아닌 경우에만 작업 수행
                 count += 1  # 카운트 증가
-                serial_number = generate_serial_number(detected_object_names)  # 일련번호 생성
-
-                # defective 아이템이 발견되었는지 확인하고 defective_count를 증가시킴.
-                if "Defective" in detected_object_names:
-                    defective_count += 1
 
                 # # 검출된 객체의 클래스 이름을 콘솔에 출력하여 확인
                 # print("Detected objects:", detected_object_names)
@@ -115,9 +110,14 @@ def get_live_transmission():
                 if most_common:
                     most_common_name = most_common[0][0]
                 else:
-                    # 빈 리스트의 경우 적절한 처리를 수행해야 합니다.
+                    # 빈 리스트의 경우 적절한 처리를 수행
                     most_common_name = None
-                    print("No objects detected")
+
+                serial_number = generate_serial_number(most_common_name)  # 일련번호 생성
+
+                # Defective이면 defective_count를 증가시킴.
+                if most_common_name == "Defective":
+                    defective_count += 1
 
                 # 클래스 이름을 자바 스프링 백엔드 서버로 전송
                 backend_url = 'http://192.168.43.183:8080/api/defective'
@@ -126,10 +126,10 @@ def get_live_transmission():
                            'defectiveCount': defective_count,
                            'serialNumber': serial_number}
                 print(payload)
-                response = requests.post(backend_url, json=payload)
-                print(response)
-                # 응답을 콘솔에 출력
-                print("Backend Response:", response.text)
+                # response = requests.post(backend_url, json=payload)
+                # print(response)
+                # # 응답을 콘솔에 출력
+                # print("Backend Response:", response.text)
                 last_time = current_time
 
     return jsonify({'image': encoded_img})
