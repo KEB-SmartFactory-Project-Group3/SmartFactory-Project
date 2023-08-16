@@ -13,8 +13,10 @@ DHT dht(DHTPIN, DHTTYPE); // 사용핀넘버 타입 등록
 
 
 //------------------------ global variables ------------------------------------------------------------------
-const char* ssid = "Dohwan"; // "KT_GiGA_F2EA"; // "SmartFactory"; //                   // 와이파이 아이디
-const char* password =   "dh990921"; // "ffk8ebb167"; // "inha4885"; //     // 와이파이 비밀번호
+// const char* ssid = "Dohwan"; // "KT_GiGA_F2EA"; // "SmartFactory"; //                   // 와이파이 아이디
+// const char* password = "dh990921"; // "ffk8ebb167"; // "inha4885"; //     // 와이파이 비밀번호
+const char* ssid = "AndroidHotspot5460"; 
+const char* password = "19990220"; 
 
 WebServer server(80);
 OLED_U8G2 oled; // create oled object
@@ -38,6 +40,7 @@ int reset_pin = D6;
 // counting_var : to store the previous value
 int count = 0;        // 카운터용 변수
 int pre_time = 0;     // 이전에 물건이 지나간 시간
+bool isSending = false;
 
 // ESP32Board OnOff
 boolean state = true;
@@ -74,8 +77,6 @@ void setup() {
   pinMode(trig_pin, OUTPUT);
   pinMode(echo_pin, INPUT);          
 
-  server.on("/", handleRootEvent);
-  server.on("/data", handleDataRequest);
   server.on("/red_led_on", handleRedledOn);
   server.on("/red_led_off", handleRedledOff);
   server.on("/reset", handleReset);
@@ -86,14 +87,18 @@ void setup() {
 }
 
 
-//---------------------------- roop --------------------------------------------------------------------------
+//---------------------------- loop --------------------------------------------------------------------------
 void loop() {
-  server.handleClient();
-  if(state == true){
+  unsigned long previousMillis = 0;
+  const unsigned long interval = 500;
+  unsigned long currentMillis = millis();
+  if (state == true) {
     counting();
   }
-  oled_display();
-  delay(500); // 500/1000 sec
+  if (currentMillis - previousMillis >= interval) {
+    previousMillis = currentMillis;
+    oled_display();
+  }
 }
 
 
@@ -130,56 +135,12 @@ void handleReset(){
   server.send(200, "application/json", jsonResponse);
 }
 
+void sendDataToServer(int currentCount) {
+  HTTPClient http;
+  // String serverUrl = "http://172.20.10.3:8080/machine/data";
+  String serverUrl = "http://192.168.43.183:8080/machine/data";
+  String requestBody;
 
-void handleRootEvent() {
-  String clientIP = server.client().remoteIP().toString();  // client's ip addr
-  int octet1, octet2, octet3, octet4;
-  sscanf(clientIP.c_str(), "%d.%d.%d.%d", &octet1, &octet2, &octet3, &octet4);
-  String maskedIP = String(octet1) + ".XXX.XXX." + String(octet4); // 2nd, 3rd masking
-
-  StaticJsonDocument<128> jsonDocument;
-  jsonDocument["message"] = "Welcome SmartFactory WebServer!";
-  jsonDocument["ip_address"] = maskedIP;
-
-  String jsonResponse;
-  serializeJson(jsonDocument, jsonResponse);
-  server.send(200, "application/json", jsonResponse);
-
-  Serial.println(jsonResponse); // monitoring
-}
-
-
-void sendDataToServer() {
-  if (WiFi.status() == WL_CONNECTED) {
-    HTTPClient http;
-    String serverUrl = "http://172.20.10.3//machine/data";
-    String requestBody;
-
-    time_t now;
-    struct tm timeinfo;
-
-    time(&now);                   // 현재 시간을 가져오기
-    localtime_r(&now, &timeinfo); // 현재 시간을 구조화된 형태로 변환
-
-    // JSON 응답에 시간 추가
-    char timeBuffer[32];
-    strftime(timeBuffer, sizeof(timeBuffer), "%Y-%m-%d %H:%M:%S", &timeinfo);
-    StaticJsonDocument<200> jsonDocument;
-    jsonDocument["count"] = count;
-    jsonDocument["times"] = timeBuffer;
-
-    serializeJson(jsonDocument, requestBody);
-
-    http.begin(serverUrl);
-    http.addHeader("Content-Type", "application/json");
-    int httpResponseCode = http.POST(requestBody);
-    http.end();
-  }
-}
-
-
-void handleDataRequest() {
-  StaticJsonDocument<200> jsonDocument;
   time_t now;
   struct tm timeinfo;
 
@@ -189,15 +150,27 @@ void handleDataRequest() {
   // JSON 응답에 시간 추가
   char timeBuffer[32];
   strftime(timeBuffer, sizeof(timeBuffer), "%Y-%m-%d %H:%M:%S", &timeinfo);
+  StaticJsonDocument<200> jsonDocument;
+  jsonDocument["count"] = currentCount;
   jsonDocument["times"] = timeBuffer;
-  jsonDocument["count"] = count;
 
-  String jsonResponse;
-  serializeJson(jsonDocument, jsonResponse);
+  serializeJson(jsonDocument, requestBody);
 
-  server.send(200, "application/json", jsonResponse);
-  Serial.println(jsonResponse);
+  http.begin(serverUrl);
+  http.addHeader("Content-Type", "application/json");
+  int httpResponseCode = http.POST(requestBody);
+
+  // if (httpResponseCode == 200) {
+  //   Serial.println("데이터 전송 성공!");
+  // } else {
+  //   Serial.print("데이터 전송 실패. HTTP 응답 코드: ");
+  //   Serial.println(httpResponseCode);
+  // }
+  
+  http.end();
+  isSending = false; // 전송 완료 상태로 설정
 }
+
 
 
 void counting(){
@@ -213,9 +186,10 @@ void counting(){
 
   if(distance > 2 && distance < 5){            // 물체와의 거리가 2cm 초과 10cm 미만이면
     int now_time = millis();
-    if(now_time - pre_time > 500){           // 중복 카운트를 방지하기 위해 0.5초 초과면 
+    if(now_time - pre_time > 500 && !isSending){           // 중복 카운트를 방지하기 위해 0.5초 초과면 
       count += 1;                         // 한번 카운트
-      sendDataToServer();                // 서버로 데이터 전송
+      isSending = true; // 전송 시작 상태로 설정
+      sendDataToServer(count);                // 서버로 데이터 전송
       pre_time = now_time;                // 이전 시각에 현재 시각 저장
     }
   }
