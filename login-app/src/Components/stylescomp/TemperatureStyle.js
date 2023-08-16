@@ -44,7 +44,13 @@ export const TempHumItemStyled = styled.div`
   padding: 1rem;
   width: 100%;
   height: 11vh;
-  text-align: center; 
+
+  //내부의 모든 자식요소를 가운데 정렬
+  display: flex;
+  align-items: center; 
+  justify-content: center;
+  
+  text-align: center;
   cursor: pointer;
   overflow: hidden;
   box-sizing: border-box;
