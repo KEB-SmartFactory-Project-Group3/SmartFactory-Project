@@ -1,6 +1,6 @@
 #include <WiFi.h>
 #include <WiFiClient.h>
-#include <WebServer.h>
+#include <HTTPClient.h>
 #include "oled_u8g2.h" // oled display
 #include <ArduinoJson.h>  // json Form
 #include <time.h> // 응답 보내는 시간 위함
@@ -12,10 +12,11 @@ DHT dht(DHTPIN, DHTTYPE); // 사용핀넘버 타입 등록
 
 
 //------------------------ global variables ------------------------------------------------------------------
-const char* ssid = "KT_GiGA_F2EA"; // "Dohwan"; // "SmartFactory"; //                   // 와이파이 아이디
-const char* password =   "ffk8ebb167"; //"dh990921"; // "inha4885"; //     // 와이파이 비밀번호
+const char* ssid = "AndroidHotspot5460"; // "KT_GiGA_F2EA"; // "SmartFactory"; //                   // 와이파이 아이디 
+const char* password =   "19990220"; // "ffk8ebb167"; // "inha4885"; //     // 와이파이 비밀번호
 
-WebServer server(80);
+unsigned long lastSendTime = 0;
+
 OLED_U8G2 oled; // create oled object
 
 //--------------------------- setup --------------------------------------------------------------------------
@@ -40,49 +41,65 @@ void setup() {
 
   // NTP 서버에서 시간 동기화
   configTime(9 * 3600, 0, "pool.ntp.org"); // NTP 서버에서 시간 동기화        
-
-  server.on("/", handleDataRequest);
-
-  server.begin();  
+  
   dht.begin(); // DHT 초기화
   Serial.println("Web server started!");
 }
 
 
-//---------------------------- roop --------------------------------------------------------------------------
+//---------------------------- loop --------------------------------------------------------------------------
 void loop() {
-  server.handleClient();
   oled_display();
+
+  unsigned long currentTime = millis();
+  if (currentTime - lastSendTime >= 1000) {
+    sendDataToServer();
+    lastSendTime = currentTime;
+  }
+
   delay(500); // 500/1000 sec
 }
 
 
 //--------------------------- functions ----------------------------------------------------------------------
 
-void handleDataRequest() {
-  StaticJsonDocument<200> jsonDocument;
+void sendDataToServer() {
+  if (WiFi.status() != WL_CONNECTED) {
+    return;
+  }
+
+  HTTPClient http;
+  String serverUrl = "http://192.168.43.183:8080/factoryinfo/data";
+  String requestBody;
+
   time_t now;
   struct tm timeinfo;
 
   time(&now);                   // 현재 시간을 가져오기
   localtime_r(&now, &timeinfo); // 현재 시간을 구조화된 형태로 변환
 
-
-  int humidity = dht.readHumidity();
-  double temperature = round(dht.readTemperature() * 10.0) / 10.0;
-
   // JSON 응답에 시간 추가
   char timeBuffer[32];
   strftime(timeBuffer, sizeof(timeBuffer), "%Y-%m-%d %H:%M:%S", &timeinfo);
+  StaticJsonDocument<200> jsonDocument;
   jsonDocument["times"] = timeBuffer;
-  jsonDocument["factoryTemperature"] = temperature;
-  jsonDocument["factoryHumidity"] =   humidity;
+  jsonDocument["factoryTemperature"] = round(dht.readTemperature() * 10.0) / 10.0;
+  jsonDocument["factoryHumidity"] = dht.readHumidity();
 
-  String jsonResponse;
-  serializeJson(jsonDocument, jsonResponse);
+  serializeJson(jsonDocument, requestBody);
 
-  server.send(200, "application/json", jsonResponse);
-  Serial.println(jsonResponse);
+  http.begin(serverUrl);
+  http.addHeader("Content-Type", "application/json");
+  int httpResponseCode = http.POST(requestBody);
+
+  if (httpResponseCode == 200) {
+    Serial.println("데이터 전송 성공!");
+  } else {
+    Serial.print("데이터 전송 실패. HTTP 응답 코드: ");
+    Serial.println(httpResponseCode);
+  }
+  
+  http.end();
 }
 
 
