@@ -1,11 +1,10 @@
 package com.SpringServer.service;
 
 import com.SpringServer.model.dto.FactoryInfoDTO;
-import com.SpringServer.model.dto.GoalDTO;
 import com.SpringServer.model.dto.MachineInfoDTO;
-import com.SpringServer.model.entity.ESP32Data;
+import com.SpringServer.model.entity.MachineData;
 import com.SpringServer.model.entity.FactoryInfo;
-import com.SpringServer.repository.ESP32Repository;
+import com.SpringServer.repository.MachineDataRepository;
 import com.SpringServer.repository.FactoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,14 +13,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class DisplayService {
 
-    private final ESP32Repository esp32Repository;
+    private final MachineDataRepository machineDataRepository;
     private final FactoryRepository factoryRepository;
 
     private final GoalService goalService;
 
 
     public MachineInfoDTO getMachineInfo(){
-        ESP32Data latestRecode = esp32Repository.findFirstByOrderByTimesDesc();
+        MachineData latestRecode = machineDataRepository.findFirstByOrderByTimesDesc();
         if (latestRecode != null){
             int latestCount = latestRecode.getCount();
             return MachineInfoDTO.builder()

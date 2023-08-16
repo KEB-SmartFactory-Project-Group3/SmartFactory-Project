@@ -12,11 +12,16 @@ public class DefectiveService {
 
     private final DefectiveRepository defectiveRepository;
 
-    public String saveDefective(DefectiveDTO defectiveDTO) {
-        var defective = Defective.builder()
-                .defective(defectiveDTO.getDefective())
+    public String saveDefective(Defective defective) {
+        var defectiveness = Defective.builder()
+                .serialNumber(defective.getSerialNumber())
+                .count(defective.getCount())
+                .defectiveCount(defective.getDefectiveCount())
+                .state(defective.getState())
                 .build();
-        defectiveRepository.save(defective);
+        defectiveRepository.save(defectiveness);
         return "db 저장완료";
     }
+
+
 }

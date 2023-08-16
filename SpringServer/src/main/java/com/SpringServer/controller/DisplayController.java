@@ -28,6 +28,11 @@ public class DisplayController {
         return ResponseEntity.ok(displayService.getMachineInfo());
     }
 
+    @GetMapping("/factoryinfo")
+    public ResponseEntity<FactoryInfoDTO> displayFactoryInfo(){
+        return ResponseEntity.ok(displayService.getFactoryInfo());
+    }
+
     @PostMapping("/goal")
     public ResponseEntity<Integer> saveGoalAmount(@RequestBody GoalDTO goalDTO){
         return ResponseEntity.ok(goalService.saveGoalAmount(goalDTO));
@@ -36,11 +41,6 @@ public class DisplayController {
     @PostMapping("/button")
     public ResponseEntity<ButtonResponse> controlEsp32Board(@RequestBody ButtonRequest request){
         return  ResponseEntity.ok(buttonService.saveStopReason(request));
-    }
-
-    @GetMapping("/factoryinfo")
-    public ResponseEntity<FactoryInfoDTO> displayFactoryInfo(){
-        return ResponseEntity.ok(displayService.getFactoryInfo());
     }
 
 }

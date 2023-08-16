@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @EnableJpaRepositories
 @Repository
-public interface DefectiveRepository extends JpaRepository<Defective, Long> {
+public interface DefectiveRepository extends JpaRepository<Defective, String> {
 }

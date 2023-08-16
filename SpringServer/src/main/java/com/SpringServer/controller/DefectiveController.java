@@ -3,6 +3,7 @@ package com.SpringServer.controller;
 
 import com.SpringServer.model.dto.ButtonRequest;
 import com.SpringServer.model.dto.DefectiveDTO;
+import com.SpringServer.model.entity.Defective;
 import com.SpringServer.service.DefectiveService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class DefectiveController {
     private final DefectiveService defectiveService;
 
     @PostMapping("/defective")
-    public ResponseEntity<String> receiveData(@RequestBody DefectiveDTO defectiveDTO) {
-        return ResponseEntity.ok(defectiveService.saveDefective(defectiveDTO));
+    public ResponseEntity<String> receiveData(@RequestBody Defective defective) {
+        return ResponseEntity.ok(defectiveService.saveDefective(defective));
     }
 }

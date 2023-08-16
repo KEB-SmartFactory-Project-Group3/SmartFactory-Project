@@ -11,5 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DefectiveDTO {
-    private String defective;
+    private String serialNumber;
+    private int count;
+    private int defectiveCount;
+
+    private String state;
 }

@@ -1,7 +1,6 @@
 package com.SpringServer.repository;
 
 
-import com.SpringServer.model.entity.ESP32Data;
 import com.SpringServer.model.entity.FactoryInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;

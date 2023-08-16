@@ -15,8 +15,9 @@ import lombok.NoArgsConstructor;
 public class Defective {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String serialNumber;
+    private int count;
+    private int defectiveCount;
 
-    private String defective;
+    private String state;
 }
