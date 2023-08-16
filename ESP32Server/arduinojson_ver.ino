@@ -1,14 +1,20 @@
 #include <WiFi.h>
 #include <WiFiClient.h>
 #include <WebServer.h>
+#include <HTTPClient.h>
 #include "oled_u8g2.h" // oled display
 #include <ArduinoJson.h>  // json Form
 #include <time.h> // 응답 보내는 시간 위함
+#include "DHT.h"
+
+#define DHTPIN A7
+#define DHTTYPE DHT11
+DHT dht(DHTPIN, DHTTYPE); // 사용핀넘버 타입 등록
 
 
 //------------------------ global variables ------------------------------------------------------------------
-const char* ssid = "Dohwan"; // "SmartFactory"; // "KT_GiGA_F2EA"; //                   // 와이파이 아이디
-const char* password =   "dh990921"; // "inha4885"; // "ffk8ebb167"; //     // 와이파이 비밀번호
+const char* ssid = "Dohwan"; // "KT_GiGA_F2EA"; // "SmartFactory"; //                   // 와이파이 아이디
+const char* password =   "dh990921"; // "ffk8ebb167"; // "inha4885"; //     // 와이파이 비밀번호
 
 WebServer server(80);
 OLED_U8G2 oled; // create oled object
@@ -75,6 +81,7 @@ void setup() {
   server.on("/reset", handleReset);
 
   server.begin();  
+  dht.begin(); // DHT 초기화
   Serial.println("Web server started!");
 }
 
@@ -95,20 +102,32 @@ void handleRedledOn(){
   Serial.println("Red_led On");
   digitalWrite(red_led, HIGH);
   state = true;
-  server.send(200);
+  StaticJsonDocument<128> jsonDocument;
+  jsonDocument["message"] = "ESP32 Start";
+  String jsonResponse;
+  serializeJson(jsonDocument, jsonResponse);
+  server.send(200, "application/json", jsonResponse);
 }
 
 void handleRedledOff(){
   Serial.println("Red_led Off");
-  digitalWrite(red_led, Low);
+  digitalWrite(red_led, LOW);
   state = false;
-  server.send(200);
+  StaticJsonDocument<128> jsonDocument;
+  jsonDocument["message"] = "ESP32 Stop";
+  String jsonResponse;
+  serializeJson(jsonDocument, jsonResponse);
+  server.send(200, "application/json", jsonResponse);
 }
 
 void handleReset(){
   Serial.println("reset");
   count = 0;
-  server.send(200);
+  StaticJsonDocument<128> jsonDocument;
+  jsonDocument["message"] = "ESP32 Reset";
+  String jsonResponse;
+  serializeJson(jsonDocument, jsonResponse);
+  server.send(200, "application/json", jsonResponse);
 }
 
 
@@ -129,20 +148,35 @@ void handleRootEvent() {
   Serial.println(jsonResponse); // monitoring
 }
 
-double calculateTemperature(){
-  // calcul_temperature_formula
-  double R1 = 10000;
-  double logR2, R2, T, Tc;
-  double c1 = 1.009249522e-03, c2 = 2.378405444e-04, c3 = 2.019202697e-07;
-  int Vo = analogRead(temp_sensor); // read from temperature sensing value
 
-  R2 = R1 * (4095.0 / (float)Vo - 1.0);
-  logR2 = log(R2);
-  T = (1.0 / (c1 + c2*logR2 + c3*logR2*logR2*logR2));
-  Tc = round((T - 273.15) * 10) / 10.0;  // celsius
-  
-  return Tc;
+void sendDataToServer() {
+  if (WiFi.status() == WL_CONNECTED) {
+    HTTPClient http;
+    String serverUrl = "http://172.20.10.3//machine/data";
+    String requestBody;
+
+    time_t now;
+    struct tm timeinfo;
+
+    time(&now);                   // 현재 시간을 가져오기
+    localtime_r(&now, &timeinfo); // 현재 시간을 구조화된 형태로 변환
+
+    // JSON 응답에 시간 추가
+    char timeBuffer[32];
+    strftime(timeBuffer, sizeof(timeBuffer), "%Y-%m-%d %H:%M:%S", &timeinfo);
+    StaticJsonDocument<200> jsonDocument;
+    jsonDocument["count"] = count;
+    jsonDocument["times"] = timeBuffer;
+
+    serializeJson(jsonDocument, requestBody);
+
+    http.begin(serverUrl);
+    http.addHeader("Content-Type", "application/json");
+    int httpResponseCode = http.POST(requestBody);
+    http.end();
+  }
 }
+
 
 void handleDataRequest() {
   StaticJsonDocument<200> jsonDocument;
@@ -156,8 +190,6 @@ void handleDataRequest() {
   char timeBuffer[32];
   strftime(timeBuffer, sizeof(timeBuffer), "%Y-%m-%d %H:%M:%S", &timeinfo);
   jsonDocument["times"] = timeBuffer;
-  jsonDocument["temperature"] = calculateTemperature();
-  jsonDocument["brightness"] = catchingPhotoresistor();
   jsonDocument["count"] = count;
 
   String jsonResponse;
@@ -167,11 +199,6 @@ void handleDataRequest() {
   Serial.println(jsonResponse);
 }
 
-int catchingPhotoresistor(){
-  // photoresistor_var
-  int lux = analogRead(photoresistor_sensor);
-  return lux;
-}
 
 void counting(){
   long duration, distance;
@@ -188,6 +215,7 @@ void counting(){
     int now_time = millis();
     if(now_time - pre_time > 500){           // 중복 카운트를 방지하기 위해 0.5초 초과면 
       count += 1;                         // 한번 카운트
+      sendDataToServer();                // 서버로 데이터 전송
       pre_time = now_time;                // 이전 시각에 현재 시각 저장
     }
   }
@@ -204,7 +232,7 @@ void oled_display(){
   String str1 = String(count, DEC);
   str1.toCharArray(value1, 6);
   strcat(text1, value1);
-  oled.setLine(1, "Web Server");
+  oled.setLine(1, "SmartFactory");
   oled.setLine(2, text1);
   oled.display();
 }
