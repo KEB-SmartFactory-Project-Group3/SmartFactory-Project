@@ -34,12 +34,11 @@ export const TempItemStyled = styled.div`
 export const TempHumItemStyled = styled.div`
   position: relative;
   margin: 5px 0; // 각 그리드 마진 조정
-  border: 2px solid ${props => props.borderColor || 'white'};
   box-shadow: none; 
   margin-top: 25px; 
-  border-radius: 5px; 
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(8px);
+
+  // background: rgba(255, 255, 255, 1);
+  // backdrop-filter: blur(8px);
   color: white;
   padding: 1rem;
   width: 100%;
@@ -49,7 +48,34 @@ export const TempHumItemStyled = styled.div`
   display: flex;
   align-items: center; 
   justify-content: center;
-  
+
+  text-align: center;
+  cursor: pointer;
+  overflow: hidden;
+  box-sizing: border-box;
+  overflow: hidden;
+`;
+
+// 온습도 실시간 그래프 item
+export const TempChartItemStyled = styled.div`
+  position: relative;
+  margin: 5px 0; // 각 그리드 마진 조정
+  box-shadow: none; 
+  margin-top: 25px;
+  border: 2px solid ${props => props.borderColor || 'white'};
+  border-radius: 5px; 
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  color: white;
+  padding: 1rem;
+  width: 100%;
+  height: auto;
+
+  //내부의 모든 자식요소를 가운데 정렬
+  display: flex;
+  align-items: center; 
+  justify-content: center;
+
   text-align: center;
   cursor: pointer;
   overflow: hidden;

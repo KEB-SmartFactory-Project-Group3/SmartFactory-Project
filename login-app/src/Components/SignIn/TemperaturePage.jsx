@@ -5,13 +5,16 @@ import { styled } from '@mui/material/styles';
 import { CircularProgress} from '@mui/material';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import { TempGridStyled,TempItemStyled, TempHumItemStyled } from '../stylescomp/TemperatureStyle';
+import { TempGridStyled,TempItemStyled, TempHumItemStyled, TempChartItemStyled } from '../stylescomp/TemperatureStyle';
 import { CSSTransition } from 'react-transition-group';
 import { FadeBox } from '../stylescomp/FadeinStyle';
 import useTemperature from '../hooks/useTemperature';
 import {Typography } from '@mui/material';
 import ThermostatIcon from '@mui/icons-material/Thermostat';
-import GaugeChart from '../Chart/ActiveShape';
+import TempGaugeChart from '../Chart/TempActiveShape';
+import HumGaugeChart from '../Chart/HumidityActiveShape';
+import TempHumidityChart from '../Chart/TempHumidityChart';
+import { purple } from '@mui/material/colors';
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -51,12 +54,16 @@ function TemperaturePage() {
                     alignItems="center"
                     justifyContent="center"
                   >
-                    {/* <ThermostatIcon style={{ fontSize: 60 }} /> */}
-                    <Typography variant="h5" style={{position: 'absolute', top: '35%'}}>
-                      {factoryTemperature ? `${Math.round(factoryTemperature)}°C` : '데이터 로딩 중...'}
-                    </Typography>
-                    </Box>
+                    {factoryTemperature
+                      ? <Typography variant="h5" style={{position: 'absolute', top: '35%'}}>
+                          {Math.round(factoryTemperature)}%
+                        </Typography>
+                      : <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                          <CircularProgress style={{ color: purple[700] }} />
+                        </div>
+                    }
                   </Box>
+                </Box>
 
           
 
@@ -67,12 +74,12 @@ function TemperaturePage() {
             <TempItemStyled>
 
               <Box position="relative" display="inline-flex">
-                    <CircularProgress 
-                      variant="determinate" 
-                      value={factoryHumidity} 
-                      size={100} // 크기 조정
-                      thickness={5} // 두께 조정
-              />
+                <CircularProgress 
+                  variant="determinate" 
+                  value={factoryHumidity} 
+                  size={100} // 크기 조정
+                  thickness={5} // 두께 조정
+               />
                 <Box
                   top={0}
                   left={0}
@@ -83,12 +90,16 @@ function TemperaturePage() {
                   alignItems="center"
                   justifyContent="center"
                 >
-                  {/* <ThermostatIcon style={{ fontSize: 60 }} /> */}
-                  <Typography variant="h5" style={{position: 'absolute', top: '35%'}}>
-                    {factoryHumidity ? `${Math.round(factoryHumidity)}%` : '데이터 로딩 중...'}
-                  </Typography>
-                  </Box>
+                {factoryHumidity 
+                  ? <Typography variant="h5" style={{position: 'absolute', top: '35%'}}>
+                      {Math.round(factoryHumidity)}%
+                    </Typography>
+                  : <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                      <CircularProgress style={{ color: purple[700] }}/>
+                    </div>
+                }
                 </Box>
+              </Box>
       
             </TempItemStyled>
         </TempGridStyled>
@@ -98,21 +109,23 @@ function TemperaturePage() {
           <TempGridStyled item xs={12}>
             <TempHumItemStyled>
             
-              <GaugeChart style={{width: '80%', height: '75%'}}/>
+              <TempGaugeChart style={{width: '80%', height: '75%'}}/>
             </TempHumItemStyled>
           </TempGridStyled>
           <TempGridStyled item xs={12}>
             <TempHumItemStyled>
-              적정 습도
+              {/* 적정 습도 */}
+              <HumGaugeChart style={{width: '80%', height: '75%'}}/>
             </TempHumItemStyled>
           </TempGridStyled>
         </Grid>
       </TempGridStyled>
 
       <TempGridStyled item xs={12} sm={12} md={12}>
-          <TempItemStyled>
-            실시간 온도 그래프
-          </TempItemStyled>
+          <TempChartItemStyled>
+            {/* 실시간 온습도 그래프 */}
+            <TempHumidityChart />
+          </TempChartItemStyled>
       </TempGridStyled>
 
       <TempGridStyled item xs={12} sm={12} md={12}>
