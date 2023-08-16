@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import useTimeRecorder from '../hooks/customMachine';
 import useMachineCount from '../hooks/useMachineCount';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
 import FormDialog from './FormDialog';
 import Paper from '@mui/material/Paper';
 import { Typography } from '@mui/material';
@@ -15,11 +13,12 @@ import { Modal } from '@mui/material';
 import { ModalStyled, GridItemStyled, SubmitContainer, StyledTextField, ItemStyledChart, GridItemStyledChart, ItemStyledCount, RateLabel, DigitalClockStyle, ItemStyledTime, ButtonStyled, GridContainerStyled, GridItemStyledTime} from '../stylescomp/MachineStyle';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/lab/Alert';
-import BasicColor from '../Chart/TargetCountChart';
 import { CSSTransition } from 'react-transition-group';
 import { FadeBox } from '../stylescomp/FadeinStyle';
 import TargetDonutChart from '../Chart/TargetCountChart';
-
+import CountLineChart from '../Chart/CountLineChart';
+import RealTimeLineChart from '../Chart/RealTimeLineChart';
+import LandingPage from './LandingPage';
 
 function MachinePage() {
 
@@ -31,6 +30,9 @@ function MachinePage() {
   const [isCardOpen,setIsCardOpen] = useState(false)
   const [submitted, setSubmitted] = useState(false)
 
+  // 데이터 표시 여부
+  const [showNoDataAlert, setShowNoDataAlert] = useState(false) 
+
   // 목표생산량 animateText
   const [animateText, setAnimateText] = useState(false)
 
@@ -41,6 +43,14 @@ function MachinePage() {
   // 목표 달성까지 남은 시간 = (목표 생산량 - 현재 생산량) / 현재 생산 속도
   const remainingItems = targetCount - count
   const remainingSeconds = remainingItems / currentRate // 후에 formatTime 함수를 사용하여 시간, 분, 초 변환
+
+  useEffect(() => {
+    if (!submitted) return // 전송하지 않으면 실행 안 함
+
+    if (isNaN(remainingSeconds)) {
+      setShowNoDataAlert(true) 
+    }
+  }, [remainingSeconds,submitted])
 
   const handleCardClick = () => {
     setIsCardOpen(!isCardOpen)
@@ -56,6 +66,8 @@ function MachinePage() {
 
   const handleTextSubmit = () => {
 
+    setShowNoDataAlert(false)
+
     if (isNaN(targetCount) || targetCount === "") {
       // 입력값이 숫자가 아닐 경우 경고를 표시
       setShowAlert(true);
@@ -69,6 +81,7 @@ function MachinePage() {
 
   const handleTextReset = () => {
     setSubmitted(false)
+    setShowNoDataAlert(false) // 초기화
   }
 
   const formatTime = (time) => {
@@ -96,13 +109,13 @@ function MachinePage() {
         <Grid container spacing={2} sx={{ background: 'transparent', border: 'none' , boxShadow: 'none',}}>
         <GridItemStyled item xs={12} sm={4} md={4}>
             <ItemStyledCount borderColor="#b388ff">
-              <RateLabel>도달률 <br/> {nowRate}</RateLabel>
+              <RateLabel>도달률 <br/> {nowRate}%</RateLabel>
               <TargetDonutChart nowRate={nowRate} />
             </ItemStyledCount>
         </GridItemStyled>
 
         <GridItemStyled item xs={12} sm={4} md={4}>
-            <ItemStyledCount>
+            <ItemStyledCount borderColor='#ff5252'>
             <Typography variant="h6" sx={{marginBottom: '1rem'}}>
               목표 생산량
             </Typography>
@@ -113,13 +126,34 @@ function MachinePage() {
                 <div>
                   앞으로 남은 생산량 <br />
                   <span style={{ fontWeight: 'bold', color: '#0f0' }}>{targetCount - count}</span>
-
                   <Typography variant="body1">
-                    예상 남은 시간: {formatTime(remainingSeconds * 1000)} 
+                    예상 남은 시간: 
+                    {
+                      isNaN(remainingSeconds) 
+                      ? ""
+                      : formatTime(remainingSeconds * 1000)
+                    }
                   </Typography>
+
+                  <Snackbar 
+                      open={showNoDataAlert} 
+                      autoHideDuration={6000} 
+                      onClose={() => setShowNoDataAlert(false)}
+                      style={{ 
+                        position: 'fixed', 
+                        top: '55%', 
+                        left: '50%', 
+                        transform: 'translate(-50%, -50%)' 
+                      }}
+                    >
+                      <Alert onClose={() => setShowNoDataAlert(false)} severity="warning" variant="filled">
+                        데이터값이 없습니다!
+                      </Alert>
+                    </Snackbar>
                 </div>
-             
               </CSSTransition>
+
+             
 
                 <SubmitContainer>
                   <ButtonStyled
@@ -177,6 +211,7 @@ function MachinePage() {
         {!isCardOpen && (
             <ItemStyledCount>
             현재 생산량: {count}
+            <CountLineChart data={count} />
             </ItemStyledCount>
           )}
         </GridItemStyled>
@@ -190,11 +225,11 @@ function MachinePage() {
         <GridItemStyledChart item xs={8} sm={8} md={8}>
           <ItemStyledChart>
             차트
-            {/* <BasicColor /> */}
+            <RealTimeLineChart />
           </ItemStyledChart>
         </GridItemStyledChart>
 
-        <Grid item xs={4} sm={4} md={4}>
+        <GridItemStyled item xs={4} sm={4} md={4}>
           <GridContainerStyled container direction='column'>
             <GridItemStyledTime item xs={12}>
               <ItemStyledTime>
@@ -229,7 +264,7 @@ function MachinePage() {
 
           </GridItemStyled>
           </GridContainerStyled>
-        </Grid>
+        </GridItemStyled>
       </Grid>
       </FadeBox>
       </CSSTransition>
