@@ -9,8 +9,6 @@ from flask_cors import CORS
 import torch
 import requests
 import time
-import itertools
-from datetime import datetime
 
 app = Flask(__name__)
 
@@ -18,7 +16,7 @@ app = Flask(__name__)
 CORS(app, resources={r"*": {"origins": ["http://165.246.116.73:3001", "http://localhost:3000"]}})
 # CORS(app, resources={r"*": {"origins": "*"}})
 
-url = 'http://192.168.0.76/'  # Arduino webserver URL
+url = 'http://192.168.43.101/'  # Arduino webserver URL
 
 # YOLOv5 모델 불러옴 (로컬에 저장된 best.pt 또는 last.pt 파일 불러옴)
 model = torch.hub.load('ultralytics/yolov5', 'custom', path='C:/YOLOv5_model/best.pt')
@@ -30,20 +28,27 @@ latest_detected_object_names = None  # 직전에 검출된 클래스 이름을 �
 latest_detected_time = 0    # 직전에 검출된 시간을 저장하기 위한 변수
 first_detection_done = False   # 첫 번째 객체 검출 완료 여부를 나타내는 변수 추가
 count = 0
+defective_count = 0
 
 # 공장 고유 번호
-prefix = 100
+prefix = 'A'
+
 # 물건의 일련번호 생성기
-sequence_generator = itertools.count(prefix * 10000)
+serial_counter = 1  # 시리얼 넘버의 시작 숫자를 설정
 
 
 def generate_serial_number():
-    return next(sequence_generator)
+    global serial_counter
+
+    serial_number = f"{prefix}{serial_counter:04d}"  # 'A' 접두사와 4자리 숫자를 결합
+    serial_counter += 1  # 다음 시리얼 넘버를 사용할 때 카운터를 증가
+
+    return serial_number
 
 
 @app.route('/get-live-transmission', methods=['GET'])
 def get_live_transmission():
-    global last_time, latest_detected_object_names, latest_detected_time, first_detection_done, count
+    global last_time, latest_detected_object_names, latest_detected_time, first_detection_done, count, defective_count
 
     img_resp = urllib.request.urlopen(url + 'cam-hi.jpg')
     img_np = np.array(bytearray(img_resp.read()), dtype=np.uint8)
@@ -90,18 +95,20 @@ def get_live_transmission():
         if current_time - last_time >= print_interval:
             count += 1  # 카운트 증가
             serial_number = generate_serial_number()  # 일련번호 생성
-            timestamp = int(time.time())  # 타임스탬프 생성
-            date_time = datetime.fromtimestamp(timestamp)
+
+            # defective 아이템이 발견되었는지 확인하고 defectiveCount를 증가
+            if "Defective" in detected_object_names:  # 여기서 "defective"를 검출된 객체 이름에 맞게 수정하세요.
+                defective_count += 1
 
             # # 검출된 객체의 클래스 이름을 콘솔에 출력하여 확인
             # print("Detected objects:", detected_object_names)
 
             # 클래스 이름을 자바 스프링 백엔드 서버로 전송
-            # backend_url = 'http://172.20.10.3:8080/api/defective'
+            backend_url = 'http://192.168.43.183:8080/api/defective'
             payload = {'defective': ', '.join(detected_object_names),
-                       'order': count,
-                       'serialNumber': serial_number,
-                       'timestamp': date_time}
+                       'count': count,
+                       'defectiveCount': defective_count,
+                       'serialNumber': serial_number}
             print(payload)
             # response = requests.post(backend_url, json=payload)
             # print(response)
