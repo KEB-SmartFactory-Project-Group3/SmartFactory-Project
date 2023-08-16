@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { LineChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Line, ReferenceLine } from 'recharts';
 import useMachineCount from '../hooks/useMachineCount';
+import styled from 'styled-components';
+
+const CenteredChartContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+`;
 
 // count 값이 변경 될 때마다 차트 데이터를 업데이트
-export default function RealTimeLineChart() {
+export default function RealTimeLineChart({targetCount}) {
 
   const [machineData, setMachineData] = useState([])
-  const {count, targetCount} = useMachineCount()
+  const {count} = useMachineCount()
 
   useEffect(() => {
     const newDataPoint = {
@@ -23,15 +31,17 @@ export default function RealTimeLineChart() {
 }, [count]); // count 값이 변경될 때마다 useEffect 실행
 
   return (
-    <LineChart width={600} height={300} machineData={machineData}>
+    <CenteredChartContainer>
+    <LineChart width={600} height={300} data={machineData}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="time" />
-        <YAxis domain={[0, 'dataMax + 10']} />
+        <YAxis domain={[0, 100000]} />
         <Tooltip />
         <Legend />
         <ReferenceLine y={targetCount} label="Target Count" stroke="red" />
         <Line type="monotone" dataKey="count" stroke="#8884d8" activeDot={{ r: 8 }} />
     </LineChart>
+    </CenteredChartContainer>
  
   );
 }

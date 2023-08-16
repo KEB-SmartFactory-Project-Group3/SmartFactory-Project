@@ -47,10 +47,10 @@ function MachinePage() {
   useEffect(() => {
     if (!submitted) return // 전송하지 않으면 실행 안 함
 
-    if (isNaN(remainingSeconds)) {
+    if (isNaN(remainingSeconds) || count === 0 || targetCount === "" || targetCount == null )  {
       setShowNoDataAlert(true) 
     }
-  }, [remainingSeconds,submitted])
+  }, [remainingSeconds,submitted,count, targetCount])
 
   const handleCardClick = () => {
     setIsCardOpen(!isCardOpen)
@@ -153,8 +153,6 @@ function MachinePage() {
                 </div>
               </CSSTransition>
 
-             
-
                 <SubmitContainer>
                   <ButtonStyled
                     variant="outlined"
@@ -225,7 +223,7 @@ function MachinePage() {
         <GridItemStyledChart item xs={8} sm={8} md={8}>
           <ItemStyledChart>
             차트
-            <RealTimeLineChart />
+            <RealTimeLineChart targetCount={targetCount}/>
           </ItemStyledChart>
         </GridItemStyledChart>
 
