@@ -10,25 +10,37 @@ export default function CountLineChart({ data }) {
   useEffect(() => {
     // 실시간 데이터가 들어왔을 때, 새로운 데이터를 추가하고 이전 데이터를 제거하여 최근 몇 개의 데이터만 보여주도록 함
     if (data !== null) {
-      setChartData(prevData => [...prevData, data].slice(-10)); // 최근 10개의 데이터만 보여주도록 함
+      setChartData(prevData => [...prevData, data].slice(-30)); // 최근 30개의 데이터만 보여주도록 함
     }
   }, [data]);
 
   // 차트의 크기를 동적으로 조절
   useEffect(() => {
     if (chartRef.current) {
-      setChartWidth(chartRef.current.offsetWidth);
+      setChartWidth(chartRef.current.offsetWidth)
     }
   }, []);
 
   return (
-    <div ref={chartRef} style={{ width: '100%', height: '100%' }}>
+    <div ref={chartRef} style={{ 
+                            margin: '0 auto',
+                            padding: '0rem',
+                            width: '100%', 
+                            display: 'flex', 
+                            justifyContent: 'center', 
+                            alignItems: 'center'
+    }}
+    >
     <LineChart
-      xAxis={[{ data: Array.from({ length: chartData.length }, (_, i) => i + 1),
+      xAxis={[{ data: Array.from({ length: chartData.length }, (_, i) => (i + 1)*20),
        }]} // x축에 1부터 순차적인 값 사용
       series={[
         {
           data: chartData,
+          lineStyle: {
+            color: 'yellow',  // 선 색 노란색
+            width: 3          // 선 굵기 
+          }
         },
       ]}
       width={chartWidth}
