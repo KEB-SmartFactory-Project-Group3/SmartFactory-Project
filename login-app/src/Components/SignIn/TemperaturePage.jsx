@@ -15,6 +15,9 @@ import TempGaugeChart from '../Chart/TempActiveShape';
 import HumGaugeChart from '../Chart/HumidityActiveShape';
 import TempHumidityChart from '../Chart/TempHumidityChart';
 import { purple } from '@mui/material/colors';
+import DeviceThermostatIcon from '@mui/icons-material/DeviceThermostat';
+import WaterDropIcon from '@mui/icons-material/WaterDrop';
+
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -33,17 +36,34 @@ function TemperaturePage() {
       <StyledFactor>
       <CSSTransition in={true} timeout={1000} classNames="fade" appear>
       <FadeBox sx={{flexGrow:1}}>
-      <Grid container spacing={2} sx={{ background: 'transparent', border: 'none' , boxShadow: 'none',}}>
-      <TempGridStyled item xs={12} sm={4} md={4}>
+      <Grid container spacing={3} sx={{ background: 'transparent', border: 'none' , boxShadow: 'none',}}>
+      <TempGridStyled item xs={6} sm={3} md={3}>
             <TempItemStyled>
 
-                <Box position="relative" display="inline-flex">
-                  <CircularProgress 
-                    variant="determinate" 
-                    value={factoryTemperature} 
-                    size={100} // 크기 조정
-                    thickness={5} // 두께 조정
-                  />
+            <Box display="flex" alignItems="center">
+              <Box 
+                sx={{
+                  width: '80px', 
+                  height: '100px', 
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: '2px solid white',
+                  borderRadius: '5px',
+                  backgroundColor: 'rgba(255, 255, 255, 0.5)', // 흰색 배경에 0.5의 불투명도
+                  backdropFilter: 'blur(5px)' // 5px 블러 처리
+                }}
+              >
+                <DeviceThermostatIcon  sx={{ fontSize: 60 }}/>
+              </Box>
+
+              <Box position="relative" display="inline-flex" ml={2}>
+                <CircularProgress 
+                  variant="determinate" 
+                  value={factoryTemperature} 
+                  size={100} // 크기 조정
+                  thickness={5} // 두께 조정
+                />
                   <Box
                     top={0}
                     left={0}
@@ -56,7 +76,7 @@ function TemperaturePage() {
                   >
                     {factoryTemperature
                       ? <Typography variant="h5" style={{position: 'absolute', top: '35%'}}>
-                          {Math.round(factoryTemperature)}%
+                          {Math.round(factoryTemperature)}C
                         </Typography>
                       : <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                           <CircularProgress style={{ color: purple[700] }} />
@@ -64,16 +84,31 @@ function TemperaturePage() {
                     }
                   </Box>
                 </Box>
-
-          
-
+              </Box>
             </TempItemStyled>
         </TempGridStyled>
 
-        <TempGridStyled item xs={12} sm={4} md={4}>
+        <TempGridStyled item xs={6} sm={3} md={3}>
             <TempItemStyled>
 
-              <Box position="relative" display="inline-flex">
+            <Box display="flex" alignItems="center">
+              <Box 
+                sx={{
+                  width: '80px', 
+                  height: '100px', 
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: '2px solid white',
+                  borderRadius: '5px',
+                  backgroundColor: 'rgba(255, 255, 255, 0.5)', // 흰색 배경에 0.5의 불투명도
+                  backdropFilter: 'blur(5px)' // 5px 블러 처리
+                }}
+              >
+                <WaterDropIcon  sx={{ fontSize: 60 }}/>
+              </Box>
+
+              <Box position="relative" display="inline-flex" ml={2}>
                 <CircularProgress 
                   variant="determinate" 
                   value={factoryHumidity} 
@@ -100,11 +135,12 @@ function TemperaturePage() {
                 }
                 </Box>
               </Box>
+            </Box>
       
             </TempItemStyled>
         </TempGridStyled>
 
-        <TempGridStyled item xs={12} sm={4} md={4}>
+        <TempGridStyled item xs={12} sm={6} md={6}>
         <Grid container direction="column">
           <TempGridStyled item xs={12}>
             <TempHumItemStyled>
