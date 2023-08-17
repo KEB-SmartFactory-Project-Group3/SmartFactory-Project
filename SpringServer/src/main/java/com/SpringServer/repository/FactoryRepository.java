@@ -23,10 +23,9 @@ public interface FactoryRepository extends JpaRepository<FactoryInfo, Timestamp>
     FactoryInfo findFirstByOrderByFactoryTemperatureAsc();
     FactoryInfo findFirstByOrderByFactoryHumidityAsc();
 
-    @Query("SELECT AVG(f.factoryTemperature) FROM FactoryInfo f WHERE f.times BETWEEN :startTimestamp AND :endTimestamp")
-    Double getAverageTemperatureBetweenDates(@Param("startTimestamp") Timestamp startTimestamp, @Param("endTimestamp") Timestamp endTimestamp);
+    @Query("SELECT AVG(f.factoryTemperature) FROM FactoryInfo f")
+    Double getAverageTemperature();
 
-    @Query("SELECT AVG(f.factoryHumidity) FROM FactoryInfo f WHERE f.times BETWEEN :startTimestamp AND :endTimestamp")
-    Double getAverageHumidityBetweenDates(@Param("startTimestamp") Timestamp startTimestamp, @Param("endTimestamp") Timestamp endTimestamp);
-
+    @Query("SELECT AVG(f.factoryHumidity) FROM FactoryInfo f")
+    Double getAverageHumidity();
 }
