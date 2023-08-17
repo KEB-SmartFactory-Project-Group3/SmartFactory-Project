@@ -42,8 +42,10 @@ int count = 0;        // 카운터용 변수
 int pre_time = 0;     // 이전에 물건이 지나간 시간
 bool isSending = false;
 
-// ESP32Board OnOff
-boolean state = true;
+
+// Machine state
+boolean state = false;  // 시작시 바로 COUNTING 안함
+
 
 
 //--------------------------- setup --------------------------------------------------------------------------
@@ -77,59 +79,58 @@ void setup() {
   pinMode(trig_pin, OUTPUT);
   pinMode(echo_pin, INPUT);          
 
-  server.on("/red_led_on", handleRedledOn);
-  server.on("/red_led_off", handleRedledOff);
-  server.on("/reset", handleReset);
+  server.on("/machineOff", machineOff);
+  server.on("/machineOn", machineOn);
+  server.on("/machineReset", machineReset);
 
-  server.begin();  
+  server.begin();   
   dht.begin(); // DHT 초기화
-  Serial.println("Web server started!");
+  Serial.println("Machine connected");
+  digitalWrite(red_led, HIGH);  // 초기 LED
 }
 
 
 //---------------------------- loop --------------------------------------------------------------------------
 void loop() {
-  unsigned long previousMillis = 0;
-  const unsigned long interval = 500;
-  unsigned long currentMillis = millis();
+  server.handleClient();
   if (state == true) {
     counting();
   }
-  if (currentMillis - previousMillis >= interval) {
-    previousMillis = currentMillis;
-    oled_display();
-  }
+  oled_display();
 }
 
 
 //--------------------------- functions ----------------------------------------------------------------------
-void handleRedledOn(){
-  Serial.println("Red_led On");
+void machineOff(){
+  Serial.println("machineOff");
   digitalWrite(red_led, HIGH);
-  state = true;
-  StaticJsonDocument<128> jsonDocument;
-  jsonDocument["message"] = "ESP32 Start";
-  String jsonResponse;
-  serializeJson(jsonDocument, jsonResponse);
-  server.send(200, "application/json", jsonResponse);
-}
-
-void handleRedledOff(){
-  Serial.println("Red_led Off");
-  digitalWrite(red_led, LOW);
+  digitalWrite(green_led, LOW);
   state = false;
   StaticJsonDocument<128> jsonDocument;
-  jsonDocument["message"] = "ESP32 Stop";
+  jsonDocument["message"] = "Machine Stop";
   String jsonResponse;
   serializeJson(jsonDocument, jsonResponse);
   server.send(200, "application/json", jsonResponse);
 }
 
-void handleReset(){
-  Serial.println("reset");
-  count = 0;
+void machineOn(){
+  Serial.println("machineOn");
+  digitalWrite(red_led, LOW);
+  digitalWrite(green_led, HIGH);
+  state = true;
   StaticJsonDocument<128> jsonDocument;
-  jsonDocument["message"] = "ESP32 Reset";
+  jsonDocument["message"] = "Machine Start";
+  String jsonResponse;
+  serializeJson(jsonDocument, jsonResponse);
+  server.send(200, "application/json", jsonResponse);
+}
+
+void machineReset(){
+  Serial.println("machineReset");
+  count = 0;
+  state = false;
+  StaticJsonDocument<128> jsonDocument;
+  jsonDocument["message"] = "Machine Reset";
   String jsonResponse;
   serializeJson(jsonDocument, jsonResponse);
   server.send(200, "application/json", jsonResponse);
@@ -159,13 +160,6 @@ void sendDataToServer(int currentCount) {
   http.begin(serverUrl);
   http.addHeader("Content-Type", "application/json");
   int httpResponseCode = http.POST(requestBody);
-
-  // if (httpResponseCode == 200) {
-  //   Serial.println("데이터 전송 성공!");
-  // } else {
-  //   Serial.print("데이터 전송 실패. HTTP 응답 코드: ");
-  //   Serial.println(httpResponseCode);
-  // }
   
   http.end();
   isSending = false; // 전송 완료 상태로 설정
@@ -201,12 +195,18 @@ void counting(){
 }
 
 void oled_display(){
-  char text1[32] = "count : ";                // text1 count 값 표시
+  char text1[32] = "count: ";                // text1 count 값 표시
   char value1[32];
   String str1 = String(count, DEC);
   str1.toCharArray(value1, 6);
   strcat(text1, value1);
+
   oled.setLine(1, "SmartFactory");
   oled.setLine(2, text1);
+    if(state == true){
+    oled.setLine(3, "Start");
+  }else{
+    oled.setLine(3, "Stop");
+  }
   oled.display();
 }
