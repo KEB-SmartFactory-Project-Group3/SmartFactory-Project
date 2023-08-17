@@ -17,14 +17,14 @@ app = Flask(__name__)
 CORS(app, resources={r"*": {"origins": ["http://165.246.116.73:3001", "http://localhost:3000"]}})
 # CORS(app, resources={r"*": {"origins": "*"}})
 
-url = 'http://165.246.116.48/'  # Arduino webserver URL
+url = 'http://192.168.43.101/'  # Arduino webserver URL
 
-# YOLOv5 모델 불러옴 (로컬에 저장된 best.pt 또는 last.pt 파일 불러옴)
+# YOLOv5 모델 불러옴 (로컬에 저장된 best.pt 불러옴)
 model = torch.hub.load('ultralytics/yolov5', 'custom', path='C:/YOLOv5_model/best.pt')
 model.conf = 0.60  # 검출 임계값(Threshold) 설정
 
 last_time = 0
-print_interval = 5  # 출력 간격
+print_interval = 3  # 출력 간격
 latest_detected_object_names = None  # 직전에 검출된 클래스 이름을 저장하기 위한 변수
 latest_detected_time = 0    # 직전에 검출된 시간을 저장하기 위한 변수
 first_detection_done = False   # 첫 번째 객체 검출 완료 여부를 나타내는 변수 추가
@@ -33,6 +33,18 @@ defective_count = 0
 
 # 물건의 일련번호 생성기
 serial_counter = 1  # 시리얼 넘버의 시작 숫자를 설정
+
+
+def fetch_and_process_image():
+    img_resp = urllib.request.urlopen(url + 'cam-hi.jpg')
+    img_np = np.array(bytearray(img_resp.read()), dtype=np.uint8)
+    img = cv2.imdecode(img_np, -1)
+    new_width = 640
+    new_height = 480
+    img = cv2.resize(img, (new_width, new_height), interpolation=cv2.INTER_LINEAR)
+    blurred_image = cv2.GaussianBlur(img, (5, 5), 0)
+    sharpened_image = cv2.addWeighted(img, 1.5, blurred_image, -0.5, 0)
+    return sharpened_image
 
 
 def generate_serial_number(most_common_name):
@@ -54,14 +66,8 @@ def generate_serial_number(most_common_name):
 def get_live_transmission():
     global last_time, latest_detected_object_names, latest_detected_time, first_detection_done, count, defective_count
 
-    img_resp = urllib.request.urlopen(url + 'cam-hi.jpg')
-    img_np = np.array(bytearray(img_resp.read()), dtype=np.uint8)
-    img = cv2.imdecode(img_np, -1)
-    new_width = 640
-    new_height = 480
-    img = cv2.resize(img, (new_width, new_height), interpolation=cv2.INTER_LINEAR)
-    blurred_image = cv2.GaussianBlur(img, (5, 5), 0)
-    sharpened_image = cv2.addWeighted(img, 1.5, blurred_image, -0.5, 0)
+    # 이미지 가져오기 및 처리
+    sharpened_image = fetch_and_process_image()
 
     # 객체 검출 수행
     results = model(sharpened_image, size=640)
@@ -89,8 +95,8 @@ def get_live_transmission():
         first_detection_done = True
 
     if first_detection_done:  # 첫 번째 객체 검출이 완료된 경우에만 다음 작업을 수행
-        # 클래스가 검출되지 않고 직전에 검출된 시간이 5초 이내이면 직전에 검출된 클래스 이름을 사용
-        if not detected_object_names and latest_detected_object_names and (current_time - latest_detected_time <= 5):
+        # 클래스가 검출되지 않고 직전에 검출된 시간이 3초 이내이면 직전에 검출된 클래스 이름을 사용
+        if not detected_object_names and latest_detected_object_names and (current_time - latest_detected_time <= 3):
             detected_object_names = latest_detected_object_names
         else:
             latest_detected_object_names = detected_object_names  # 검출된 클래스 이름을 저장
@@ -126,10 +132,10 @@ def get_live_transmission():
                            'defectiveCount': defective_count,
                            'serialNumber': serial_number}
                 print(payload)
-                # response = requests.post(backend_url, json=payload)
-                # print(response)
-                # # 응답을 콘솔에 출력
-                # print("Backend Response:", response.text)
+                response = requests.post(backend_url, json=payload)
+                print(response)
+                # 응답을 콘솔에 출력
+                print("Backend Response:", response.text)
                 last_time = current_time
 
     return jsonify({'image': encoded_img})
