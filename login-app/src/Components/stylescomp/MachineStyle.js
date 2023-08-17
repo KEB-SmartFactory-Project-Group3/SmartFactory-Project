@@ -31,12 +31,12 @@ export const ModalStyled = styled.div`
 export const GridItemStyled = styled(Grid)`
   // 기본 스타일
   transition: transform 0.3s, backdrop-filter 0.3s;
+  box-sizing: border-box;
 
   &:hover {
     backdrop-filter: blur(15px);
     transform: scale(1.05);
   }
-
 `;
 
 export const ItemStyled = styled.div`
@@ -62,14 +62,13 @@ export const ItemStyled = styled.div`
     background: rgba(255, 255, 255, 0.2);
   }
 `;
-// 도달량, 목표생산량, 현재생산량 
+// 도달량, 목표생산량
 export const ItemStyledCount = styled.div`
+  position: relative;
   margin: 5px 0; // 각 그리드 마진 조정
-  border: 1px solid white;
+  border: 2px solid ${props => props.borderColor || 'white'};
   box-shadow: none; 
   margin-top: 25px; 
-  // margin-left: 10px;
-  // margin-right: 10px;
   border-radius: 5px; 
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(8px);
@@ -77,25 +76,36 @@ export const ItemStyledCount = styled.div`
   transition: background 0.3s, backdrop-filter 0.3s;
   padding: 1rem;
   width: 100%;
-  height: 22vh;
+  height: 23vh;
   text-align: center; 
   cursor: pointer;
   overflow: hidden;
+  // overflow: visible;
   box-sizing: border-box;
 
   &:hover {
     background: rgba(255, 255, 255, 0.2);
   }
 `;
+// 도달률 라벨
+export const RateLabel = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 5%;
+  transform: translateY(-50%);
+  padding-left: 1rem;
+`;
 
 // 차트 부분
 export const GridItemStyledChart = styled(Grid)`
   // 기본 스타일
   transition: transform 0.3s, backdrop-filter 0.3s;
+  box-sizing: border-box;
+ 
 `;
 export const ItemStyledChart = styled.div`
   margin: 2px 0;
-  border: 1px solid white;
+  border: 2px solid #03A9F4;
   box-shadow: none; 
   margin-top: 25px; 
   border-radius: 5px; 
@@ -105,12 +115,44 @@ export const ItemStyledChart = styled.div`
   transition: background 0.3s, backdrop-filter 0.3s;
   padding: 0.5rem;
   width: 100%;
+  height: 100%;
+
+  //내부의 모든 자식요소를 가운데 정렬
+  display: flex;
+  align-items: center; 
+  justify-content: center;
+
   text-align: center; 
   cursor: pointer;
   overflow: hidden;
   box-sizing: border-box;
 `;
 
+// 현재생산량 
+export const ProductionItemStyled = styled.div`
+  position: relative;
+  margin: 5px 0; // 각 그리드 마진 조정
+  border: 2px solid ${props => props.borderColor || 'white'};
+  box-shadow: none; 
+  margin-top: 25px; 
+  border-radius: 5px; 
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  color: white;
+  transition: background 0.3s, backdrop-filter 0.3s;
+  padding: 1rem;
+  width: 100%;
+  height: auto;
+  text-align: center; 
+  cursor: pointer;
+  overflow: hidden;
+  // overflow: visible;
+  box-sizing: border-box;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+`;
 export const SubmitContainer = styled.div`
   display: flex;
   justify-content: flex-end;
@@ -135,25 +177,26 @@ export const StyledTextField = styled(TextField)`
   }
 `;
 
-// 가동시간  스타일
-// export const DigitalClockStyle = styled(Typography)({
-//   fontFamily: '"Orbitron", sans-serif', // 디지털 시계 폰트
-//   backgroundColor: '#333',
-//   color: '#0f0',
-//   padding: '1rem',
-//   borderRadius: '5px',
-//   border: '3px solid #0f0',
-//   display: 'inline-block',
-// });
+// 가동 시간 디자인
+export const GridItemStyledTime = styled(Grid)`
+  // 기본 스타일
+  transition: transform 0.3s, backdrop-filter 0.3s;
+  box-sizing: border-box;
 
+  &:hover {
+    backdrop-filter: blur(15px);
+    transform: scale(1.05);
+  }
+`;
 export const DigitalClockStyle = styled(Typography)`
   font-family: 'Orbitron', sans-serif;
   background-color: #333;
   color: #0f0;
-  padding: 1rem;
+  padding: 0.4rem 5rem; //상하 0.4 좌우 5
   border-radius: 5px;
   border: 3px solid #0f0;
   display: inline-block;
+  margin-bottom: 20px !important;
 `;
 
 export const ItemStyledTime = styled.div`
@@ -162,7 +205,7 @@ export const ItemStyledTime = styled.div`
   margin-top: 25px; 
   border-radius: 5px; 
   color: white;
-  padding: 0rem;
+  padding: 0rem; //상하 0
   width: 100%;
   text-align: center; 
   cursor: pointer;
@@ -170,8 +213,9 @@ export const ItemStyledTime = styled.div`
   box-sizing: border-box;
 `;
 
-//버튼 디자인
-export const ButtonStyled = styled(Button)`
+// 버튼 디자인
+
+export const SubmitButtonStyled = styled(Button)`
   font-family: 'Orbitron', sans-serif !important;
   margin: 0 7px !important;
   
@@ -179,8 +223,24 @@ export const ButtonStyled = styled(Button)`
     background-color: #555 !important;
   }
 `;
+export const ButtonStyled = styled(Button)`
+  font-family: 'Orbitron', sans-serif !important;
+ 
+  // border-color: white !important;
+  margin-top: 20px !important;
+  width: 150px !important;
+  height: 50px !important;
+  margin: 0 7px !important;
+  border-width: ${props => props.borderWidth || '1px'} !important; 
+  
+  &:hover {
+    background-color: ${props => props.hoverColor || '#555'} !important;
+  }
+`;
 
 export const GridContainerStyled = styled(Grid)`
   align-items: center; 
   justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
 `;

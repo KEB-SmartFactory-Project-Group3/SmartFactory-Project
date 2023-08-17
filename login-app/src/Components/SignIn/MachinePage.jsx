@@ -13,7 +13,7 @@ import { Modal } from '@mui/material';
 import { ModalStyled, GridItemStyled, SubmitContainer, 
         StyledTextField, ItemStyledChart, GridItemStyledChart, 
         ItemStyledCount, RateLabel, DigitalClockStyle, ItemStyledTime, 
-        ButtonStyled, GridContainerStyled, GridItemStyledTime ,ProductionItemStyled} from '../stylescomp/MachineStyle';
+        ButtonStyled, SubmitButtonStyled,GridContainerStyled, GridItemStyledTime ,ProductionItemStyled} from '../stylescomp/MachineStyle';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/lab/Alert';
 import { CSSTransition } from 'react-transition-group';
@@ -25,98 +25,17 @@ import LandingPage from './LandingPage';
 import Badge from '@mui/material/Badge';
 import MailIcon from '@mui/icons-material/Mail';
 import BasicBars from '../Chart/CountLineChart';
+import Tooltip from '@mui/material/Tooltip';
 import axios from 'axios';
-import { sendStartToBackend , sendResetToBackend} from '../api/ApiService';
+import { sendStartToBackend , sendResetToBackend, apiServer} from '../api/ApiService';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogActions from '@mui/material/DialogActions';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
 
 function MachinePage() {
-
-  // const apiServer = axios.create({
-  //   baseURL: 'http://192.168.43.183:8080',
-  //   withCredentials: true, //쿠키 자동 포함
-  // })
-
-//   const sendStartToBackend = async () => {
-//     try {
-
-//       const token = document.cookie.split('=')[1]; // 쿠키에서 토큰 가져오기
-//         const config = {
-//           headers: {
-//             Authorization: `Bearer ${token}`,
-//           },
-//         }
-      
-//       const userName = null
-//       const operationStopTime = 0
-//       const operationTime = 0
-//       const reason = null
-//       const count =0
-//       const Startstate = 'start'; 
-//       const StartData = {
-//         state: Startstate,
-//         userName,
-//         operationStopTime,
-//         operationTime,
-//         reason,
-//         count
-//       }
-
-//       const response = await axios.post('/click/button', StartData, config) 
-        
-//       if (response.status === 200) {
-//         console.log("startState posted successfully", response.data)
-//       } else {
-//         console.log("startState Error while posting")
-//       }
-//     }catch (error) {
-//       console.error("Error sending start command", error);
-//     }
-  
-// }
-// const sendResetToBackend = async () => {
-//   try {
-
-//     const token = document.cookie.split('=')[1]; // 쿠키에서 토큰 가져오기
-//       const config = {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         },
-//       }
-    
-//     const userName = null
-//     const operationStopTime = 0
-//     const operationTime = 0
-//     const reason = null
-//     const count =0
-//     const Resetstate = 'reset'; 
-//     const resetData = {
-//       state: Resetstate,
-//       userName,
-//       operationStopTime,
-//       operationTime,
-//       reason,
-//       count
-//     }
-
-//     const response = await axios.post('/click/button', resetData, config) 
-      
-//     if (response.status === 200) {
-//       console.log("startState posted successfully", response.data)
-//     } else {
-//       console.log("startState Error while posting")
-//     }
-//   }catch (error) {
-//     console.error("Error sending start command", error);
-//   }
-
-// }
-  // const handleResetAndNotifyBackend = () => {
-  //   resetTimer();
-  //   sendResetToBackend();
-  // };
-  // const handleStartAndNotifyBackend = () => {
-  //   handleStart(); // original function to start the machine
-  //   sendStartToBackend(); // send start command to backend
-  // };
 
   const handleStartAndNotifyBackend = async () => {
     handleStart(); // original function to start the machine
@@ -124,10 +43,10 @@ function MachinePage() {
     const StartData = {
         state: 'start',
         userName: null,
-        operationStopTime: 0,
-        operationTime: 0,
+        operationStopTime: null,
+        operationTime: null,
         reason: null,
-        count: 0
+        count: null
     }
 
     try {
@@ -143,10 +62,10 @@ function MachinePage() {
     const ResetData = {
       state: 'reset',
       userName: null,
-      operationStopTime: 0,
-      operationTime: 0,
+      operationStopTime: null,
+      operationTime: null,
       reason: null,
-      count: 0
+      count: null
   }
 
     try {
@@ -163,6 +82,25 @@ function MachinePage() {
  
   const [isCardOpen,setIsCardOpen] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+
+  // reset 다이얼로그 상태
+  const [openResetDialog, setOpenResetDialog] = useState(false)
+
+  // Dialog 열기
+  const handleOpenResetDialog = () => {
+    setOpenResetDialog(true);
+  };
+
+  // Dialog 닫기
+  const handleCloseResetDialog = () => {
+    setOpenResetDialog(false);
+  };
+
+  // 실제 reset 수행 및 Dialog 닫기
+  const handleConfirmReset = () => {
+    handleResetAndNotifyBackend();
+    setOpenResetDialog(false);
+  };
 
   // 데이터 표시 여부
   const [showNoDataAlert, setShowNoDataAlert] = useState(false) 
@@ -249,7 +187,7 @@ function MachinePage() {
     <StyledFactor className="MachinePage">
       <CSSTransition in={true} timeout={1000} classNames="fade" appear>
       <FadeBox sx={{flexGrow:1}}>
-        <Grid container spacing={2} sx={{ background: 'transparent', border: 'none' , boxShadow: 'none',}}>
+        <Grid container spacing={3} sx={{ background: 'transparent', border: 'none' , boxShadow: 'none',}}>
         <GridItemStyled item xs={12} sm={4} md={4}>
             <ItemStyledCount borderColor="#b388ff">
               <RateLabel>도달률 <br/> {nowRate}%</RateLabel>
@@ -318,14 +256,14 @@ function MachinePage() {
               label="목표 생산량"
               />
               <SubmitContainer>
-              <ButtonStyled
+              <SubmitButtonStyled
                 variant="outlined"
                 style={{ color: 'white', borderColor:'white'}}
                 size="small"
                 onClick={handleTextSubmit}
               >
                 전송
-              </ButtonStyled>
+              </SubmitButtonStyled>
               </SubmitContainer>
               </>
             )}
@@ -360,7 +298,7 @@ function MachinePage() {
 
             <GridItemStyled  item xs={12}>
             {isRunning ? (
-                  <ButtonStyled variant='outlined' style={{color:'white', borderColor: 'white'}}size='small' onClick={handleOpenForm}>
+                  <ButtonStyled variant='outlined' borderWidth="3px" style={{fontWeight: 'bold', color:'green', borderColor: 'green'}}size='large' onClick={handleOpenForm}>
                     가동중지
                   </ButtonStyled>
                   ) : formOpen ? (
@@ -371,15 +309,37 @@ function MachinePage() {
                     </>
                   ) : (
                     <>
-                     <ButtonStyled variant='outlined' style={{color:'white', borderColor: 'white'}}size="small" onClick={handleStartAndNotifyBackend}>
+                     <ButtonStyled variant='outlined' borderWidth="3px" style={{fontWeight: 'bold' ,color:'blue', borderColor: 'blue'}}size="large" onClick={handleStartAndNotifyBackend}>
                           가동 시작
                       </ButtonStyled> 
                     </>
                 )}
-                 <ButtonStyled variant='outlined' style={{color:'white', borderColor: 'white'}}size='small' onClick={ handleResetAndNotifyBackend}>
+                <Tooltip title="데이터를 초기화합니다">
+                 <ButtonStyled variant='outlined' borderWidth="3px" style={{fontWeight: 'bold',color:'red', borderColor: 'red' }}size='large' onClick={()=> {handleResetAndNotifyBackend(); handleOpenResetDialog();}}>
                     Reset
                 </ButtonStyled>
                 <FormDialog open={formOpen} handleClose={handleCloseForm} elapsedTime={elapsedTime} handleRestart={restartTimer} handleStop={handleStop}  />
+                </Tooltip>
+
+                <Dialog
+                  open={openResetDialog}
+                  onClose={handleCloseResetDialog}
+                >
+                  <DialogTitle>{"데이터 초기화"}</DialogTitle>
+                  <DialogContent>
+                    <DialogContentText>
+                      데이터를 초기화 합니다. 정말 reset 하시겠습니까?
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={handleCloseResetDialog} color="primary">
+                      Cancel
+                    </Button>
+                    <Button onClick={handleConfirmReset} color="primary" autoFocus>
+                      Reset
+                    </Button>
+                  </DialogActions>
+                </Dialog>
 
           </GridItemStyled>
           </GridContainerStyled>
