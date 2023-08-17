@@ -37,7 +37,7 @@ function TemperaturePage() {
       <CSSTransition in={true} timeout={1000} classNames="fade" appear>
       <FadeBox sx={{flexGrow:1}}>
       <Grid container spacing={3} sx={{ background: 'transparent', border: 'none' , boxShadow: 'none',}}>
-      <TempGridStyled item xs={6} sm={3} md={3}>
+      <TempGridStyled item xs={6} sm={4} md={4}>
             <TempItemStyled>
 
             <Box display="flex" alignItems="center">
@@ -88,7 +88,7 @@ function TemperaturePage() {
             </TempItemStyled>
         </TempGridStyled>
 
-        <TempGridStyled item xs={6} sm={3} md={3}>
+        <TempGridStyled item xs={6} sm={4} md={4}>
             <TempItemStyled>
 
             <Box display="flex" alignItems="center">
@@ -140,28 +140,32 @@ function TemperaturePage() {
             </TempItemStyled>
         </TempGridStyled>
 
-        <TempGridStyled item xs={12} sm={6} md={6}>
-        <Grid container direction="column">
-          <TempGridStyled item xs={12}>
+          <TempGridStyled item xs={12} sm={4} md={4}>
             <TempHumItemStyled>
             
               <TempGaugeChart style={{width: '80%', height: '75%'}}/>
             </TempHumItemStyled>
           </TempGridStyled>
-          <TempGridStyled item xs={12}>
+
+          {/* 작은 화면일 때 적정온도 다음에 적정습도 나오도록 코드 수정 */}
+          <TempGridStyled item xs={6} sm={4} md={4} sx={{ display: { xs: 'block', sm: 'none' } }}>
             <TempHumItemStyled>
-              {/* 적정 습도 */}
-              <HumGaugeChart style={{width: '80%', height: '75%'}}/>
+                <HumGaugeChart style={{width: '80%', height: '75%'}}/>
             </TempHumItemStyled>
           </TempGridStyled>
-        </Grid>
-      </TempGridStyled>
 
-      <TempGridStyled item xs={12} sm={12} md={12}>
+      <TempGridStyled item xs={12} sm={8} md={8}>
           <TempChartItemStyled>
             {/* 실시간 온습도 그래프 */}
             <TempHumidityChart />
           </TempChartItemStyled>
+      </TempGridStyled>
+
+      <TempGridStyled item xs={6} sm = {4} md ={4} sx={{ display: { xs: 'none', sm: 'block' } }}>
+        <TempHumItemStyled>
+          {/* 적정 습도 */}
+          <HumGaugeChart style={{width: '80%', height: '75%'}}/>
+        </TempHumItemStyled>
       </TempGridStyled>
 
       <TempGridStyled item xs={12} sm={12} md={12}>
