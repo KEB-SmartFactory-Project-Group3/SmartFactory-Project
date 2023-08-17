@@ -17,7 +17,7 @@ app = Flask(__name__)
 CORS(app, resources={r"*": {"origins": ["http://165.246.116.73:3001", "http://localhost:3000"]}})
 # CORS(app, resources={r"*": {"origins": "*"}})
 
-url = 'http://192.168.43.101/'  # Arduino webserver URL
+url = 'http://165.246.116.48/'  # Arduino webserver URL
 
 # YOLOv5 모델 불러옴 (로컬에 저장된 best.pt 또는 last.pt 파일 불러옴)
 model = torch.hub.load('ultralytics/yolov5', 'custom', path='C:/YOLOv5_model/best.pt')
@@ -44,7 +44,7 @@ def generate_serial_number(most_common_name):
     else:
         prefix = 'AN'
 
-    serial_number = f"{prefix}{serial_counter:04d}"  # 'A' 접두사와 4자리 숫자를 결합
+    serial_number = f"{prefix}{serial_counter:04d}"  # 'AD' or 'AN' 접두사와 4자리 숫자를 결합
     serial_counter += 1  # 다음 시리얼 넘버를 사용할 때 카운터를 증가
 
     return serial_number
@@ -75,7 +75,7 @@ def get_live_transmission():
         if isinstance(detected_frame, torch.Tensor):
             detected_frame = detected_frame.numpy().transpose(1, 2, 0)  # PyTorch 텐서를 OpenCV 형식으로 변환
 
-    # 이미지 품질을 70으로 설정하여 압축과 최적화 적용
+    # 이미지 품질을 50으로 설정하여 압축과 최적화 적용
     is_success, im_buf_arr = cv2.imencode(".jpg", detected_frame, [cv2.IMWRITE_JPEG_QUALITY, 50])
     byte_im = im_buf_arr.tobytes()
     encoded_img = base64.b64encode(byte_im).decode('utf-8')
