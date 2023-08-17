@@ -1,9 +1,8 @@
 package com.SpringServer.service;
 
 import com.SpringServer.model.dto.AuthenticationRequest;
-import com.SpringServer.model.dto.AuthenticationResponse;
+import com.SpringServer.model.dto.AuthLoginResponse;
 import com.SpringServer.model.dto.RegisterRequest;
-import com.SpringServer.service.JwtService;
 import com.SpringServer.model.entity.User;
 import com.SpringServer.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public AuthLoginResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getId(),
@@ -29,13 +28,13 @@ public class AuthenticationService {
         var user = userRepository.findById(request.getId())
                 .orElseThrow();
         var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
+        return AuthLoginResponse.builder()
                 .token(jwtToken)
                 .name(user.getName())
                 .build();
     }
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public AuthLoginResponse register(RegisterRequest request) {
         var user = User.builder()
                 .id(request.getId())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -43,7 +42,7 @@ public class AuthenticationService {
                 .build();
         userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
+        return AuthLoginResponse.builder()
                 .token(jwtToken)
                 .name(user.getName())
                 .build();

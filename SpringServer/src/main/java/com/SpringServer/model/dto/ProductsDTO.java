@@ -5,12 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationResponse {
+public class ProductsDTO {
 
-    private String token;
-    private String name;
+    private String serialNumber;
+    private String state;
+    private Timestamp productionTime;
 }

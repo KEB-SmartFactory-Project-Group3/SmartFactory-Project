@@ -4,11 +4,10 @@ import com.SpringServer.model.dto.ButtonRequest;
 import com.SpringServer.model.dto.ButtonResponse;
 import com.SpringServer.model.entity.StopReason;
 import com.SpringServer.repository.StopRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
-import org.springframework.boot.json.JsonParser;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -16,11 +15,11 @@ import org.springframework.web.client.RestTemplate;
 public class ButtonService {
 
     private final GoalService goalService;
-
-    private final String URL = "http://172.20.10.11";
+    private final DBResetService dbResetService;
+    private final String URL = "http://192.168.43.142";
     private final StopRepository stopRepository;
 
-    public ButtonResponse saveStopReason(ButtonRequest request){
+    public void saveStopReason(ButtonRequest request){
         var stopReason = StopReason.builder()
                 .operationStopTime(request.getOperationStopTime())
                 .operationTime(request.getOperationTime())
@@ -28,44 +27,35 @@ public class ButtonService {
                 .reason(request.getReason())
                 .nowRate(goalService.calculateNowRate(request.getCount()))
                 .build();
-
-        onOffSpring(onOffEsp32Board(request));
-
         stopRepository.save(stopReason);
-        return ButtonResponse.builder()
-                .result("saved")
-                .build();
     }
 
-    public String onOffEsp32Board(ButtonRequest request){
+    public ButtonResponse controlMachineState(ButtonRequest request){
         RestTemplate restTemplate = new RestTemplate();
         String jsonResponse = null;
-        if (request.getState().equals("stop")) {
-            String stopURL = URL + "/red_led_off";
-            jsonResponse = restTemplate.getForObject(stopURL, String.class);
-        } else if (request.getState().equals("start")) {
-            String startURL = URL + "/red_led_on";
-            jsonResponse = restTemplate.getForObject(startURL, String.class);
-        } else if (request.getState().equals("reset")) {
-            String resetURL = URL + "/reset";
-            jsonResponse = restTemplate.getForObject(resetURL, String.class);
-        } else {
-            throw new IllegalArgumentException("ESP32 command 실패");
+        String targetUrl = null;
+        String message = null;
+
+        switch (request.getState()) {
+            case "stop" -> targetUrl = URL + "/machineOff";
+            case "start" -> targetUrl = URL + "/machineOn";
+            case "reset" -> targetUrl = URL + "/machineReset";
+            default -> throw new IllegalArgumentException("Machine command 실패");
         }
 
-        JSONObject jsonObject = new JSONObject(jsonResponse);
-        return jsonObject.getString("message");
-    }
-
-    public void onOffSpring(String jsonResponse){
-        if(jsonResponse.equals("ESP32 Start")){
-
-        } else if (jsonResponse.equals("ESP32 Stop")) {
-
-        } else if (jsonResponse.equals("ESP32 Reset")) {
-
-        } else{
-            throw new IllegalArgumentException("ESP32 command 실패");
+        try {
+            jsonResponse = restTemplate.getForObject(targetUrl, String.class);
+            JSONObject jsonObject = new JSONObject(jsonResponse);
+            message = jsonObject.getString("message");
+            if (message.equals("Machine Reset")){
+                dbResetService.resetExceptSpecificTable();
+            }
+            return ButtonResponse.builder()
+                    .result(message)
+                    .build();
+        } catch (RestClientException e) {
+            throw new IllegalArgumentException("Machine Response 에러");
         }
     }
+
 }

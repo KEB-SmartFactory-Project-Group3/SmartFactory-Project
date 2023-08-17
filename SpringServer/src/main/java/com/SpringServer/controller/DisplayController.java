@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/display")
 public class DisplayController {
 
-    private final GoalService goalService;
     private final DisplayService displayService;
-    private final ButtonService buttonService;
 
 
 
@@ -31,16 +29,6 @@ public class DisplayController {
     @GetMapping("/factoryinfo")
     public ResponseEntity<FactoryInfoDTO> displayFactoryInfo(){
         return ResponseEntity.ok(displayService.getFactoryInfo());
-    }
-
-    @PostMapping("/goal")
-    public ResponseEntity<Integer> saveGoalAmount(@RequestBody GoalDTO goalDTO){
-        return ResponseEntity.ok(goalService.saveGoalAmount(goalDTO));
-    }
-
-    @PostMapping("/button")
-    public ResponseEntity<ButtonResponse> controlEsp32Board(@RequestBody ButtonRequest request){
-        return  ResponseEntity.ok(buttonService.saveStopReason(request));
     }
 
 }

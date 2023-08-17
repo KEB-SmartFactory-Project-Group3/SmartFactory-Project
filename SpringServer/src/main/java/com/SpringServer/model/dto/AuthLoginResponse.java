@@ -9,9 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MachineInfoDTO {
+public class AuthLoginResponse {
 
-    private double nowRate;
-    private int count;
-    private int defectiveCount;
+    private String token;
+    private String name;
 }

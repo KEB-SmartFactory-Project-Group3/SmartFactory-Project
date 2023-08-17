@@ -27,7 +27,7 @@ public class ButtonRequest {
     private String reason;  // "휴식", "수리"...
     private int count;
 
-    private String state;   // "가동중지", "재가동", "reset"
+    private String state;   // "stop", "start", "reset"
 
 
 
