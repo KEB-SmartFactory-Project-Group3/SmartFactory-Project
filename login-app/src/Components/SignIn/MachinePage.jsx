@@ -10,7 +10,10 @@ import { styled } from '@mui/material/styles';
 import { StyledBackground, StyledFactor } from '../stylescomp/BackgroundStyle';
 import {OutlinedCard} from '../card/MachineCards';
 import { Modal } from '@mui/material';
-import { ModalStyled, GridItemStyled, SubmitContainer, StyledTextField, ItemStyledChart, GridItemStyledChart, ItemStyledCount, RateLabel, DigitalClockStyle, ItemStyledTime, ButtonStyled, GridContainerStyled, GridItemStyledTime} from '../stylescomp/MachineStyle';
+import { ModalStyled, GridItemStyled, SubmitContainer, 
+        StyledTextField, ItemStyledChart, GridItemStyledChart, 
+        ItemStyledCount, RateLabel, DigitalClockStyle, ItemStyledTime, 
+        ButtonStyled, GridContainerStyled, GridItemStyledTime ,ProductionItemStyled} from '../stylescomp/MachineStyle';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/lab/Alert';
 import { CSSTransition } from 'react-transition-group';
@@ -19,9 +22,140 @@ import TargetDonutChart from '../Chart/TargetCountChart';
 import CountLineChart from '../Chart/CountLineChart';
 import RealTimeLineChart from '../Chart/RealTimeLineChart';
 import LandingPage from './LandingPage';
+import Badge from '@mui/material/Badge';
+import MailIcon from '@mui/icons-material/Mail';
+import BasicBars from '../Chart/CountLineChart';
+import axios from 'axios';
+import { sendStartToBackend , sendResetToBackend} from '../api/ApiService';
 
 function MachinePage() {
 
+  // const apiServer = axios.create({
+  //   baseURL: 'http://192.168.43.183:8080',
+  //   withCredentials: true, //쿠키 자동 포함
+  // })
+
+//   const sendStartToBackend = async () => {
+//     try {
+
+//       const token = document.cookie.split('=')[1]; // 쿠키에서 토큰 가져오기
+//         const config = {
+//           headers: {
+//             Authorization: `Bearer ${token}`,
+//           },
+//         }
+      
+//       const userName = null
+//       const operationStopTime = 0
+//       const operationTime = 0
+//       const reason = null
+//       const count =0
+//       const Startstate = 'start'; 
+//       const StartData = {
+//         state: Startstate,
+//         userName,
+//         operationStopTime,
+//         operationTime,
+//         reason,
+//         count
+//       }
+
+//       const response = await axios.post('/click/button', StartData, config) 
+        
+//       if (response.status === 200) {
+//         console.log("startState posted successfully", response.data)
+//       } else {
+//         console.log("startState Error while posting")
+//       }
+//     }catch (error) {
+//       console.error("Error sending start command", error);
+//     }
+  
+// }
+// const sendResetToBackend = async () => {
+//   try {
+
+//     const token = document.cookie.split('=')[1]; // 쿠키에서 토큰 가져오기
+//       const config = {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       }
+    
+//     const userName = null
+//     const operationStopTime = 0
+//     const operationTime = 0
+//     const reason = null
+//     const count =0
+//     const Resetstate = 'reset'; 
+//     const resetData = {
+//       state: Resetstate,
+//       userName,
+//       operationStopTime,
+//       operationTime,
+//       reason,
+//       count
+//     }
+
+//     const response = await axios.post('/click/button', resetData, config) 
+      
+//     if (response.status === 200) {
+//       console.log("startState posted successfully", response.data)
+//     } else {
+//       console.log("startState Error while posting")
+//     }
+//   }catch (error) {
+//     console.error("Error sending start command", error);
+//   }
+
+// }
+  // const handleResetAndNotifyBackend = () => {
+  //   resetTimer();
+  //   sendResetToBackend();
+  // };
+  // const handleStartAndNotifyBackend = () => {
+  //   handleStart(); // original function to start the machine
+  //   sendStartToBackend(); // send start command to backend
+  // };
+
+  const handleStartAndNotifyBackend = async () => {
+    handleStart(); // original function to start the machine
+
+    const StartData = {
+        state: 'start',
+        userName: null,
+        operationStopTime: 0,
+        operationTime: 0,
+        reason: null,
+        count: 0
+    }
+
+    try {
+        await sendStartToBackend(StartData);
+    } catch (error) {
+        console.error("Error sending start command", error);
+    }
+};
+
+  const handleResetAndNotifyBackend = async() => {
+    resetTimer();
+
+    const ResetData = {
+      state: 'reset',
+      userName: null,
+      operationStopTime: 0,
+      operationTime: 0,
+      reason: null,
+      count: 0
+  }
+
+    try {
+        await sendResetToBackend(ResetData);
+    } catch (error) {
+        console.error("Error sending reset command", error);
+    }
+  };
+  
   const { isRunning, elapsedTime, restartTimer, startTime, handleStart, handleStop, resetTimer} = useTimeRecorder();
   const {count, showAlert, setShowAlert,targetAchievement, targetCount, setTargetCount, handleTargetcountChange, handleTargetCountSubmit} = useMachineCount()
   const {nowRate} = useMachineRate()
@@ -43,6 +177,15 @@ function MachinePage() {
   // 목표 달성까지 남은 시간 = (목표 생산량 - 현재 생산량) / 현재 생산 속도
   const remainingItems = targetCount - count
   const remainingSeconds = remainingItems / currentRate // 후에 formatTime 함수를 사용하여 시간, 분, 초 변환
+
+  // alert 횟수
+  const [alertCount, setAlertCount] = useState(0)
+
+  useEffect(() => {
+    if (showNoDataAlert || showAlert) {
+      setAlertCount(prevCount => prevCount + 1);
+    }
+  }, [showNoDataAlert, showAlert])
 
   useEffect(() => {
     if (!submitted) return // 전송하지 않으면 실행 안 함
@@ -115,7 +258,7 @@ function MachinePage() {
         </GridItemStyled>
 
         <GridItemStyled item xs={12} sm={4} md={4}>
-            <ItemStyledCount borderColor='#ff5252'>
+            <ItemStyledCount borderColor='#ffeb3b'>
             <Typography variant="h6" sx={{marginBottom: '1rem'}}>
               목표 생산량
             </Typography>
@@ -205,29 +348,7 @@ function MachinePage() {
             </Alert>
         </Snackbar>
 
-        <GridItemStyled item xs={12} sm={4} md={4} onClick={handleCardClick}>
-        {!isCardOpen && (
-            <ItemStyledCount>
-            현재 생산량: {count}
-            <CountLineChart data={count} />
-            </ItemStyledCount>
-          )}
-        </GridItemStyled>
-
-        <Modal open={isCardOpen}>
-          <ModalStyled isOpen={isCardOpen}>
-            <OutlinedCard onClose={handleCardClick} />
-          </ModalStyled>
-        </Modal>
-          
-        <GridItemStyledChart item xs={8} sm={8} md={8}>
-          <ItemStyledChart>
-            차트
-            <RealTimeLineChart targetCount={targetCount}/>
-          </ItemStyledChart>
-        </GridItemStyledChart>
-
-        <GridItemStyled item xs={4} sm={4} md={4}>
+        <GridItemStyled item xs={12} sm={4} md={4}>
           <GridContainerStyled container direction='column'>
             <GridItemStyledTime item xs={12}>
               <ItemStyledTime>
@@ -250,12 +371,12 @@ function MachinePage() {
                     </>
                   ) : (
                     <>
-                     <ButtonStyled variant='outlined' style={{color:'white', borderColor: 'white'}}size="small" onClick={handleStart}>
+                     <ButtonStyled variant='outlined' style={{color:'white', borderColor: 'white'}}size="small" onClick={handleStartAndNotifyBackend}>
                           가동 시작
                       </ButtonStyled> 
                     </>
                 )}
-                 <ButtonStyled variant='outlined' style={{color:'white', borderColor: 'white'}}size='small' onClick={resetTimer}>
+                 <ButtonStyled variant='outlined' style={{color:'white', borderColor: 'white'}}size='small' onClick={ handleResetAndNotifyBackend}>
                     Reset
                 </ButtonStyled>
                 <FormDialog open={formOpen} handleClose={handleCloseForm} elapsedTime={elapsedTime} handleRestart={restartTimer} handleStop={handleStop}  />
@@ -263,6 +384,32 @@ function MachinePage() {
           </GridItemStyled>
           </GridContainerStyled>
         </GridItemStyled>
+
+        <Modal open={isCardOpen}>
+          <ModalStyled isOpen={isCardOpen}>
+            <OutlinedCard onClose={handleCardClick} />
+          </ModalStyled>
+        </Modal>
+          
+        <GridItemStyledChart item xs={8} sm={8} md={8}>
+          <ItemStyledChart>
+            차트
+            <RealTimeLineChart targetCount={targetCount}/>
+          </ItemStyledChart>
+        </GridItemStyledChart>
+
+         <GridItemStyled item xs={12} sm={4} md={4} onClick={handleCardClick}>
+        {!isCardOpen && (
+            <ProductionItemStyled>
+            현재 생산량: {count}
+            <BasicBars count={count} />
+            </ProductionItemStyled>
+          )}
+        </GridItemStyled>
+
+        <Badge badgeContent={alertCount} color="primary">
+          <MailIcon />
+        </Badge>
       </Grid>
       </FadeBox>
       </CSSTransition>
@@ -271,6 +418,7 @@ function MachinePage() {
 
   );
 }
+
 
 
 
