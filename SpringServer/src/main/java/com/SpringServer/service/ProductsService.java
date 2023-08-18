@@ -1,9 +1,12 @@
 package com.SpringServer.service;
 
+import com.SpringServer.model.entity.OperationStop;
 import com.SpringServer.model.entity.Products;
 import com.SpringServer.repository.ProductsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -23,5 +26,8 @@ public class ProductsService {
         return "db 저장완료";
     }
 
+    public List<Products> findAllProducts(){
+        return productsRepository.findAll();
+    }
 
 }
