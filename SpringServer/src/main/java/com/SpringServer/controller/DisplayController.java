@@ -36,9 +36,4 @@ public class DisplayController {
         return ResponseEntity.ok(statisticsTemperatureHumidityService.getStatisticsTemperatureHumidityData());
     }
 
-    @GetMapping("/operationstoplist")
-    public ResponseEntity<List<OperationStop>> getAllOperationStops() {
-        return ResponseEntity.ok(displayService.findAllOperationStop());
-    }
-
 }

@@ -19,7 +19,6 @@ public class DisplayService {
 
     private final FactoryRepository factoryRepository;
     private final ProductsRepository productsRepository;
-    private final OperationStopRepository operationStopRepository;
 
     private final GoalService goalService;
 
@@ -55,10 +54,6 @@ public class DisplayService {
                 .factoryTemperature(0.0)
                 .factoryHumidity(0)
                 .build();
-    }
-
-    public List<OperationStop> findAllOperationStop() {
-        return operationStopRepository.findAll();
     }
 
 }
