@@ -1,6 +1,7 @@
 import styled ,{ keyframes }from 'styled-components';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
+import { Button } from '@mui/material';
 
 export const StyledSignInContainer = styled.div`
   display: flex;
@@ -56,4 +57,31 @@ export const StyledBox = styled(Box)`
   }
 
 `;
+
+export const StyledLoginButton = styled(Button)`
+  background-color: transparent !important;
+  color: #C0C0C0;
+  width: 310px;
+  height: 30px;
+  margin: 10px 0 15px 12px;
+  border-radius: 5px;
+  border: 1px solid white !important;
+  box-shadow: none;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    animation: bgColorChange 0.3s forwards;
+    backdrop-filter: blur(8px);
+  }
+
+  @keyframes bgColorChange {
+    from {
+      background-color: transparent;
+    }
+    to {
+      background-color: rgba(124, 77, 255, 0.4);
+    }
+  }
+`;
+
 
