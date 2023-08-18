@@ -3,12 +3,22 @@ import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import { StyledBackground, StyledFactor } from '../stylescomp/BackgroundStyle';
+import { StyledBackground, StyledFactor, LandStyledFactor } from '../stylescomp/BackgroundStyle';
 import { CSSTransition } from 'react-transition-group';
 import { FadeBox } from '../stylescomp/FadeinStyle';
 import {GridItemStyled, SubmitContainer, StyledTextField, ItemStyledChart, GridItemStyledChart, ItemStyledCount, RateLabel, DigitalClockStyle, ItemStyledTime, ButtonStyled, GridContainerStyled, GridItemStyledTime} from '../stylescomp/MachineStyle';
 import { TempGridStyled,TempItemStyled, TempHumItemStyled } from '../stylescomp/TemperatureStyle';
 import { LandGrid, LandItem, LandItemVision, PredictCountItem, TitrationItem } from '../stylescomp/LandingStyle';
+import TargetDonutChart from '../Chart/TargetCountChart';
+import BasicBars from '../Chart/CountCompare';
+import useMachineCount from '../hooks/useMachineCount';
+import TempHumidityChart from '../Chart/TempHumidityChart';
+import RealTimeLineChart from '../Chart/RealTimeLineChart';
+import useTimeRecorder from '../hooks/customMachine';
+import useMachineRate from '../hooks/useMachineRate';
+import Icon from '@mui/material/Icon';
+import { Typography } from '@mui/material';
+
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -20,7 +30,20 @@ const Item = styled(Paper)(({ theme }) => ({
 
 function LandingPage() {
 
-  // const operationStartTime = useMachine()
+    const {count, defectiveCount, targetCount} = useMachineCount()
+    const {nowRate} = useMachineRate()
+
+    // 남은 예상 시간, 남은 생산량 로컬 스토리지에서 가져옴
+    const rawRemainingItems = localStorage.getItem("remainingItems")
+    const remainingItemsFromStorage = rawRemainingItems ? parseInt( rawRemainingItems ) : 0
+   
+    function convertTimeToSeconds(timeString) {
+      const [hours, minutes, seconds] = timeString.split(':').map(parseFloat);
+      return (hours * 3600) + (minutes * 60) + seconds;
+  }
+  
+    const rawRemainingSeconds = localStorage.getItem("remainingSeconds");
+    const remainingSecondsFromStorage = rawRemainingSeconds ? convertTimeToSeconds(rawRemainingSeconds) : 0;
 
   return (
     <StyledBackground>
@@ -28,10 +51,11 @@ function LandingPage() {
       <CSSTransition in={true} timeout={1000} classNames="fade" appear>
       <FadeBox sx={{flexGrow:1}}>
       <Grid container spacing={2} sx={{ background: 'transparent', border: 'none' , boxShadow: 'none',}}>
-       
+
         <LandGrid item xs={12} md={2}>
-          <ItemStyledCount>
+          <ItemStyledCount borderColor='#651fff'>
             도달률
+            <TargetDonutChart nowRate={nowRate} />
           </ItemStyledCount>
         </LandGrid>
 
@@ -39,13 +63,19 @@ function LandingPage() {
         <LandGrid item xs={12} md={2}>
           <Grid container direction="column">
             <LandGrid item xs={12}>
-              <PredictCountItem>
-                앞으로 남은 생산량
+              <PredictCountItem highlight={remainingItemsFromStorage > 0}>
+                 앞으로 남은 생산량
+                <Typography variant="h6"  style={{ color: '#0f0' }}>
+                    {remainingItemsFromStorage}
+                </Typography>
               </PredictCountItem>
             </LandGrid>
             <LandGrid item xs={12}>
-              <PredictCountItem>
+              <PredictCountItem highlightTime={remainingSecondsFromStorage > 0}>
                 예상 남은 시간
+                <Typography variant="h6"  style={{ color: '#ffeb3b' }}>
+                {remainingSecondsFromStorage }
+                </Typography>
               </PredictCountItem>
             </LandGrid>
           </Grid>
@@ -85,6 +115,7 @@ function LandingPage() {
       <GridItemStyled item xs={12} md={6}>
         <TempItemStyled>
           실시간 온도 그래프
+          <TempHumidityChart />
         </TempItemStyled>
       </GridItemStyled>
 

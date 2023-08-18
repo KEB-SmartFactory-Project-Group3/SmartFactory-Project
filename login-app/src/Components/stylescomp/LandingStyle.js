@@ -39,7 +39,12 @@ export const LandItem = styled.div`
 // 예상 생산량, 예상 시간 item
 export const PredictCountItem = styled.div`
 margin: 5px 0; // 각 그리드 마진 조정
-border: 1px solid white;
+// border: ${props => props.highlight ? '2px solid #0f0' : '2px solid white'};
+
+border: ${props => 
+  props.highlight ? '2px solid #0f0' :
+  props.highlightTime ? '2px solid #ffeb3b' : 
+  '2px solid white'};
 box-shadow: none; 
 margin-top: 25px; 
 border-radius: 5px; 
