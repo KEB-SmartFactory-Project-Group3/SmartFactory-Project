@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.sql.Timestamp;
 
 @Data
@@ -13,12 +14,15 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "machinedata")
-public class MachineData {
+@Table(name = "products")
+public class Products {
 
     @Id
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private Timestamp times;
+    private String serialNumber;
     private int count;
+    private int defectiveCount;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private Timestamp productionTime;
 
+    private String state;
 }

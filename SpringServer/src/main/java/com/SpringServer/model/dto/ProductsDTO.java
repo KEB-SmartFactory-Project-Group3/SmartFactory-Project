@@ -1,5 +1,7 @@
 package com.SpringServer.model.dto;
 
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,8 +14,10 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductsDTO {
-
     private String serialNumber;
     private String state;
+    private int count;
+    private int defectiveCount;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp productionTime;
 }

@@ -1,6 +1,6 @@
 package com.SpringServer.service;
 
-import com.SpringServer.model.entity.StopReason;
+import com.SpringServer.model.entity.OperationStop;
 import com.SpringServer.model.entity.User;
 import org.reflections.Reflections;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class DBResetService {
@@ -20,7 +19,7 @@ public class DBResetService {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private static final List<Class<?>> EXCLUDED_ENTITY_CLASSES = Arrays.asList(StopReason.class, User.class);
+    private static final List<Class<?>> EXCLUDED_ENTITY_CLASSES = Arrays.asList(OperationStop.class, User.class);
 
     @Transactional
     public void resetExceptSpecificTable() {

@@ -12,14 +12,15 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "stopreason")
-public class StopReason {
+@Table(name = "oprationstop")
+public class OperationStop {
     @Id
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp operationStopTime;
@@ -28,5 +29,4 @@ public class StopReason {
     private String userName;
     private String reason;
     private double nowRate;
-
 }

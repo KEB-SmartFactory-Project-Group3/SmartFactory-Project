@@ -2,7 +2,7 @@ package com.SpringServer.service;
 
 import com.SpringServer.model.dto.AuthenticationRequest;
 import com.SpringServer.model.dto.AuthLoginResponse;
-import com.SpringServer.model.dto.RegisterRequest;
+import com.SpringServer.model.dto.AuthRegisterRequest;
 import com.SpringServer.model.entity.User;
 import com.SpringServer.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +34,7 @@ public class AuthenticationService {
                 .build();
     }
 
-    public AuthLoginResponse register(RegisterRequest request) {
+    public AuthLoginResponse register(AuthRegisterRequest request) {
         var user = User.builder()
                 .id(request.getId())
                 .password(passwordEncoder.encode(request.getPassword()))

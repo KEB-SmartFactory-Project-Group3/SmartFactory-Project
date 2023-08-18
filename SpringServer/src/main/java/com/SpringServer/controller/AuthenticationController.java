@@ -3,7 +3,7 @@ package com.SpringServer.controller;
 import com.SpringServer.model.dto.AuthenticationRequest;
 import com.SpringServer.model.dto.AuthLoginResponse;
 import com.SpringServer.service.AuthenticationService;
-import com.SpringServer.model.dto.RegisterRequest;
+import com.SpringServer.model.dto.AuthRegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +16,7 @@ public class AuthenticationController {
     private final AuthenticationService service;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthLoginResponse> register(@RequestBody RegisterRequest request){
+    public ResponseEntity<AuthLoginResponse> register(@RequestBody AuthRegisterRequest request){
         return  ResponseEntity.ok(service.register(request));
     }
     @PostMapping("/login")

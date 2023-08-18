@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MachineInfoDTO {
+public class CountDTO {
 
     private double nowRate;
     private int count;

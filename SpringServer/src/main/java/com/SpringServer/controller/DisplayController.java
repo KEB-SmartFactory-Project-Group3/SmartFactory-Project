@@ -1,15 +1,16 @@
 package com.SpringServer.controller;
 
 
-//import com.SpringServer.model.dto.CountDTO;
-//import com.SpringServer.model.dto.TemperatureDTO;
-//import com.SpringServer.model.dto.TimesDTO;
+
 import com.SpringServer.model.dto.*;
+import com.SpringServer.model.entity.OperationStop;
 import com.SpringServer.service.DisplayService;
 import com.SpringServer.service.StatisticsTemperatureHumidityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,10 +21,9 @@ public class DisplayController {
     private final StatisticsTemperatureHumidityService statisticsTemperatureHumidityService;
 
 
-
     @GetMapping("/machineinfo")
-    public ResponseEntity<MachineInfoDTO> displayMachineInfo(){
-        return ResponseEntity.ok(displayService.getMachineInfo());
+    public ResponseEntity<CountDTO> displayMachineInfo(){
+        return ResponseEntity.ok(displayService.getProductsCount());
     }
 
     @GetMapping("/factoryinfo")
@@ -36,5 +36,9 @@ public class DisplayController {
         return ResponseEntity.ok(statisticsTemperatureHumidityService.getStatisticsTemperatureHumidityData());
     }
 
+    @GetMapping("/operationstoplist")
+    public ResponseEntity<List<OperationStop>> getAllOperationStops() {
+        return ResponseEntity.ok(displayService.findAllOperationStop());
+    }
 
 }

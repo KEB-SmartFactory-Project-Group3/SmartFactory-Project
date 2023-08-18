@@ -2,8 +2,8 @@ package com.SpringServer.service;
 
 import com.SpringServer.model.dto.ButtonRequest;
 import com.SpringServer.model.dto.ButtonResponse;
-import com.SpringServer.model.entity.StopReason;
-import com.SpringServer.repository.StopRepository;
+import com.SpringServer.model.entity.OperationStop;
+import com.SpringServer.repository.OperationStopRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -16,37 +16,41 @@ public class ButtonService {
 
     private final GoalService goalService;
     private final DBResetService dbResetService;
-    private final String URL = "http://192.168.43.142";
-    private final StopRepository stopRepository;
+    private final String MachineURL = "http://192.168.43.142";
+    private final String CamURL = "http://192.168.43.9:5000";
+    private final OperationStopRepository operationStopRepository;
 
     public void saveStopReason(ButtonRequest request){
-        var stopReason = StopReason.builder()
+        var stopReason = OperationStop.builder()
                 .operationStopTime(request.getOperationStopTime())
                 .operationTime(request.getOperationTime())
                 .userName(request.getUserName())
                 .reason(request.getReason())
                 .nowRate(goalService.calculateNowRate(request.getCount()))
                 .build();
-        stopRepository.save(stopReason);
+        operationStopRepository.save(stopReason);
     }
 
     public ButtonResponse controlMachineState(ButtonRequest request){
         RestTemplate restTemplate = new RestTemplate();
         String jsonResponse = null;
-        String targetUrl = null;
+        String machineControlUrl = null;
         String message = null;
 
         switch (request.getState()) {
-            case "stop" -> targetUrl = URL + "/machineOff";
-            case "start" -> targetUrl = URL + "/machineOn";
-            case "reset" -> targetUrl = URL + "/machineReset";
+            case "stop" -> machineControlUrl = MachineURL + "/machineOff";
+            case "start" -> machineControlUrl = MachineURL + "/machineOn";
+            case "reset" -> {
+                machineControlUrl = MachineURL + "/machineReset";
+            }
             default -> throw new IllegalArgumentException("Machine command 실패");
         }
 
         try {
-            jsonResponse = restTemplate.getForObject(targetUrl, String.class);
+            jsonResponse = restTemplate.getForObject(machineControlUrl, String.class);
             JSONObject jsonObject = new JSONObject(jsonResponse);
             message = jsonObject.getString("message");
+
             if (message.equals("Machine Reset")){
                 dbResetService.resetExceptSpecificTable();
             }
