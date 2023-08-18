@@ -8,7 +8,7 @@ import { CSSTransition } from 'react-transition-group';
 import { FadeBox } from '../stylescomp/FadeinStyle';
 import {GridItemStyled, SubmitContainer, StyledTextField, ItemStyledChart, GridItemStyledChart, ItemStyledCount, RateLabel, DigitalClockStyle, ItemStyledTime, ButtonStyled, GridContainerStyled, GridItemStyledTime} from '../stylescomp/MachineStyle';
 import { TempGridStyled,TempItemStyled, TempHumItemStyled } from '../stylescomp/TemperatureStyle';
-import { LandGrid, LandItem, LandItemVision, PredictCountItem, TitrationItem } from '../stylescomp/LandingStyle';
+import { LandGrid, LandItem, LandItemVision, PredictCountItem, TitrationItem, LandDigitalClockStyle } from '../stylescomp/LandingStyle';
 import TargetDonutChart from '../Chart/TargetCountChart';
 import BasicBars from '../Chart/CountCompare';
 import useMachineCount from '../hooks/useMachineCount';
@@ -18,6 +18,7 @@ import useTimeRecorder from '../hooks/customMachine';
 import useMachineRate from '../hooks/useMachineRate';
 import Icon from '@mui/material/Icon';
 import { Typography } from '@mui/material';
+import customMachine from '../hooks/customMachine'
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -28,10 +29,19 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
+const formatTime = (time) => {
+  const hours = Math.floor(time / 3600000); // 시간
+  const minutes = Math.floor((time % 3600000) / 60000); // 분
+  const seconds = ((time % 60000) / 1000).toFixed(0); // 초
+
+  return `${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+};
+
 function LandingPage() {
 
     const {count, defectiveCount, targetCount} = useMachineCount()
     const {nowRate} = useMachineRate()
+    const {elapsedTime} = customMachine()
 
     // 남은 예상 시간, 남은 생산량 로컬 스토리지에서 가져옴
     const rawRemainingItems = localStorage.getItem("remainingItems")
@@ -104,8 +114,11 @@ function LandingPage() {
 
         {/* 다음 줄: 가동 시간 */}
         <TempGridStyled item xs={12} md={2}>
-          <TempItemStyled>
+          <TempItemStyled borderColor='#0f0'>
             가동 시간
+            <LandDigitalClockStyle variant='h3'>
+              {formatTime(elapsedTime)}
+            </LandDigitalClockStyle>
           </TempItemStyled>
         </TempGridStyled>
        
