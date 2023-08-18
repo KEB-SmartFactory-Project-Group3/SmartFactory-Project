@@ -72,10 +72,10 @@ export const retrieveData = async (dataKey) => {
       response = await apiClient.get("/api/display/factoryinfo", config);
       return response.data[dataKey];  // dataKey에 대한 값 직접 반환
     } 
-    // else if (dataKey === 'maxTemperature' || dataKey === 'minTemperature' || dataKey === 'avgTemperature' || dataKey === 'maxHumidity' || dataKey === 'minHumidity' || dataKey === 'avgHumidity') {
-    //   response = await apiClient.get("/api/display/statistics", config);
-    //   return response.data[dataKey];
-    // } 
+    else if (dataKey === 'maxTemperature' || dataKey === 'minTemperature' || dataKey === 'avgTemperature' || dataKey === 'maxHumidity' || dataKey === 'minHumidity' || dataKey === 'avgHumidity') {
+      response = await apiClient.get("/api/display/statistics", config);
+      return response.data[dataKey];
+    } 
     
       else if (dataKey === 'operationStopList') {
       response = await apiClient.get("/operationstop/totallist", config);
@@ -87,6 +87,16 @@ export const retrieveData = async (dataKey) => {
           rate: item.nowRate
       }));
       return modifiedData;
+    }  else if (dataKey === 'productsList') {
+      response = await apiClient.get("/products/totallist", config);
+      const productsmodifiedData = response.data.map(item => ({
+          serialnum: item.serialNumber,
+          liststate: item.state,
+          listcount: item.count,
+          listdefect: item.defectiveCount, 
+          productionTime: item.productionTime
+      }));
+      return productsmodifiedData;
     }
       else {
         response = await apiClient.get("/api/display/machineinfo", config);
