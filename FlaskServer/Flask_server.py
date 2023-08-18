@@ -18,7 +18,7 @@ app = Flask(__name__)
 # CORS(app, resources={r"*": {"origins": ["http://165.246.116.73:3001", "http://localhost:3000", "http://192.168.43.142"]}})
 CORS(app, resources={r"*": {"origins": "*"}})
 
-url = 'http://192.168.43.101/'  # Arduino webserver URL
+arduino_url = 'http://192.168.43.101/'  # Arduino webserver URL
 
 # YOLOv5 모델 불러옴 (로컬에 저장된 best.pt 불러옴)
 model = torch.hub.load('ultralytics/yolov5', 'custom', path='C:/YOLOv5_model/best.pt')
@@ -34,13 +34,11 @@ defective_count = 0
 count_from_arduino = 0
 timestamp_from_arduino = None
 pre_count = 0
-
-# 물건의 일련번호 생성기
-serial_counter = 1  # 시리얼 넘버의 시작 숫자를 설정
+serial_counter = 1  # 물건의 일련번호 생성 (시리얼 넘버의 시작 숫자를 설정)
 
 
 def fetch_and_process_image():
-    img_resp = urllib.request.urlopen(url + 'cam-hi.jpg')
+    img_resp = urllib.request.urlopen(arduino_url + 'cam-hi.jpg')
     img_np = np.array(bytearray(img_resp.read()), dtype=np.uint8)
     img = cv2.imdecode(img_np, -1)
     new_width = 640
@@ -117,14 +115,12 @@ def wrapped_get_live_transmission():
     while True:
         # 이미지 가져오기 및 처리
         sharpened_image = fetch_and_process_image()
-
         # 객체 검출 수행
         results = model(sharpened_image, size=640)
-
         # 검출된 객체에 대한 클래스 이름 가져오기
         detected_object_names = [model.names[int(cls)] for cls in results.pred[0][:, -1]]
-
-        current_time = time.time()  # 현재 시각
+        # 현재 시각 저장
+        current_time = time.time()
 
         # 클래스가 검출되지 않고 직전에 검출된 시간이 3초 이내이면 직전에 검출된 클래스 이름을 사용
         if not detected_object_names and latest_detected_object_names and (current_time - latest_detected_time <= 3):
@@ -139,10 +135,8 @@ def wrapped_get_live_transmission():
 
         if most_common:
             object_status = most_common[0][0]
-        else:
-            # 빈 리스트의 경우 적절한 처리를 수행
+        else: # 빈 리스트의 경우 적절한 처리를 수행
             object_status = "Normal"
-
         # print(object_status)
 
         if pre_count != 0 and count_from_arduino == 1:
@@ -156,9 +150,10 @@ def wrapped_get_live_transmission():
                 defective_count += 1
             # 데이터를 백엔드 서버로 전송
             if object_status == "normal":
-                object_status == "Normal"
+                object_status = "Normal"
+
             response = send_to_backend(serial_number, object_status, defective_count, count_from_arduino, timestamp_from_arduino)
-            print(response)
+            # print(response)
             print("Backend Response:", response.text) # 응답을 콘솔에 출력
 
             pre_count = count_from_arduino
