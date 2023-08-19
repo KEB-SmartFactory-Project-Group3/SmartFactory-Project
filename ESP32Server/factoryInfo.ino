@@ -8,6 +8,10 @@
 
 #define DHTPIN A7
 #define DHTTYPE DHT11
+#define BUZZER_PIN D9
+#define TONE_OUTPUT_CHANNEL 0
+#define TONE_RESOLUTION 8
+
 DHT dht(DHTPIN, DHTTYPE); // 사용핀넘버 타입 등록
 
 
@@ -23,6 +27,8 @@ OLED_U8G2 oled; // create oled object
 void setup() {
   Serial.begin(115200);  // ESP32 baud rate
   oled.setup();
+  ledcSetup(TONE_OUTPUT_CHANNEL, 0, TONE_RESOLUTION);
+  ledcAttachPin(BUZZER_PIN, TONE_OUTPUT_CHANNEL);
 
   // wifi connecting setting
   WiFi.mode(WIFI_STA);        // Set to Connection Mode
@@ -52,7 +58,7 @@ void loop() {
   oled_display();
 
   unsigned long currentTime = millis();
-  if (currentTime - lastSendTime >= 1000) {
+  if (currentTime - lastSendTime >= 10000) {
     sendDataToServer();
     lastSendTime = currentTime;
   }
@@ -78,13 +84,26 @@ void sendDataToServer() {
   time(&now);                   // 현재 시간을 가져오기
   localtime_r(&now, &timeinfo); // 현재 시간을 구조화된 형태로 변환
 
+  int humidity = dht.readHumidity();
+  double temperature = round(dht.readTemperature() * 10.0) / 10.0;
+  bool isValid = true;
+
+  if (humidity >= 70 || temperature >= 30.0) {
+    isValid = false;
+    myTone(BUZZER_PIN, 440, 500);
+    delay(500);
+  } else {
+    isValid = true;
+  }
+
   // JSON 응답에 시간 추가
   char timeBuffer[32];
   strftime(timeBuffer, sizeof(timeBuffer), "%Y-%m-%d %H:%M:%S", &timeinfo);
   StaticJsonDocument<200> jsonDocument;
   jsonDocument["times"] = timeBuffer;
-  jsonDocument["factoryTemperature"] = round(dht.readTemperature() * 10.0) / 10.0;
-  jsonDocument["factoryHumidity"] = dht.readHumidity();
+  jsonDocument["factoryTemperature"] = temperature;
+  jsonDocument["factoryHumidity"] = humidity;
+  jsonDocument["isValid"] = isValid;
 
   serializeJson(jsonDocument, requestBody);
 
@@ -93,13 +112,21 @@ void sendDataToServer() {
   int httpResponseCode = http.POST(requestBody);
 
   if (httpResponseCode == 200) {
-    Serial.println("데이터 전송 성공!");
+    Serial.println(temperature);
+    Serial.println(humidity);
+    Serial.println(isValid);
   } else {
     Serial.print("데이터 전송 실패. HTTP 응답 코드: ");
     Serial.println(httpResponseCode);
   }
   
   http.end();
+}
+
+void myTone(int pin, int frequency, int duration) {
+  ledcWriteTone(TONE_OUTPUT_CHANNEL, frequency);
+  delay(duration);
+  ledcWriteTone(TONE_OUTPUT_CHANNEL, 0);
 }
 
 

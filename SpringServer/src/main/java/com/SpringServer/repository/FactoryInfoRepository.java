@@ -23,6 +23,7 @@ public interface FactoryRepository extends JpaRepository<FactoryInfo, Timestamp>
     FactoryInfo findFirstByOrderByFactoryTemperatureAsc();
     FactoryInfo findFirstByOrderByFactoryHumidityAsc();
 
+    // 평균 온습도를 계산하는 메서드
     @Query("SELECT AVG(f.factoryTemperature) FROM FactoryInfo f")
     Double getAverageTemperature();
 

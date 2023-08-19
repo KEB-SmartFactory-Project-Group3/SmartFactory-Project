@@ -1,9 +1,8 @@
 package com.SpringServer.controller;
 
 import com.SpringServer.model.entity.FactoryInfo;
-import com.SpringServer.repository.FactoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import com.SpringServer.service.FactoryInfoService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,19 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/factoryinfo")
 public class FactoryInfoController {
 
-    public final FactoryRepository factoryRepository;
-
-    @Autowired
-    public FactoryInfoController(FactoryRepository factoryRepository) {
-        this.factoryRepository = factoryRepository;
-    }
+    private final FactoryInfoService factoryInfoService;
 
     @PostMapping("/data")
     public ResponseEntity<?> saveMachineData(@RequestBody FactoryInfo factoryInfo) {
-        factoryRepository.save(factoryInfo);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return  ResponseEntity.ok(factoryInfoService.saveFactoryInfo(factoryInfo));
     }
 }
