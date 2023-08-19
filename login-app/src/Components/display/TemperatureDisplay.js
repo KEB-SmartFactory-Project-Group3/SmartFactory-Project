@@ -1,9 +1,11 @@
 import React, { useState, useEffect }  from 'react';
 import { Box, Typography, CircularProgress, Dialog, DialogTitle , DialogActions} from '@mui/material';
 import DeviceThermostatIcon from '@mui/icons-material/DeviceThermostat'; // 이 부분은 실제 아이콘 import 경로에 따라 변경해주세요.
-import { purple, pink , red ,yellow} from '@mui/material/colors';
+import { purple, pink , red ,yellow, blue} from '@mui/material/colors';
 import WarningIcon from '@mui/icons-material/Warning';
 import Button from '@mui/material/Button';
+import HighTemperatureWarning from '../alert/HighTemperatureWarning';
+import LowTemperatureWarning from '../alert/LowTemperatureWarning';
 
 function getTemperatureColor(value) {
   if (value <= 33) {
@@ -18,12 +20,22 @@ function getTemperatureColor(value) {
 function TemperatureDisplay({ factoryTemperature, CustomCircularProgress }) {
 
   const [isWarningOpen, setIsWarningOpen] = useState(false)
+  const [isLowTempWarningOpen, setIsLowTempWarningOpen] = useState(false)
+  const [isInitialRender, setIsInitialRender] = useState(true) //초기 렌더링 상태
 
   useEffect(() => {
-    if (factoryTemperature >= 25) {
-      setIsWarningOpen(true)
+    if (isInitialRender) {
+      setIsInitialRender(false);
+      return;  // 초기 렌더링이면 실행 안 함
     }
-  }, [factoryTemperature])
+  
+    if (factoryTemperature >= 30) {
+      setIsWarningOpen(true);
+    } else if (factoryTemperature <= 18) {  
+      setIsLowTempWarningOpen(true);
+    }
+  }, [factoryTemperature]);
+  
 
   return (
     <Box display="flex">
@@ -80,56 +92,10 @@ function TemperatureDisplay({ factoryTemperature, CustomCircularProgress }) {
         </Box>
       </Box>
 
-      {/* <Dialog open={isWarningOpen}  maxWidth="sm" fullWidth={true} >
-          <DialogTitle sx={{ color: '#FFF' ,display: 'flex',
-        alignItems: 'center'}}>
-            <WarningIcon sx={{ color: yellow[500] , fontSize: 40 , marginRight: 1 }}/>
-            <Typography variant="h5" component="span" fontWeight="bold">
-              Warning
-          </Typography>
-          </DialogTitle>
-          <Typography variant="h6" align="center" sx={{ padding: 2 }}>
-              온도가 너무 높습니다!
-          </Typography>
-          <DialogActions>
-              <Button onClick={() => setIsWarningOpen(false)} color="primary">
-                  Cancel
-              </Button>
-          </DialogActions>
-      </Dialog> */}
+      <HighTemperatureWarning isOpen={isWarningOpen} onClose={() => setIsWarningOpen(false)} />
+      <LowTemperatureWarning isOpen={isLowTempWarningOpen} onClose={() => setIsLowTempWarningOpen(false)} />
+ 
 
-      <Dialog 
-            open={isWarningOpen} 
-            maxWidth="sm" 
-            fullWidth={true} 
-            PaperProps={{
-                style: {
-                    backgroundColor: 'rgba(255, 255, 255, 0.8)',  // white with opacity
-                    backdropFilter: 'blur(5px)',  // blur effect
-                    borderRadius: '15px',  // border radius
-                    border: '1px solid rgba(0, 0, 0, 0.12)'  // border line with some opacity
-                }
-            }}
-        >
-          <DialogTitle sx={{ 
-              color: '#FFF',
-              display: 'flex',
-              alignItems: 'center'
-          }}>
-              <WarningIcon sx={{ color: yellow[500], fontSize: 40, marginRight: 1 }}/>
-              <Typography variant="h5" component="span" fontWeight="bold">
-                  Warning
-              </Typography>
-          </DialogTitle>
-          <Typography variant="h6" align="center" sx={{ padding: 2 }}>
-              온도가 너무 높습니다!
-          </Typography>
-          <DialogActions>
-              <Button onClick={() => setIsWarningOpen(false)} color="primary">
-                  Cancel
-              </Button>
-          </DialogActions>
-      </Dialog>
 
     </Box>
   );
