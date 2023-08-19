@@ -17,6 +17,7 @@ app = Flask(__name__)
 # React server & CORS
 # CORS(app, resources={r"*": {"origins": ["http://165.246.116.73:3001", "http://localhost:3000", "http://192.168.43.142"]}})
 CORS(app, resources={r"*": {"origins": "*"}})
+# CORS(app, resources={r"*": {"origins": ["http://192.168.43.192:3002"]}})
 
 arduino_url = 'http://192.168.43.101/'  # Arduino webserver URL
 
@@ -33,6 +34,7 @@ count = 0
 defective_count = 0
 count_from_arduino = 0
 timestamp_from_arduino = None
+defective_count_from_arduino = 0
 pre_count = 0
 serial_counter = 1  # 물건의 일련번호 생성 (시리얼 넘버의 시작 숫자를 설정)
 
@@ -95,22 +97,25 @@ def send_to_backend(serial_number, object_status, defective_count, count, timest
 
 @app.route('/count', methods=['POST'])
 def receive_data_from_arduino():
-    global count_from_arduino, timestamp_from_arduino
+    global count_from_arduino, timestamp_from_arduino, defective_count, defective_count_from_arduino
 
     json_data = request.get_json()
 
     count_from_arduino = json_data['count']
     timestamp_from_arduino = json_data['times']
+    # defective_count_from_arduino = json_data['defective_count']
 
     print("count_from_arduino: ", count_from_arduino)
     # print(timestamp_from_arduino)
 
-    return jsonify({"message": "success"}), 200
+    return jsonify({"defective_count": defective_count}), 200
 
 
-def wrapped_get_live_transmission():
+def continuous_object_detection_and_processing():
     global last_time, latest_detected_object_names, latest_detected_time, first_detection_done, count, defective_count
     global count_from_arduino, timestamp_from_arduino, pre_count
+
+    # defective_count = 0
 
     while True:
         # 이미지 가져오기 및 처리
@@ -139,19 +144,21 @@ def wrapped_get_live_transmission():
             object_status = "Normal"
         # print(object_status)
 
-        if pre_count != 0 and count_from_arduino == 1:
-            defective_count = 0
+        if count_from_arduino != pre_count:
+            # defective_count = defective_count_from_arduino
+            if pre_count != 0 and count_from_arduino == 1:
+                defective_count = 0
 
-        if count_from_arduino > pre_count:
-            # 일련번호 생성
-            serial_number = generate_serial_number(object_status, count_from_arduino)
             # Defective이면 defective_count를 증가시킴.
             if object_status == "Defective":
                 defective_count += 1
-            # 데이터를 백엔드 서버로 전송
             if object_status == "normal":
                 object_status = "Normal"
 
+            # 일련번호 생성
+            serial_number = generate_serial_number(object_status, count_from_arduino)
+
+            # 데이터를 백엔드 서버로 전송
             response = send_to_backend(serial_number, object_status, defective_count, count_from_arduino, timestamp_from_arduino)
             # print(response)
             print("Backend Response:", response.text) # 응답을 콘솔에 출력
@@ -160,17 +167,17 @@ def wrapped_get_live_transmission():
 
         last_time = current_time
 
-    # encoded_img = process_and_encode_image(results)
-    # return jsonify({'image': encoded_img})
 
-# @app.route('/get-live-transmission', methods=['GET'])
-# def get_live_transmission():
-#     t = Thread(target=wrapped_get_live_transmission)
-#     t.start()
-#     return "OK", 200
+@app.route('/get-live-transmission', methods=['GET'])
+def get_live_transmission():
+    sharpened_image = fetch_and_process_image()
+    results = model(sharpened_image, size=640)
+    encoded_img = process_and_encode_image(results)
+
+    return jsonify({'image': encoded_img})
 
 
 if __name__ == '__main__':
-    t = Thread(target=wrapped_get_live_transmission)
+    t = Thread(target=continuous_object_detection_and_processing)
     t.start()  # 함수를 별도의 스레드에서 실행
-    app.run(host='0.0.0.0', debug=False, port=5000, threaded=True)
+    app.run(host='0.0.0.0', debug=True, port=5000, threaded=True)
