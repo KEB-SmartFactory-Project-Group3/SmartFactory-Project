@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ButtonResponse {
+public class StringResultResponse {
     private String result;
 }

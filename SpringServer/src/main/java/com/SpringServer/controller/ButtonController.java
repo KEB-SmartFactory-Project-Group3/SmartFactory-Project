@@ -2,7 +2,7 @@ package com.SpringServer.controller;
 
 
 import com.SpringServer.model.dto.ButtonRequest;
-import com.SpringServer.model.dto.ButtonResponse;
+import com.SpringServer.model.dto.StringResultResponse;
 import com.SpringServer.model.dto.GoalDTO;
 import com.SpringServer.service.ButtonService;
 import com.SpringServer.service.GoalService;
@@ -24,13 +24,13 @@ public class ButtonController {
     private final GoalService goalService;
 
     @PostMapping("/stopbutton")
-    public ResponseEntity<ButtonResponse> stopMachine(@RequestBody ButtonRequest request){
+    public ResponseEntity<StringResultResponse> stopMachine(@RequestBody ButtonRequest request){
         buttonService.saveStopReason(request);
         return  ResponseEntity.ok(buttonService.controlMachineState(request));
     }
 
     @PostMapping("/button")
-    public ResponseEntity<ButtonResponse> controlMachine(@RequestBody ButtonRequest request){
+    public ResponseEntity<StringResultResponse> controlMachine(@RequestBody ButtonRequest request){
         return  ResponseEntity.ok(buttonService.controlMachineState(request));
     }
 

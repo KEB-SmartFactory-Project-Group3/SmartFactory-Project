@@ -5,14 +5,14 @@ import com.SpringServer.model.entity.FactoryInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @EnableJpaRepositories
 @Repository
-public interface FactoryRepository extends JpaRepository<FactoryInfo, Timestamp> {
+public interface FactoryInfoRepository extends JpaRepository<FactoryInfo, Timestamp> {
     FactoryInfo findFirstByOrderByTimesDesc();
 
     // 최대 온도 및 습도를 조회하는 메서드
@@ -29,4 +29,6 @@ public interface FactoryRepository extends JpaRepository<FactoryInfo, Timestamp>
 
     @Query("SELECT AVG(f.factoryHumidity) FROM FactoryInfo f")
     Double getAverageHumidity();
+
+    List<FactoryInfo> findByIsValidFalse();
 }

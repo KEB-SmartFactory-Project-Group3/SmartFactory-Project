@@ -28,6 +28,9 @@ public class AuthenticationService {
         var user = userRepository.findById(request.getId())
                 .orElseThrow();
         var jwtToken = jwtService.generateToken(user);
+        // refresh token 발급--------------------------------------------
+//        var refreshToken = jwtService.generateRefreshToken(user);
+        // refresh token AuthLoginResponse에 추가?----------------------------
         return AuthLoginResponse.builder()
                 .token(jwtToken)
                 .name(user.getName())
@@ -47,4 +50,22 @@ public class AuthenticationService {
                 .name(user.getName())
                 .build();
     }
+
+// ---------------------- refreshToken 발급 -----------------------------------------------------
+//    public RefreshTokenResponse refreshToken(RefreshTokenRequest refreshTokenRequest){
+//        authenticationManager.authenticate(
+//                new UsernamePasswordAuthenticationToken(
+//                        request.getId(),
+//                        request.getPassword()
+//                )
+//        );
+//        var user = userRepository.findById(request.getId())
+//                .orElseThrow();
+//        var jwtToken = jwtService.generateToken(user);
+//        return RefreshTokenResponse.builder()
+//                .token(jwtToken)
+//                .refreshToken(refreshToken)
+//                .build();
+//    }
+// ----------------------------------------------------------------------------------------------
 }

@@ -1,6 +1,5 @@
 package com.SpringServer.controller;
 
-import com.SpringServer.model.entity.OperationStop;
 import com.SpringServer.model.entity.Products;
 import com.SpringServer.service.ProductsService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +11,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/products")
-public class ProductsController {
+public class ProductsSaveController {
 
     private final ProductsService productsService;
 

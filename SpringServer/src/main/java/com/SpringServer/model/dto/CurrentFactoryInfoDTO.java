@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FactoryInfoDTO {
+public class CurrentFactoryInfoDTO {
 
     private double factoryTemperature;
     private int factoryHumidity;

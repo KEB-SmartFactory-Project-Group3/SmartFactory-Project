@@ -1,7 +1,7 @@
 package com.SpringServer.service;
 
 import com.SpringServer.model.dto.ButtonRequest;
-import com.SpringServer.model.dto.ButtonResponse;
+import com.SpringServer.model.dto.StringResultResponse;
 import com.SpringServer.model.entity.OperationStop;
 import com.SpringServer.repository.OperationStopRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class ButtonService {
         operationStopRepository.save(stopReason);
     }
 
-    public ButtonResponse controlMachineState(ButtonRequest request){
+    public StringResultResponse controlMachineState(ButtonRequest request){
         RestTemplate restTemplate = new RestTemplate();
         String jsonResponse = null;
         String machineControlUrl = null;
@@ -54,7 +54,7 @@ public class ButtonService {
             if (message.equals("Machine Reset")){
                 dbResetService.resetExceptSpecificTable();
             }
-            return ButtonResponse.builder()
+            return StringResultResponse.builder()
                     .result(message)
                     .build();
         } catch (RestClientException e) {

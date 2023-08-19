@@ -1,6 +1,7 @@
 package com.SpringServer.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -24,4 +25,7 @@ public class FactoryInfo {
     private Timestamp times;
     private double factoryTemperature;
     private int factoryHumidity;
+
+    @JsonProperty("isValid")
+    private boolean isValid;
 }
