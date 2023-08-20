@@ -7,7 +7,7 @@ import { StyledBackground, StyledFactor, LandStyledFactor } from '../stylescomp/
 import { CSSTransition } from 'react-transition-group';
 import { FadeBox } from '../stylescomp/FadeinStyle';
 import {GridItemStyled, SubmitContainer, StyledTextField, ItemStyledChart, GridItemStyledChart, ItemStyledCount, RateLabel, DigitalClockStyle, ItemStyledTime, ButtonStyled, GridContainerStyled, GridItemStyledTime} from '../stylescomp/MachineStyle';
-import { TempGridStyled,TempItemStyled, TempHumItemStyled } from '../stylescomp/TemperatureStyle';
+import { TempGridStyled,TempItemStyled, TempHumItemStyled, TempHumDBStyled } from '../stylescomp/TemperatureStyle';
 import { LandGrid, LandItem, LandItemVision, PredictCountItem, TitrationItem, LandDigitalClockStyle } from '../stylescomp/LandingStyle';
 import TargetDonutChart from '../Chart/TargetCountChart';
 import BasicBars from '../Chart/CountCompare';
@@ -19,6 +19,12 @@ import useMachineRate from '../hooks/useMachineRate';
 import Icon from '@mui/material/Icon';
 import { Typography } from '@mui/material';
 import customMachine from '../hooks/customMachine'
+import useTemperature from '../hooks/useTemperature';
+import TemperatureDisplay from '../display/TemperatureDisplay';
+import { CircularProgress} from '@mui/material';
+import HumidityDisplay from '../display/HumidityDisplay';
+import LiveTransmissionComponent from './LiveTransmissionComponent';
+import TemperatureData from '../Data/TemperatureData';
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -42,6 +48,7 @@ function LandingPage() {
     const {count, defectiveCount, targetCount} = useMachineCount()
     const {nowRate} = useMachineRate()
     const {elapsedTime} = customMachine()
+    const {factoryTemperature,  factoryHumidity } = useTemperature()
 
     // 남은 예상 시간, 남은 생산량 로컬 스토리지에서 가져옴
     const rawRemainingItems = localStorage.getItem("remainingItems")
@@ -60,7 +67,7 @@ function LandingPage() {
       <StyledFactor>
       <CSSTransition in={true} timeout={1000} classNames="fade" appear>
       <FadeBox sx={{flexGrow:1}}>
-      <Grid container spacing={2} sx={{ background: 'transparent', border: 'none' , boxShadow: 'none',}}>
+      <Grid container spacing={2} sx={{ background: 'transparent', border: 'none' , boxShadow: 'none'}}>
 
         <LandGrid item xs={12} md={2}>
           <ItemStyledCount borderColor='#651fff'>
@@ -98,20 +105,29 @@ function LandingPage() {
           </ItemStyledCount>
         </LandGrid>
 
-        {/* 컴퓨터 비전 */}
-        <LandGrid item xs={12} md={5}>
-          <LandItem>
-            컴퓨터 비전
-          </LandItem>
-        </LandGrid>
+        <TempGridStyled item xs={6} md={2.5}>
+        <TempItemStyled>
+          {/* 현재온도 */}
+          <TemperatureDisplay factoryTemperature={factoryTemperature} CustomCircularProgress={CircularProgress} />
+        </TempItemStyled>
+      </TempGridStyled>
 
+      <TempGridStyled item xs={6} md={2.5}>
+        <TempItemStyled>
+          {/* 현재 습도 */}
+          <HumidityDisplay factoryHumidity={factoryHumidity} CustomCircularProgress={CircularProgress} />
+        </TempItemStyled>
+      </TempGridStyled>
+
+    
         {/* 다음 줄: 기계 차트 */}
         <TempGridStyled item xs={12} md={5}>
           <TempItemStyled>
             기계 차트
+            <RealTimeLineChart targetCount={targetCount}/>
           </TempItemStyled>
         </TempGridStyled>
-
+     
         {/* 다음 줄: 가동 시간 */}
         <TempGridStyled item xs={12} md={2}>
           <TempItemStyled borderColor='#0f0'>
@@ -121,43 +137,13 @@ function LandingPage() {
             </LandDigitalClockStyle>
           </TempItemStyled>
         </TempGridStyled>
-       
 
-      {/* 다음줄 */}
-
-      <GridItemStyled item xs={12} md={6}>
-        <TempItemStyled>
-          실시간 온도 그래프
-          <TempHumidityChart />
-        </TempItemStyled>
-      </GridItemStyled>
-
-      <GridItemStyled item xs={6} md={2}>
-        <TempItemStyled>
-          현재온도
-        </TempItemStyled>
-      </GridItemStyled>
-
-      <GridItemStyled item xs={6} md={2}>
-        <TempItemStyled>
-          현재 습도
-        </TempItemStyled>
-      </GridItemStyled>
-
-      <GridItemStyled item xs={12} md={2}>
-        <Grid container direction="column">
-          <Grid item xs={6}>
-            <TitrationItem>
-              적정 온도
-            </TitrationItem>
-          </Grid>
-          <Grid item xs={6}>
-            <TitrationItem>
-              적정 습도
-            </TitrationItem>
-          </Grid>
-        </Grid>
-      </GridItemStyled>
+       <LandGrid item xs={12} md={5} >
+          <LandItem>
+            컴퓨터 비전
+            <LiveTransmissionComponent />
+          </LandItem>
+        </LandGrid>
 
       </Grid>
       </FadeBox>

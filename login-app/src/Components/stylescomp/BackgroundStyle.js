@@ -15,6 +15,7 @@ export const StyledFactor = styled.div`
   width: 97vw;
   border-radius: 2rem;
   // border: 1px solid white;
+  
 
   // 큰 화면일 때 스크롤바 숨김
   ::-webkit-scrollbar {
@@ -22,6 +23,13 @@ export const StyledFactor = styled.div`
   }
   -ms-overflow-style: none;  
   scrollbar-width: none;
+
+  // 2500*1000 사이즈일 때의 스타일
+  @media screen and (min-width: 2500px) and (min-height: 1000px) {
+    height: 89vh ;
+    width: 55vw ;
+
+  }
 
   overflow: auto;
   overflow-x: hidden;
@@ -35,3 +43,5 @@ export const StyledFactor = styled.div`
     scrollbar-width: auto; 
   }
 `;
+
+
