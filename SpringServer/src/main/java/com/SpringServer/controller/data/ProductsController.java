@@ -1,5 +1,6 @@
 package com.SpringServer.controller.data;
 
+import com.SpringServer.model.dto.StringResultResponse;
 import com.SpringServer.model.dto.data.CurrentProductsDTO;
 import com.SpringServer.model.entity.Products;
 import com.SpringServer.service.data.ProductsService;
@@ -17,7 +18,7 @@ public class ProductsController {
     private final ProductsService productsService;
 
     @PostMapping("/save")
-    public ResponseEntity<String> receiveData(@RequestBody Products products) {
+    public ResponseEntity<StringResultResponse> receiveData(@RequestBody Products products) {
         return ResponseEntity.ok(productsService.saveProducts(products));
     }
 

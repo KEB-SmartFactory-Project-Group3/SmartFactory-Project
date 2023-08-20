@@ -26,7 +26,14 @@ public class AuthenticationController {
     public ResponseEntity<AuthLoginResponse> login(@RequestBody AuthenticationRequest request){
         return  ResponseEntity.ok(service.authenticate(request));
     }
-// 추가할 일 db에 refresh 토큰 저장, 관리 -------------------------------------------------------------------------------------------------------
+
+    @GetMapping("/logout")
+    public ResponseEntity<?> logout(){
+
+        return ResponseEntity.ok("logout");
+    }
+
+    // 추가할 일 db에 refresh 토큰 저장, 관리 -----------------------------------------------------------------
 //    @PostMapping("/refresh")
 //    public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
 //        // 유효한 갱신 토큰인지 확인 및 사용자 정보 로드
@@ -36,10 +43,4 @@ public class AuthenticationController {
 //        return ResponseEntity.ok(new AuthenticationResponse(newAccessToken, refreshTokenRequest.getRefreshToken()));
 //    }
 // -------------------------------------------------------------------------------------------------------
-
-    @GetMapping("/logout")
-    public ResponseEntity<?> logout(){
-
-        return ResponseEntity.ok("logout");
-    }
 }

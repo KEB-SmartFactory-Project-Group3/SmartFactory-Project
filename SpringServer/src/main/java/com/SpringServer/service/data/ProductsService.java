@@ -1,5 +1,6 @@
 package com.SpringServer.service.data;
 
+import com.SpringServer.model.dto.StringResultResponse;
 import com.SpringServer.model.dto.data.CurrentProductsDTO;
 import com.SpringServer.model.entity.Products;
 import com.SpringServer.repository.ProductsRepository;
@@ -14,8 +15,9 @@ import java.util.List;
 public class ProductsService {
 
     private final ProductsRepository productsRepository;
+    private final GoalService goalService;
 
-    public String saveProducts(Products products) {
+    public StringResultResponse saveProducts(Products products) {
         var product = Products.builder()
                 .serialNumber(products.getSerialNumber())
                 .count(products.getCount())
@@ -23,11 +25,15 @@ public class ProductsService {
                 .defectiveCount(products.getDefectiveCount())
                 .state(products.getState())
                 .build();
-        productsRepository.save(product);
-        return "db 저장완료";
+        try{
+            productsRepository.save(product);
+            return StringResultResponse.builder()
+                .result("products 저장이 완료되었습니다.")
+                .build();
+        } catch (Exception e) {
+            throw new IllegalArgumentException("products 저장에 실패했습니다.");
+        }
     }
-
-    private final GoalService goalService;
 
 
     public CurrentProductsDTO getProductsCount(){
