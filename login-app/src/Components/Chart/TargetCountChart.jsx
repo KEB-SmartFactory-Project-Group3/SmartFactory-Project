@@ -3,64 +3,48 @@ import { PieChart, Pie, Cell } from 'recharts';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import useMachineRate from '../hooks/useMachineRate';
+import LinearProgress from '@mui/material/LinearProgress';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 
-function TargetDonutChart() {
-    const {nowRate} = useMachineRate()
-    const [open, setOpen] = useState(false)
-    // const percentage = parseFloat((nowRate * 100).toFixed(1));
-    const percentage = nowRate
+function LinearProgressWithLabel(props) {
+    return (
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ width: '100%', mr: 1 }}>
+                <LinearProgress variant="determinate" {...props} />
+            </Box>
+            <Box sx={{ minWidth: 35 }}>
+                <Typography variant="body2" color="text.secondary">{`${Math.round(
+                    props.value,
+                )}%`}</Typography>
+            </Box>
+        </Box>
+    );
+}
+
+export default function TargetDonutChart() {
+    const { nowRate: progress } = useMachineRate();
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
-        if (nowRate >= 90 && !open) {
+        if (progress >= 90 && !open) {
             setOpen(true);
         }
-    }, [nowRate]);
-
-    const getAchievedColor = (percentage) => {
-        if (percentage < 50) return '#f50057'; //yellow
-        if (percentage < 70) return '#b388ff'; // green
-        return '#f50057'; // red
-    };
-
-    // const data = [
-    //     { name: 'Achieved', value: percentage },
-    //     { name: 'Remaining', value: 100 - percentage }
-    // ];
-
-    const data = [
-        { name: 'Achieved', value: percentage, color: getAchievedColor(percentage) },
-        { name: 'Remaining', value: 100 - percentage, color: '#b388ff' }
-    ];
-
-    // const COLORS = ['#f50057', '#b388ff']; //Achieved, Remaining
+    }, [progress]);
 
     return (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-        <PieChart width={200} height={180}>
-                <Pie
-                    data={data}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={50}
-                    outerRadius={70}
-                    fill="#8884d8"
-                    paddingAngle={5}
-                    dataKey="value"
-                >
-                    {data.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} style={{ filter: 'brightness(1.2)' }} />
-                    ))}
-                </Pie>
-            </PieChart>
-            <div style={{ position: 'absolute',
-                          top: '50%', 
-                          left: '50%', 
-                          transform: 'translate(-50%, -50%)', 
-                          fontSize: '20px', 
-                          fontWeight: 'bold',
-                          color: percentage < 50 ? 'yellow' : 
-                                 percentage < 70 ? 'green' : 'red'}}>
-                {percentage}%
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+            <Box sx={{ width: '100%', marginBottom: '20px' }}>
+                <LinearProgressWithLabel value={progress} />
+            </Box>
+
+            <div style={{ fontSize: '16px', fontWeight: 'bold', textAlign: 'center' }}>
+                도달률 
+                <div style={{ fontSize: '20px', 
+                              color: progress < 50 ? 'yellow' : 
+                                     progress < 70 ? 'green' : 'red' }}>
+                    {progress}%
+                </div>
             </div>
 
             <Snackbar open={open} autoHideDuration={6000} onClose={() => setOpen(false)}>
@@ -68,9 +52,7 @@ function TargetDonutChart() {
                     도달률이 90% 이상입니다!
                 </Alert>
             </Snackbar>
-       
         </div>
     );
 }
 
-export default TargetDonutChart;
