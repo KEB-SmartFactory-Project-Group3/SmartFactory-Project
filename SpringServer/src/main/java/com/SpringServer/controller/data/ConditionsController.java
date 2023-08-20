@@ -1,9 +1,9 @@
 package com.SpringServer.controller.data;
 
-import com.SpringServer.model.dto.data.CurrentConditionDTO;
-import com.SpringServer.model.dto.data.ConditionStatisticsDTO;
-import com.SpringServer.model.entity.Condition;
-import com.SpringServer.service.data.ConditionService;
+import com.SpringServer.model.dto.data.CurrentConditionsDTO;
+import com.SpringServer.model.dto.data.ConditionsStatisticsDTO;
+import com.SpringServer.model.entity.Conditions;
+import com.SpringServer.service.data.ConditionsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,28 +12,28 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/condition")
-public class ConditionController {
+@RequestMapping("/conditions")
+public class ConditionsController {
 
-    private final ConditionService conditionService;
+    private final ConditionsService conditionsService;
 
     @PostMapping("/save")
-    public ResponseEntity<?> saveMachineData(@RequestBody Condition condition) {
-        return  ResponseEntity.ok(conditionService.saveCondition(condition));
+    public ResponseEntity<?> saveMachineData(@RequestBody Conditions conditions) {
+        return  ResponseEntity.ok(conditionsService.saveConditions(conditions));
     }
 
     @GetMapping("/current")
-    public ResponseEntity<CurrentConditionDTO> displayConditions(){
-        return ResponseEntity.ok(conditionService.getCurrentCondition());
+    public ResponseEntity<CurrentConditionsDTO> displayConditions(){
+        return ResponseEntity.ok(conditionsService.getCurrentConditions());
     }
 
     @GetMapping("/statistics")
-    public ResponseEntity<ConditionStatisticsDTO> displayStatistics(){
-        return ResponseEntity.ok(conditionService.getStatisticsTemperatureHumidityData());
+    public ResponseEntity<ConditionsStatisticsDTO> displayStatistics(){
+        return ResponseEntity.ok(conditionsService.getStatisticsTemperatureHumidityData());
     }
 
     @GetMapping("/outlierlist")
-    public ResponseEntity<List<Condition>> getAllOutliers() {
-        return ResponseEntity.ok(conditionService.findAllOutliers());
+    public ResponseEntity<List<Conditions>> getAllOutliers() {
+        return ResponseEntity.ok(conditionsService.findAllOutliers());
     }
 }

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ConditionStatisticsDTO {
+public class ConditionsStatisticsDTO {
     private Double maxTemperature;
     private Double minTemperature;
     private Double avgTemperature;

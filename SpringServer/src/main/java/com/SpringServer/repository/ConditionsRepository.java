@@ -1,7 +1,7 @@
 package com.SpringServer.repository;
 
 
-import com.SpringServer.model.entity.Condition;
+import com.SpringServer.model.entity.Conditions;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -12,23 +12,23 @@ import java.util.List;
 
 @EnableJpaRepositories
 @Repository
-public interface ConditionRepository extends JpaRepository<Condition, Timestamp> {
-    Condition findFirstByOrderByTimesDesc();
+public interface ConditionsRepository extends JpaRepository<Conditions, Timestamp> {
+    Conditions findFirstByOrderByTimesDesc();
 
     // 최대 온도 및 습도를 조회하는 메서드
-    Condition findFirstByOrderByFactoryTemperatureDesc();
-    Condition findFirstByOrderByFactoryHumidityDesc();
+    Conditions findFirstByOrderByFactoryTemperatureDesc();
+    Conditions findFirstByOrderByFactoryHumidityDesc();
 
     // 최소 온도 및 습도를 조회하는 메서드
-    Condition findFirstByOrderByFactoryTemperatureAsc();
-    Condition findFirstByOrderByFactoryHumidityAsc();
+    Conditions findFirstByOrderByFactoryTemperatureAsc();
+    Conditions findFirstByOrderByFactoryHumidityAsc();
 
     // 평균 온습도를 계산하는 메서드
-    @Query("SELECT AVG(f.factoryTemperature) FROM Condition f")
+    @Query("SELECT AVG(f.factoryTemperature) FROM Conditions f")
     Double getAverageTemperature();
 
-    @Query("SELECT AVG(f.factoryHumidity) FROM Condition f")
+    @Query("SELECT AVG(f.factoryHumidity) FROM Conditions f")
     Double getAverageHumidity();
 
-    List<Condition> findByIsValidFalse();
+    List<Conditions> findByIsValidFalse();
 }

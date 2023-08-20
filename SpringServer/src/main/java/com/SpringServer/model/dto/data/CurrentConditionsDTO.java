@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CurrentConditionDTO {
+public class CurrentConditionsDTO {
 
     private double factoryTemperature;
     private int factoryHumidity;

@@ -17,7 +17,6 @@ public class ButtonService {
     private final GoalService goalService;
     private final DBResetService dbResetService;
     private final String MachineURL = "http://192.168.43.142";
-    private final String CamURL = "http://192.168.43.9:5000";
     private final OperationStopRepository operationStopRepository;
 
     public void saveStopReason(ButtonRequest request){
@@ -40,9 +39,7 @@ public class ButtonService {
         switch (request.getState()) {
             case "stop" -> machineControlUrl = MachineURL + "/machineOff";
             case "start" -> machineControlUrl = MachineURL + "/machineOn";
-            case "reset" -> {
-                machineControlUrl = MachineURL + "/machineReset";
-            }
+            case "reset" -> machineControlUrl = MachineURL + "/machineReset";
             default -> throw new IllegalArgumentException("Machine command 실패");
         }
 

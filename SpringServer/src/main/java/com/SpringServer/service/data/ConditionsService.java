@@ -1,11 +1,11 @@
 package com.SpringServer.service.data;
 
 
-import com.SpringServer.model.dto.data.CurrentConditionDTO;
-import com.SpringServer.model.dto.data.ConditionStatisticsDTO;
+import com.SpringServer.model.dto.data.CurrentConditionsDTO;
+import com.SpringServer.model.dto.data.ConditionsStatisticsDTO;
 import com.SpringServer.model.dto.StringResultResponse;
-import com.SpringServer.model.entity.Condition;
-import com.SpringServer.repository.ConditionRepository;
+import com.SpringServer.model.entity.Conditions;
+import com.SpringServer.repository.ConditionsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,19 +13,19 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ConditionService {
+public class ConditionsService {
 
-    private final ConditionRepository conditionRepository;
+    private final ConditionsRepository conditionsRepository;
 
-    public StringResultResponse saveCondition(Condition condition) {
-        var conditionData = Condition.builder()
-                .factoryHumidity(condition.getFactoryHumidity())
-                .factoryTemperature(condition.getFactoryTemperature())
-                .times(condition.getTimes())
-                .isValid(condition.isValid())
+    public StringResultResponse saveConditions(Conditions conditions) {
+        var condition = Conditions.builder()
+                .factoryHumidity(conditions.getFactoryHumidity())
+                .factoryTemperature(conditions.getFactoryTemperature())
+                .times(conditions.getTimes())
+                .isValid(conditions.isValid())
                 .build();
         try {
-            conditionRepository.save(conditionData);
+            conditionsRepository.save(condition);
             return StringResultResponse.builder()
                     .result("온습도 저장이 완료되었습니다.")
                     .build();
@@ -34,35 +34,35 @@ public class ConditionService {
         }
     }
 
-    public CurrentConditionDTO getCurrentCondition(){
-        Condition latestRecode = conditionRepository.findFirstByOrderByTimesDesc();
+    public CurrentConditionsDTO getCurrentConditions(){
+        Conditions latestRecode = conditionsRepository.findFirstByOrderByTimesDesc();
         if (latestRecode != null){
             double latestTemperature = latestRecode.getFactoryTemperature();
             int latestHumidity = latestRecode.getFactoryHumidity();
-            return CurrentConditionDTO.builder()
+            return CurrentConditionsDTO.builder()
                     .factoryTemperature(latestTemperature)
                     .factoryHumidity(latestHumidity)
                     .build();
         }
-        return CurrentConditionDTO.builder()
+        return CurrentConditionsDTO.builder()
                 .factoryTemperature(0.0)
                 .factoryHumidity(0)
                 .build();
     }
 
-    public ConditionStatisticsDTO getStatisticsTemperatureHumidityData() {
-        Double maxTemperature = conditionRepository.findFirstByOrderByFactoryTemperatureDesc().getFactoryTemperature();
-        Double minTemperature = conditionRepository.findFirstByOrderByFactoryTemperatureAsc().getFactoryTemperature();
-        int maxHumidity = conditionRepository.findFirstByOrderByFactoryHumidityDesc().getFactoryHumidity();
-        int minHumidity = conditionRepository.findFirstByOrderByFactoryHumidityAsc().getFactoryHumidity();
+    public ConditionsStatisticsDTO getStatisticsTemperatureHumidityData() {
+        Double maxTemperature = conditionsRepository.findFirstByOrderByFactoryTemperatureDesc().getFactoryTemperature();
+        Double minTemperature = conditionsRepository.findFirstByOrderByFactoryTemperatureAsc().getFactoryTemperature();
+        int maxHumidity = conditionsRepository.findFirstByOrderByFactoryHumidityDesc().getFactoryHumidity();
+        int minHumidity = conditionsRepository.findFirstByOrderByFactoryHumidityAsc().getFactoryHumidity();
 
-        Double RawAvgTemperature = conditionRepository.getAverageTemperature();
-        Double RawAvgHumidity = conditionRepository.getAverageHumidity();
+        Double RawAvgTemperature = conditionsRepository.getAverageTemperature();
+        Double RawAvgHumidity = conditionsRepository.getAverageHumidity();
 
         Double roundedAvgTemperature = Math.round(RawAvgTemperature * 10) / 10.0;
         Double roundedAvgHumidity = Math.round(RawAvgHumidity * 10) / 10.0;
 
-        return ConditionStatisticsDTO.builder()
+        return ConditionsStatisticsDTO.builder()
                 .maxHumidity(maxHumidity)
                 .minHumidity(minHumidity)
                 .avgHumidity(roundedAvgHumidity)
@@ -72,7 +72,7 @@ public class ConditionService {
                 .build();
     }
 
-    public List<Condition> findAllOutliers() {
-        return conditionRepository.findByIsValidFalse();
+    public List<Conditions> findAllOutliers() {
+        return conditionsRepository.findByIsValidFalse();
     }
 }
