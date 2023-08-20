@@ -228,9 +228,7 @@ function MachinePage() {
 
           <GridItemStyled item xs={12}> 
             <ItemCountDB borderColor='#ffeb3b'>
-            {/* <Typography variant="h6" sx={{marginBottom: '1rem'}}>
-              목표 생산량
-            </Typography> */}
+
             {submitted ? (
               <>
               <CSSTransition in={animateText} timeout={1000} classNames="fade" appear>

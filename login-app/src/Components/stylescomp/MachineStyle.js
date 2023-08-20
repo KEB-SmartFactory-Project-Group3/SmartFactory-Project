@@ -78,7 +78,7 @@ export const ItemStyledCount = styled.div`
   transition: background 0.3s, backdrop-filter 0.3s;
   padding: 1rem;
   width: 100%;
-  height: 23vh;
+  height: ${props => props.height || '23vh'};
   text-align: center; 
   cursor: pointer;
   overflow: hidden;
@@ -96,7 +96,7 @@ export const ItemCountDB = styled.div`
   margin: 5px 0; // 각 그리드 마진 조정
   border: 2px solid ${props => props.borderColor || 'white'};
   box-shadow: none; 
-  margin-top: 15px; 
+  margin-top: 25px; 
   border-radius: 5px; 
   background: ${props => props.background || 'rgba(255, 255, 255, 0.1)'};
   backdrop-filter: ${props => props.backdropFilter || 'blur(8px)'};
@@ -183,8 +183,12 @@ export const ProductionItemStyled = styled.div`
 `;
 export const SubmitContainer = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   width: 100%;
+  position: absolute; 
+  top: 18px; 
+  left: 150px; 
+
 `;
 
 export const StyledTextField = styled(TextField)`
@@ -220,7 +224,7 @@ export const DigitalClockStyle = styled(Typography)`
   font-family: 'Orbitron', sans-serif;
   background-color: #333;
   color: #0f0;
-  padding: 0.4rem 5rem; //상하 0.4 좌우 5
+  padding: 1rem 5rem; //상하 0.4 좌우 5
   border-radius: 5px;
   border: 3px solid #0f0;
   display: inline-block;
