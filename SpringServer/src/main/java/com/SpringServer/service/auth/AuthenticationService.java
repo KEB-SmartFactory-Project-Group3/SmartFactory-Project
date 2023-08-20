@@ -1,5 +1,6 @@
 package com.SpringServer.service.auth;
 
+import com.SpringServer.model.dto.StringResultResponse;
 import com.SpringServer.model.dto.auth.AuthenticationRequest;
 import com.SpringServer.model.dto.auth.AuthLoginResponse;
 import com.SpringServer.model.dto.auth.AuthRegisterRequest;
@@ -37,17 +38,20 @@ public class AuthenticationService {
                 .build();
     }
 
-    public AuthLoginResponse register(AuthRegisterRequest request) {
+    public StringResultResponse register(AuthRegisterRequest request) {
         var user = User.builder()
                 .id(request.getId())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .name(request.getName())
                 .build();
+        if(userRepository.findById(request.getId()).isPresent()){
+            return StringResultResponse.builder()
+                    .result("회원가입 실패")
+                    .build();
+        }
         userRepository.save(user);
-        var jwtToken = jwtService.generateToken(user);
-        return AuthLoginResponse.builder()
-                .token(jwtToken)
-                .name(user.getName())
+        return StringResultResponse.builder()
+                .result("회원가입 완료")
                 .build();
     }
 

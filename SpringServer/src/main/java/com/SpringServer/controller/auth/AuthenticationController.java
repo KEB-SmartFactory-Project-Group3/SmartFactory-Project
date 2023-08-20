@@ -1,5 +1,6 @@
 package com.SpringServer.controller.auth;
 
+import com.SpringServer.model.dto.StringResultResponse;
 import com.SpringServer.model.dto.auth.AuthenticationRequest;
 import com.SpringServer.model.dto.auth.AuthLoginResponse;
 import com.SpringServer.service.auth.AuthenticationService;
@@ -16,7 +17,7 @@ public class AuthenticationController {
     private final AuthenticationService service;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthLoginResponse> register(@RequestBody AuthRegisterRequest request){
+    public ResponseEntity<StringResultResponse> register(@RequestBody AuthRegisterRequest request){
         return  ResponseEntity.ok(service.register(request));
     }
 
