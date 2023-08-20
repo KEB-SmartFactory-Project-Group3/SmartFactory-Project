@@ -15,16 +15,17 @@ from threading import Thread
 app = Flask(__name__)
 
 # React server & CORS
-# CORS(app, resources={r"*": {"origins": ["http://165.246.116.73:3001", "http://localhost:3000", "http://192.168.43.142"]}})
-CORS(app, resources={r"*": {"origins": "*"}})
-# CORS(app, resources={r"*": {"origins": ["http://192.168.43.192:3002"]}})
+CORS(app, resources={r"*": {"origins": ["http://192.168.43.192:3004"]}})
 
-arduino_url = 'http://192.168.43.101/'  # Arduino webserver URL
+# Arduino webserver URL
+arduino_url = 'http://192.168.43.101/'
 
-# YOLOv5 모델 불러옴 (로컬에 저장된 best.pt 불러옴)
-model = torch.hub.load('ultralytics/yolov5', 'custom', path='C:/YOLOv5_model/best.pt')
-model.conf = 0.60  # 검출 임계값(Threshold) 설정
+# YOLOv5 모델 불러오기
+model = torch.hub.load('ultralytics/yolov5', 'custom', path='C:/YOLOv5_model/yolov5_cupramen_best.pt')
+# 검출 임계값(Threshold) 설정
+model.conf = 0.6
 
+# 물체 count를 위한 변수들
 last_time = 0
 print_interval = 3  # 출력 간격
 latest_detected_object_names = None  # 직전에 검출된 클래스 이름을 저장하기 위한 변수
@@ -39,7 +40,7 @@ pre_count = 0
 serial_counter = 1  # 물건의 일련번호 생성 (시리얼 넘버의 시작 숫자를 설정)
 
 
-def fetch_and_process_image():
+def fetch_and_process_image():  # 이미지를 아두이노 서버에서 불러와서 처리
     img_resp = urllib.request.urlopen(arduino_url + 'cam-hi.jpg')
     img_np = np.array(bytearray(img_resp.read()), dtype=np.uint8)
     img = cv2.imdecode(img_np, -1)
@@ -52,7 +53,7 @@ def fetch_and_process_image():
     return sharpened_image
 
 
-def process_and_encode_image(results):
+def process_and_encode_image(results):  # 양품과 불량품 객체를 검출해서 이미지에 적용
     # 객체 검출 결과를 영상에 표시
     detected_frame = results.render()
 
@@ -70,10 +71,9 @@ def process_and_encode_image(results):
     return encoded_img
 
 
-def generate_serial_number(most_common_name, count):
+def generate_serial_number(object_status, count):    # 물체가 양품인지 불량품인지에 따라 시리얼넘버 생성
 
-    # most_common_name에 따라 접두사 선택
-    if most_common_name == "Defective":
+    if object_status == "defective":
         prefix = 'AD'
     else:
         prefix = 'AN'
@@ -83,7 +83,7 @@ def generate_serial_number(most_common_name, count):
     return serial_number
 
 
-def send_to_backend(serial_number, object_status, defective_count, count, timestamp):
+def send_to_backend(serial_number, object_status, defective_count, count, timestamp):   # 스프링 백엔드 서버에 데이터 보냄
     backend_url = 'http://192.168.43.183:8080/products/save'
     payload = {'serialNumber': serial_number,
                'state': object_status,
@@ -96,26 +96,22 @@ def send_to_backend(serial_number, object_status, defective_count, count, timest
 
 
 @app.route('/count', methods=['POST'])
-def receive_data_from_arduino():
+def receive_data_from_arduino():    # 아두이노 ESP32 보드에서 물체 카운트 값과 타임스탬프 값을 가져옴
     global count_from_arduino, timestamp_from_arduino, defective_count, defective_count_from_arduino
 
     json_data = request.get_json()
 
     count_from_arduino = json_data['count']
     timestamp_from_arduino = json_data['times']
-    # defective_count_from_arduino = json_data['defective_count']
 
     print("count_from_arduino: ", count_from_arduino)
-    # print(timestamp_from_arduino)
 
     return jsonify({"defective_count": defective_count}), 200
 
 
-def continuous_object_detection_and_processing():
+def continuous_object_detection_and_processing():   # 물체를 인식하여 물체의 상태를 검출
     global last_time, latest_detected_object_names, latest_detected_time, first_detection_done, count, defective_count
     global count_from_arduino, timestamp_from_arduino, pre_count
-
-    # defective_count = 0
 
     while True:
         # 이미지 가져오기 및 처리
@@ -140,28 +136,22 @@ def continuous_object_detection_and_processing():
 
         if most_common:
             object_status = most_common[0][0]
-        else: # 빈 리스트의 경우 적절한 처리를 수행
-            object_status = "Normal"
-        # print(object_status)
+        else:
+            object_status = "normal"
 
         if count_from_arduino != pre_count:
-            # defective_count = defective_count_from_arduino
             if pre_count != 0 and count_from_arduino == 1:
                 defective_count = 0
 
-            # Defective이면 defective_count를 증가시킴.
-            if object_status == "Defective":
+            # 물체가 불량품이면 defective_count를 증가
+            if object_status == "defective":
                 defective_count += 1
-            if object_status == "normal":
-                object_status = "Normal"
 
             # 일련번호 생성
             serial_number = generate_serial_number(object_status, count_from_arduino)
 
             # 데이터를 백엔드 서버로 전송
             response = send_to_backend(serial_number, object_status, defective_count, count_from_arduino, timestamp_from_arduino)
-            # print(response)
-            print("Backend Response:", response.text) # 응답을 콘솔에 출력
 
             pre_count = count_from_arduino
 
@@ -169,9 +159,9 @@ def continuous_object_detection_and_processing():
 
 
 @app.route('/get-live-transmission', methods=['GET'])
-def get_live_transmission():
+def get_live_transmission():    # 리액트 프론트 서버에 이미지 전송
     sharpened_image = fetch_and_process_image()
-    results = model(sharpened_image, size=640)
+    results = model(sharpened_image, size=416)
     encoded_img = process_and_encode_image(results)
 
     return jsonify({'image': encoded_img})
