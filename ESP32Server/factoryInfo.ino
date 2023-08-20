@@ -58,7 +58,7 @@ void loop() {
   oled_display();
 
   unsigned long currentTime = millis();
-  if (currentTime - lastSendTime >= 1000) {
+  if (currentTime - lastSendTime >= 10000) {
     sendDataToServer();
     lastSendTime = currentTime;
   }
