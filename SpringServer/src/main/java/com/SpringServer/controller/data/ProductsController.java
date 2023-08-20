@@ -1,5 +1,6 @@
 package com.SpringServer.controller;
 
+import com.SpringServer.model.dto.CurrentCountDTO;
 import com.SpringServer.model.entity.Products;
 import com.SpringServer.service.ProductsService;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,11 @@ public class ProductsSaveController {
     @PostMapping("/save")
     public ResponseEntity<String> receiveData(@RequestBody Products products) {
         return ResponseEntity.ok(productsService.saveProducts(products));
+    }
+
+    @GetMapping("/current")
+    public ResponseEntity<CurrentCountDTO> displayMachineInfo(){
+        return ResponseEntity.ok(productsService.getProductsCount());
     }
 
     @GetMapping("/totallist")

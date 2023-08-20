@@ -58,7 +58,7 @@ void loop() {
   oled_display();
 
   unsigned long currentTime = millis();
-  if (currentTime - lastSendTime >= 10000) {
+  if (currentTime - lastSendTime >= 1000) {
     sendDataToServer();
     lastSendTime = currentTime;
   }
@@ -75,7 +75,7 @@ void sendDataToServer() {
   }
 
   HTTPClient http;
-  String serverUrl = "http://192.168.43.183:8080/factoryinfo/data";
+  String serverUrl = "http://192.168.43.183:8080/factoryinfo/save";
   String requestBody;
 
   time_t now;
@@ -112,6 +112,7 @@ void sendDataToServer() {
   int httpResponseCode = http.POST(requestBody);
 
   if (httpResponseCode == 200) {
+    isValid;
     Serial.println(temperature);
     Serial.println(humidity);
     Serial.println(isValid);

@@ -1,7 +1,6 @@
 package com.SpringServer.service;
 
-import com.SpringServer.model.dto.CountDTO;
-import com.SpringServer.model.entity.OperationStop;
+import com.SpringServer.model.dto.CurrentCountDTO;
 import com.SpringServer.model.entity.Products;
 import com.SpringServer.repository.ProductsRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,17 +29,17 @@ public class ProductsService {
     private final GoalService goalService;
 
 
-    public CountDTO getProductsCount(){
+    public CurrentCountDTO getProductsCount(){
         Products latestRecode = productsRepository.findFirstByOrderByCountDesc();
         if (latestRecode != null){
             int latestCount = latestRecode.getCount();
-            return CountDTO.builder()
+            return CurrentCountDTO.builder()
                     .nowRate(goalService.calculateNowRate(latestCount))
                     .count(latestCount)
                     .defectiveCount(latestRecode.getDefectiveCount())
                     .build();
         }
-        return CountDTO.builder()
+        return CurrentCountDTO.builder()
                 .nowRate(0.0)
                 .count(0)
                 .defectiveCount(0)

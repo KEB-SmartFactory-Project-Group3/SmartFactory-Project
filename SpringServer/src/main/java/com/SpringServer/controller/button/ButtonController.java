@@ -34,7 +34,7 @@ public class ButtonController {
         return  ResponseEntity.ok(buttonService.controlMachineState(request));
     }
 
-    @PostMapping("/goal")
+    @PostMapping("/setgoal")
     public ResponseEntity<Integer> saveGoalAmount(@RequestBody GoalDTO goalDTO){
         return ResponseEntity.ok(goalService.saveGoalAmount(goalDTO));
     }
