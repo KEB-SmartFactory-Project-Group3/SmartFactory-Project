@@ -13,27 +13,55 @@ import { Modal } from '@mui/material';
 import { ModalStyled, GridItemStyled, SubmitContainer, 
         StyledTextField, ItemStyledChart, GridItemStyledChart, 
         ItemStyledCount, RateLabel, DigitalClockStyle, ItemStyledTime, 
-        ButtonStyled, SubmitButtonStyled,GridContainerStyled, GridItemStyledTime ,ProductionItemStyled} from '../stylescomp/MachineStyle';
+        ButtonStyled, SubmitButtonStyled,GridContainerStyled, GridItemStyledTime ,ProductionItemStyled, ItemCountDB} from '../stylescomp/MachineStyle';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/lab/Alert';
 import { CSSTransition } from 'react-transition-group';
 import { FadeBox } from '../stylescomp/FadeinStyle';
 import TargetDonutChart from '../Chart/TargetCountChart';
-import CountLineChart from '../Chart/CountLineChart';
 import RealTimeLineChart from '../Chart/RealTimeLineChart';
-import LandingPage from './LandingPage';
 import Badge from '@mui/material/Badge';
 import MailIcon from '@mui/icons-material/Mail';
-import BasicBars from '../Chart/CountLineChart';
+import BasicBars from '../Chart/CountCompare';
 import Tooltip from '@mui/material/Tooltip';
-import axios from 'axios';
-import { sendStartToBackend , sendResetToBackend, apiServer} from '../api/ApiService';
+import { sendStartToBackend , sendResetToBackend } from '../api/ApiService';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
+import useDefective from '../hooks/useDefective';
+import ProductionManagement from '../Data/ProductionManagement';
+// import styled from 'styled-components';
+
+const StyledDialog = styled(Dialog)`
+  & .MuiPaper-root {
+    background-color: rgba(0, 0, 0, 0.1); // 불투명한 검정색
+    backdrop-filter: blur(8px);
+    border-radius: 5px;
+    color: white; // 모든 글자를 하얀색으로
+  }
+`;
+
+const StyledCancelButton = styled(Button)`
+  background-color: white; // 배경색 흰색
+  color: black; // 글자색 검정
+
+  &:hover {
+    background-color: #f2f2f2;
+  }
+`;
+
+const StyledResetButton = styled(Button)`
+  background-color: white; // 배경색 흰색
+  color: red; // 글자색 빨간색
+
+  &:hover {
+    background-color: #f2f2f2;
+  }
+`;
+
 
 function MachinePage() {
 
@@ -78,9 +106,9 @@ function MachinePage() {
   const { isRunning, elapsedTime, restartTimer, startTime, handleStart, handleStop, resetTimer} = useTimeRecorder();
   const {count, showAlert, setShowAlert,targetAchievement, targetCount, setTargetCount, handleTargetcountChange, handleTargetCountSubmit} = useMachineCount()
   const {nowRate} = useMachineRate()
+  const {defectiveCount} = useDefective()
   const [formOpen, setFormOpen] = useState(false)
  
-  const [isCardOpen,setIsCardOpen] = useState(false)
   const [submitted, setSubmitted] = useState(false)
 
   // reset 다이얼로그 상태
@@ -116,6 +144,9 @@ function MachinePage() {
   const remainingItems = targetCount - count
   const remainingSeconds = remainingItems / currentRate // 후에 formatTime 함수를 사용하여 시간, 분, 초 변환
 
+  // 로컬 스토리지에 저장
+  localStorage.setItem("remainingItems", remainingItems)
+  localStorage.setItem("remainingSeconds", remainingSeconds)
   // alert 횟수
   const [alertCount, setAlertCount] = useState(0)
 
@@ -133,9 +164,6 @@ function MachinePage() {
     }
   }, [remainingSeconds,submitted,count, targetCount])
 
-  const handleCardClick = () => {
-    setIsCardOpen(!isCardOpen)
-  }
   
   const handleOpenForm = () => {
     setFormOpen(true)
@@ -188,18 +216,20 @@ function MachinePage() {
       <CSSTransition in={true} timeout={1000} classNames="fade" appear>
       <FadeBox sx={{flexGrow:1}}>
         <Grid container spacing={3} sx={{ background: 'transparent', border: 'none' , boxShadow: 'none',}}>
-        <GridItemStyled item xs={12} sm={4} md={4}>
-            <ItemStyledCount borderColor="#b388ff">
-              <RateLabel>도달률 <br/> {nowRate}%</RateLabel>
+        <GridItemStyled item xs={12} sm={2} md={2}>
+            <ItemStyledCount borderColor="#651fff">
+              {/* <RateLabel>도달률 <br/> {nowRate}%</RateLabel> */}
               <TargetDonutChart nowRate={nowRate} />
             </ItemStyledCount>
         </GridItemStyled>
 
-        <GridItemStyled item xs={12} sm={4} md={4}>
-            <ItemStyledCount borderColor='#ffeb3b'>
-            <Typography variant="h6" sx={{marginBottom: '1rem'}}>
+        <GridItemStyled item xs={12} sm={3} md={3}>
+        <GridItemStyled container direction="column" spacing={2} >
+          <GridItemStyled item xs={12}> 
+            <ItemCountDB borderColor='#ffeb3b'>
+            {/* <Typography variant="h6" sx={{marginBottom: '1rem'}}>
               목표 생산량
-            </Typography>
+            </Typography> */}
             {submitted ? (
               <>
               <CSSTransition in={animateText} timeout={1000} classNames="fade" appear>
@@ -235,14 +265,14 @@ function MachinePage() {
               </CSSTransition>
 
                 <SubmitContainer>
-                  <ButtonStyled
+                  <SubmitButtonStyled
                     variant="outlined"
                     style={{ color: 'white', borderColor:'white'}}
                     size="small"
                     onClick={handleTextReset}
                   >
                     재입력
-                  </ButtonStyled>
+                  </SubmitButtonStyled>
                 </SubmitContainer>
               </>
             ) : (
@@ -267,26 +297,10 @@ function MachinePage() {
               </SubmitContainer>
               </>
             )}
-          </ItemStyledCount>
-        </GridItemStyled>
+          </ItemCountDB>
+          </GridItemStyled >
 
-        <Snackbar 
-            open={showAlert} 
-            autoHideDuration={6000} 
-            onClose={() => setShowAlert(false)}
-            style={{ 
-                position: 'fixed', 
-                top: '50%', 
-                left: '50%', 
-                transform: 'translate(-50%, -50%)' 
-            }}
-        >
-            <Alert onClose={() => setShowAlert(false)} severity="error" variant="filled">
-                유효한 값을 입력하세요.
-            </Alert>
-        </Snackbar>
-
-        <GridItemStyled item xs={12} sm={4} md={4}>
+          <GridItemStyled item xs={12} >
           <GridContainerStyled container direction='column'>
             <GridItemStyledTime item xs={12}>
               <ItemStyledTime>
@@ -315,41 +329,147 @@ function MachinePage() {
                     </>
                 )}
                 <Tooltip title="데이터를 초기화합니다">
-                 <ButtonStyled variant='outlined' borderWidth="3px" style={{fontWeight: 'bold',color:'red', borderColor: 'red' }}size='large' onClick={()=> {handleResetAndNotifyBackend(); handleOpenResetDialog();}}>
-                    Reset
+                 <ButtonStyled variant='outlined' borderWidth="3px" style={{fontWeight: 'bold',color:'red', borderColor: 'red' }}size='large' onClick={handleOpenResetDialog}>
+                    초기화
                 </ButtonStyled>
                 <FormDialog open={formOpen} handleClose={handleCloseForm} elapsedTime={elapsedTime} handleRestart={restartTimer} handleStop={handleStop}  />
                 </Tooltip>
 
-                <Dialog
+                <StyledDialog
                   open={openResetDialog}
                   onClose={handleCloseResetDialog}
                 >
-                  <DialogTitle>{"데이터 초기화"}</DialogTitle>
+                  <DialogTitle>데이터 초기화</DialogTitle>
                   <DialogContent>
-                    <DialogContentText>
-                      데이터를 초기화 합니다. 정말 reset 하시겠습니까?
+                    <DialogContentText color='white'>
+                      데이터를 초기화 합니다. 정말 Reset 하시겠습니까?
                     </DialogContentText>
                   </DialogContent>
                   <DialogActions>
-                    <Button onClick={handleCloseResetDialog} color="primary">
+                    <StyledCancelButton onClick={handleCloseResetDialog} color="primary">
                       Cancel
-                    </Button>
-                    <Button onClick={handleConfirmReset} color="primary" autoFocus>
+                    </StyledCancelButton>
+                    <StyledResetButton onClick={handleConfirmReset} color="primary" autoFocus>
                       Reset
-                    </Button>
+                    </StyledResetButton>
                   </DialogActions>
-                </Dialog>
+                </StyledDialog>
 
           </GridItemStyled>
           </GridContainerStyled>
         </GridItemStyled>
+          
+        </GridItemStyled>
+        </GridItemStyled>
 
-        <Modal open={isCardOpen}>
+
+        <Snackbar 
+            open={showAlert} 
+            autoHideDuration={6000} 
+            onClose={() => setShowAlert(false)}
+            style={{ 
+                position: 'fixed', 
+                top: '50%', 
+                left: '50%', 
+                transform: 'translate(-50%, -50%)' 
+            }}
+        >
+            <Alert onClose={() => setShowAlert(false)} severity="error" variant="filled">
+                유효한 값을 입력하세요.
+            </Alert>
+        </Snackbar>
+
+        {/* <GridItemStyled item xs={12} sm={4} md={4}>
+          <GridContainerStyled container direction='column'>
+            <GridItemStyledTime item xs={12}>
+              <ItemStyledTime>
+                <DigitalClockStyle variant='h3'>
+                {formatTime(elapsedTime)}
+                </DigitalClockStyle>
+                </ItemStyledTime>
+            </GridItemStyledTime> 
+
+            <GridItemStyled  item xs={12}>
+            {isRunning ? (
+                  <ButtonStyled variant='outlined' borderWidth="3px" style={{fontWeight: 'bold', color:'green', borderColor: 'green'}}size='large' onClick={handleOpenForm}>
+                    가동중지
+                  </ButtonStyled>
+                  ) : formOpen ? (
+                    <>
+                      <ButtonStyled variant='outlined' style={{color:'white', borderColor: 'white'}}size="small"onClick={handleStart}>
+                        재가동
+                      </ButtonStyled>
+                    </>
+                  ) : (
+                    <>
+                     <ButtonStyled variant='outlined' borderWidth="3px" style={{fontWeight: 'bold' ,color:'blue', borderColor: 'blue'}}size="large" onClick={handleStartAndNotifyBackend}>
+                          가동 시작
+                      </ButtonStyled> 
+                    </>
+                )}
+                <Tooltip title="데이터를 초기화합니다">
+                 <ButtonStyled variant='outlined' borderWidth="3px" style={{fontWeight: 'bold',color:'red', borderColor: 'red' }}size='large' onClick={handleOpenResetDialog}>
+                    초기화
+                </ButtonStyled>
+                <FormDialog open={formOpen} handleClose={handleCloseForm} elapsedTime={elapsedTime} handleRestart={restartTimer} handleStop={handleStop}  />
+                </Tooltip>
+
+                <StyledDialog
+                  open={openResetDialog}
+                  onClose={handleCloseResetDialog}
+                >
+                  <DialogTitle>데이터 초기화</DialogTitle>
+                  <DialogContent>
+                    <DialogContentText color='white'>
+                      데이터를 초기화 합니다. 정말 Reset 하시겠습니까?
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                    <StyledCancelButton onClick={handleCloseResetDialog} color="primary">
+                      Cancel
+                    </StyledCancelButton>
+                    <StyledResetButton onClick={handleConfirmReset} color="primary" autoFocus>
+                      Reset
+                    </StyledResetButton>
+                  </DialogActions>
+                </StyledDialog>
+
+          </GridItemStyled>
+          </GridContainerStyled>
+        </GridItemStyled> */}
+
+        {/* <Modal open={isCardOpen}>
           <ModalStyled isOpen={isCardOpen}>
             <OutlinedCard onClose={handleCardClick} />
           </ModalStyled>
-        </Modal>
+        </Modal> */}
+
+        <GridItemStyled item xs={12} sm={7} md={7} >
+          <ItemCountDB height="24vh"
+                       background="none"
+                       backdropFilter="none"
+                       hoverBackground="none"
+                       borderColor='none'
+          >
+
+            <ProductionManagement 
+              fieldWidths={{
+                user: 120,
+                opTime: 120,
+                stopTime: 200,
+                stopReason: 120,
+                rate: 100
+              }} 
+              boxDimensions={{
+                height: '235px',
+                width: '100%'
+              }}
+            />
+            
+
+          </ItemCountDB>
+
+        </GridItemStyled>
           
         <GridItemStyledChart item xs={8} sm={8} md={8}>
           <ItemStyledChart>
@@ -358,18 +478,19 @@ function MachinePage() {
           </ItemStyledChart>
         </GridItemStyledChart>
 
-         <GridItemStyled item xs={12} sm={4} md={4} onClick={handleCardClick}>
-        {!isCardOpen && (
+         <GridItemStyled item xs={12} sm={4} md={4}>
+  
             <ProductionItemStyled>
-            현재 생산량: {count}
-            <BasicBars count={count} />
+            {/* <h2>현재 생산량: {count}</h2>
+            <h2>불량품 수 : {defectiveCount}</h2> */}
+            <BasicBars count={count} defectiveCount={defectiveCount} />
             </ProductionItemStyled>
-          )}
+          
         </GridItemStyled>
 
-        <Badge badgeContent={alertCount} color="primary">
+        {/* <Badge badgeContent={alertCount} color="primary">
           <MailIcon />
-        </Badge>
+        </Badge> */}
       </Grid>
       </FadeBox>
       </CSSTransition>

@@ -3,6 +3,8 @@ import Grid from '@mui/material/Grid';
 import { TextField } from '@mui/material';
 import { Card, CardContent, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
+import { Dialog } from '@mui/material';
+
 
 export const ModalStyled = styled.div`
  //중앙배치
@@ -30,13 +32,13 @@ export const ModalStyled = styled.div`
 
 export const GridItemStyled = styled(Grid)`
   // 기본 스타일
-  transition: transform 0.3s, backdrop-filter 0.3s;
+  // transition: background 0.3s, backdrop-filter 0.3s;
   box-sizing: border-box;
 
-  &:hover {
-    backdrop-filter: blur(15px);
-    transform: scale(1.05);
-  }
+  // &:hover {
+  //   backdrop-filter: blur(15px);
+  //   transform: scale(1.05);
+  // }
 `;
 
 export const ItemStyled = styled.div`
@@ -85,6 +87,32 @@ export const ItemStyledCount = styled.div`
 
   &:hover {
     background: rgba(255, 255, 255, 0.2);
+  }
+`;
+
+// 목표생산량, 생산관리DB
+export const ItemCountDB = styled.div`
+  position: relative;
+  margin: 5px 0; // 각 그리드 마진 조정
+  border: 2px solid ${props => props.borderColor || 'white'};
+  box-shadow: none; 
+  margin-top: 15px; 
+  border-radius: 5px; 
+  background: ${props => props.background || 'rgba(255, 255, 255, 0.1)'};
+  backdrop-filter: ${props => props.backdropFilter || 'blur(8px)'};
+  color: white;
+  transition: background 0.3s, backdrop-filter 0.3s;
+  padding: 1rem;
+  width: 100%;
+  height: ${props => props.height || '10vh'};
+  text-align: center; 
+  cursor: pointer;
+  overflow: hidden;
+  // overflow: visible;
+  box-sizing: border-box;
+
+  &:hover {
+    background: ${props => props.hoverBackground || 'rgba(255, 255, 255, 0.2)'};
   }
 `;
 // 도달률 라벨
@@ -238,9 +266,40 @@ export const ButtonStyled = styled(Button)`
   }
 `;
 
+
 export const GridContainerStyled = styled(Grid)`
   align-items: center; 
   justify-content: center;
   box-sizing: border-box;
   width: 100%;
+`;
+
+// reset dialog style
+export const StyledDialog = styled(Dialog)`
+  & .MuiPaper-root {
+    // background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 5px;
+    border: 1px solid white;
+    color: white;
+  }
+`;
+
+
+export const StyledCancelButton = styled(Button)`
+  background-color: white; // 배경색 흰색
+  color: black; // 글자색 검정
+
+  &:hover {
+    background-color: #f2f2f2;
+  }
+`;
+
+export const StyledResetButton = styled(Button)`
+  background-color: white; // 배경색 흰색
+  color: red; // 글자색 빨간색
+
+  &:hover {
+    background-color: #f2f2f2;
+  }
 `;
