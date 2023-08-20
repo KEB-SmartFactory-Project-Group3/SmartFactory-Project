@@ -17,8 +17,8 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "factoryinfo")
-public class FactoryInfo {
+@Table(name = "condition")
+public class Condition {
 
     @Id
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
