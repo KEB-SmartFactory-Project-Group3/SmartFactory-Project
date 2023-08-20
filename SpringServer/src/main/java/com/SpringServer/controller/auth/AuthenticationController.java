@@ -5,6 +5,7 @@ import com.SpringServer.model.dto.auth.AuthenticationRequest;
 import com.SpringServer.model.dto.auth.AuthLoginResponse;
 import com.SpringServer.service.auth.AuthenticationService;
 import com.SpringServer.model.dto.auth.AuthRegisterRequest;
+import com.SpringServer.service.exceptions.DuplicateIdException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ public class AuthenticationController {
     private final AuthenticationService service;
 
     @PostMapping("/register")
-    public ResponseEntity<StringResultResponse> register(@RequestBody AuthRegisterRequest request){
+    public ResponseEntity<StringResultResponse> register(@RequestBody AuthRegisterRequest request) throws DuplicateIdException {
         return  ResponseEntity.ok(service.register(request));
     }
 

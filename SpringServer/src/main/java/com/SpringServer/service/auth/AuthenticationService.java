@@ -6,6 +6,7 @@ import com.SpringServer.model.dto.auth.AuthLoginResponse;
 import com.SpringServer.model.dto.auth.AuthRegisterRequest;
 import com.SpringServer.model.entity.User;
 import com.SpringServer.repository.UserRepository;
+import com.SpringServer.service.exceptions.DuplicateIdException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,16 +39,14 @@ public class AuthenticationService {
                 .build();
     }
 
-    public StringResultResponse register(AuthRegisterRequest request) {
+    public StringResultResponse register(AuthRegisterRequest request) throws DuplicateIdException {
         var user = User.builder()
                 .id(request.getId())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .name(request.getName())
                 .build();
         if(userRepository.findById(request.getId()).isPresent()){
-            return StringResultResponse.builder()
-                    .result("회원가입 실패")
-                    .build();
+            throw new DuplicateIdException("이미 사용 중인 아이디입니다.");
         }
         userRepository.save(user);
         return StringResultResponse.builder()
