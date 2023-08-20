@@ -1,4 +1,4 @@
-package com.SpringServer.model.dto;
+package com.SpringServer.model.dto.data;
 
 
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class StatisticsTemperatureHumidityDTO {
+public class StatisticsFactoryInfoDTO {
     private Double maxTemperature;
     private Double minTemperature;
     private Double avgTemperature;

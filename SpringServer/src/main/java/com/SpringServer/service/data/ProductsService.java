@@ -1,8 +1,9 @@
-package com.SpringServer.service;
+package com.SpringServer.service.data;
 
-import com.SpringServer.model.dto.CurrentCountDTO;
+import com.SpringServer.model.dto.data.CurrentProductsDTO;
 import com.SpringServer.model.entity.Products;
 import com.SpringServer.repository.ProductsRepository;
+import com.SpringServer.service.button.GoalService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,17 +30,17 @@ public class ProductsService {
     private final GoalService goalService;
 
 
-    public CurrentCountDTO getProductsCount(){
+    public CurrentProductsDTO getProductsCount(){
         Products latestRecode = productsRepository.findFirstByOrderByCountDesc();
         if (latestRecode != null){
             int latestCount = latestRecode.getCount();
-            return CurrentCountDTO.builder()
+            return CurrentProductsDTO.builder()
                     .nowRate(goalService.calculateNowRate(latestCount))
                     .count(latestCount)
                     .defectiveCount(latestRecode.getDefectiveCount())
                     .build();
         }
-        return CurrentCountDTO.builder()
+        return CurrentProductsDTO.builder()
                 .nowRate(0.0)
                 .count(0)
                 .defectiveCount(0)

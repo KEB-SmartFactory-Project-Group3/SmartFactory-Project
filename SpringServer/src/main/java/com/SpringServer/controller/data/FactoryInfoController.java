@@ -1,9 +1,9 @@
-package com.SpringServer.controller;
+package com.SpringServer.controller.data;
 
-import com.SpringServer.model.dto.CurrentFactoryInfoDTO;
-import com.SpringServer.model.dto.StatisticsTemperatureHumidityDTO;
+import com.SpringServer.model.dto.data.CurrentFactoryInfoDTO;
+import com.SpringServer.model.dto.data.StatisticsFactoryInfoDTO;
 import com.SpringServer.model.entity.FactoryInfo;
-import com.SpringServer.service.FactoryInfoService;
+import com.SpringServer.service.data.FactoryInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,11 +13,11 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/factoryinfo")
-public class FactoryInfoSaveController {
+public class FactoryInfoController {
 
     private final FactoryInfoService factoryInfoService;
 
-    @PostMapping("/data")
+    @PostMapping("/save")
     public ResponseEntity<?> saveMachineData(@RequestBody FactoryInfo factoryInfo) {
         return  ResponseEntity.ok(factoryInfoService.saveFactoryInfo(factoryInfo));
     }
@@ -28,7 +28,7 @@ public class FactoryInfoSaveController {
     }
 
     @GetMapping("/statistics")
-    public ResponseEntity<StatisticsTemperatureHumidityDTO> displayStatistics(){
+    public ResponseEntity<StatisticsFactoryInfoDTO> displayStatistics(){
         return ResponseEntity.ok(factoryInfoService.getStatisticsTemperatureHumidityData());
     }
 

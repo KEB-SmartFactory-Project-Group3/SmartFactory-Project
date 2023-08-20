@@ -1,6 +1,6 @@
-package com.SpringServer.service;
+package com.SpringServer.service.button;
 
-import com.SpringServer.model.dto.ButtonRequest;
+import com.SpringServer.model.dto.button.ButtonRequest;
 import com.SpringServer.model.dto.StringResultResponse;
 import com.SpringServer.model.entity.OperationStop;
 import com.SpringServer.repository.OperationStopRepository;

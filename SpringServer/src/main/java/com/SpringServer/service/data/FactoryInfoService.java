@@ -1,8 +1,8 @@
-package com.SpringServer.service;
+package com.SpringServer.service.data;
 
 
-import com.SpringServer.model.dto.CurrentFactoryInfoDTO;
-import com.SpringServer.model.dto.StatisticsTemperatureHumidityDTO;
+import com.SpringServer.model.dto.data.CurrentFactoryInfoDTO;
+import com.SpringServer.model.dto.data.StatisticsFactoryInfoDTO;
 import com.SpringServer.model.dto.StringResultResponse;
 import com.SpringServer.model.entity.FactoryInfo;
 import com.SpringServer.repository.FactoryInfoRepository;
@@ -34,7 +34,7 @@ public class FactoryInfoService {
         }
     }
 
-    public StatisticsTemperatureHumidityDTO getStatisticsTemperatureHumidityData() {
+    public StatisticsFactoryInfoDTO getStatisticsTemperatureHumidityData() {
         Double maxTemperature = factoryInfoRepository.findFirstByOrderByFactoryTemperatureDesc().getFactoryTemperature();
         Double minTemperature = factoryInfoRepository.findFirstByOrderByFactoryTemperatureAsc().getFactoryTemperature();
         int maxHumidity = factoryInfoRepository.findFirstByOrderByFactoryHumidityDesc().getFactoryHumidity();
@@ -46,7 +46,7 @@ public class FactoryInfoService {
         Double roundedAvgTemperature = Math.round(RawAvgTemperature * 10) / 10.0;
         Double roundedAvgHumidity = Math.round(RawAvgHumidity * 10) / 10.0;
 
-        return StatisticsTemperatureHumidityDTO.builder()
+        return StatisticsFactoryInfoDTO.builder()
                 .maxHumidity(maxHumidity)
                 .minHumidity(minHumidity)
                 .avgHumidity(roundedAvgHumidity)

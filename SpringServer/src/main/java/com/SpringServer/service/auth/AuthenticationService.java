@@ -1,8 +1,8 @@
-package com.SpringServer.service;
+package com.SpringServer.service.auth;
 
-import com.SpringServer.model.dto.AuthenticationRequest;
-import com.SpringServer.model.dto.AuthLoginResponse;
-import com.SpringServer.model.dto.AuthRegisterRequest;
+import com.SpringServer.model.dto.auth.AuthenticationRequest;
+import com.SpringServer.model.dto.auth.AuthLoginResponse;
+import com.SpringServer.model.dto.auth.AuthRegisterRequest;
 import com.SpringServer.model.entity.User;
 import com.SpringServer.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

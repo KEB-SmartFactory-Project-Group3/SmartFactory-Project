@@ -1,6 +1,6 @@
-package com.SpringServer.service;
+package com.SpringServer.service.button;
 
-import com.SpringServer.model.dto.GoalDTO;
+import com.SpringServer.model.dto.data.GoalDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.SpringServer.service;
+package com.SpringServer.service.data;
 
 import com.SpringServer.model.entity.OperationStop;
 import com.SpringServer.repository.OperationStopRepository;

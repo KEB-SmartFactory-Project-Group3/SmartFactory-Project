@@ -1,11 +1,11 @@
-package com.SpringServer.controller;
+package com.SpringServer.controller.button;
 
 
-import com.SpringServer.model.dto.ButtonRequest;
+import com.SpringServer.model.dto.button.ButtonRequest;
 import com.SpringServer.model.dto.StringResultResponse;
-import com.SpringServer.model.dto.GoalDTO;
-import com.SpringServer.service.ButtonService;
-import com.SpringServer.service.GoalService;
+import com.SpringServer.model.dto.data.GoalDTO;
+import com.SpringServer.service.button.ButtonService;
+import com.SpringServer.service.button.GoalService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

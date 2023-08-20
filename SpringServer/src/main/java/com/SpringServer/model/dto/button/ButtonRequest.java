@@ -1,4 +1,4 @@
-package com.SpringServer.model.dto;
+package com.SpringServer.model.dto.button;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;

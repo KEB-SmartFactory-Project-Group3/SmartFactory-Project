@@ -1,4 +1,4 @@
-package com.SpringServer.model.dto;
+package com.SpringServer.model.dto.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

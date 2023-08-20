@@ -1,6 +1,6 @@
 package com.SpringServer.config;
 
-import com.SpringServer.service.JwtService;
+import com.SpringServer.service.auth.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

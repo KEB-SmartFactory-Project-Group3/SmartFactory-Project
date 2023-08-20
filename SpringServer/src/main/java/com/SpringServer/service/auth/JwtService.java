@@ -1,4 +1,4 @@
-package com.SpringServer.service;
+package com.SpringServer.service.auth;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

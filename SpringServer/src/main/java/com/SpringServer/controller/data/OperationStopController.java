@@ -1,8 +1,8 @@
-package com.SpringServer.controller;
+package com.SpringServer.controller.data;
 
 
 import com.SpringServer.model.entity.OperationStop;
-import com.SpringServer.service.OperationStopService;
+import com.SpringServer.service.data.OperationStopService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
