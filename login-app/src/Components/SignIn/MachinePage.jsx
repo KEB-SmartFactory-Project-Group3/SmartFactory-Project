@@ -215,16 +215,17 @@ function MachinePage() {
     <StyledFactor className="MachinePage">
       <CSSTransition in={true} timeout={1000} classNames="fade" appear>
       <FadeBox sx={{flexGrow:1}}>
-        <Grid container spacing={3} sx={{ background: 'transparent', border: 'none' , boxShadow: 'none',}}>
-        <GridItemStyled item xs={12} sm={2} md={2}>
-            <ItemStyledCount borderColor="#651fff">
-              {/* <RateLabel>도달률 <br/> {nowRate}%</RateLabel> */}
+        <Grid container spacing={2} sx={{ background: 'transparent', border: 'none' , boxShadow: 'none',}}>
+
+        <GridItemStyled item xs={12} sm={5} md={5}>
+        <GridItemStyled container direction="column" spacing={2} >
+
+        <GridItemStyled item xs={12} >
+            <ItemStyledCount borderColor="#651fff" height="11vh">
               <TargetDonutChart nowRate={nowRate} />
             </ItemStyledCount>
         </GridItemStyled>
 
-        <GridItemStyled item xs={12} sm={3} md={3}>
-        <GridItemStyled container direction="column" spacing={2} >
           <GridItemStyled item xs={12}> 
             <ItemCountDB borderColor='#ffeb3b'>
             {/* <Typography variant="h6" sx={{marginBottom: '1rem'}}>
@@ -299,65 +300,6 @@ function MachinePage() {
             )}
           </ItemCountDB>
           </GridItemStyled >
-
-          <GridItemStyled item xs={12} >
-          <GridContainerStyled container direction='column'>
-            <GridItemStyledTime item xs={12}>
-              <ItemStyledTime>
-                <DigitalClockStyle variant='h3'>
-                {formatTime(elapsedTime)}
-                </DigitalClockStyle>
-                </ItemStyledTime>
-            </GridItemStyledTime> 
-
-            <GridItemStyled  item xs={12}>
-            {isRunning ? (
-                  <ButtonStyled variant='outlined' borderWidth="3px" style={{fontWeight: 'bold', color:'green', borderColor: 'green'}}size='large' onClick={handleOpenForm}>
-                    가동중지
-                  </ButtonStyled>
-                  ) : formOpen ? (
-                    <>
-                      <ButtonStyled variant='outlined' style={{color:'white', borderColor: 'white'}}size="small"onClick={handleStart}>
-                        재가동
-                      </ButtonStyled>
-                    </>
-                  ) : (
-                    <>
-                     <ButtonStyled variant='outlined' borderWidth="3px" style={{fontWeight: 'bold' ,color:'blue', borderColor: 'blue'}}size="large" onClick={handleStartAndNotifyBackend}>
-                          가동 시작
-                      </ButtonStyled> 
-                    </>
-                )}
-                <Tooltip title="데이터를 초기화합니다">
-                 <ButtonStyled variant='outlined' borderWidth="3px" style={{fontWeight: 'bold',color:'red', borderColor: 'red' }}size='large' onClick={handleOpenResetDialog}>
-                    초기화
-                </ButtonStyled>
-                <FormDialog open={formOpen} handleClose={handleCloseForm} elapsedTime={elapsedTime} handleRestart={restartTimer} handleStop={handleStop}  />
-                </Tooltip>
-
-                <StyledDialog
-                  open={openResetDialog}
-                  onClose={handleCloseResetDialog}
-                >
-                  <DialogTitle>데이터 초기화</DialogTitle>
-                  <DialogContent>
-                    <DialogContentText color='white'>
-                      데이터를 초기화 합니다. 정말 Reset 하시겠습니까?
-                    </DialogContentText>
-                  </DialogContent>
-                  <DialogActions>
-                    <StyledCancelButton onClick={handleCloseResetDialog} color="primary">
-                      Cancel
-                    </StyledCancelButton>
-                    <StyledResetButton onClick={handleConfirmReset} color="primary" autoFocus>
-                      Reset
-                    </StyledResetButton>
-                  </DialogActions>
-                </StyledDialog>
-
-          </GridItemStyled>
-          </GridContainerStyled>
-        </GridItemStyled>
           
         </GridItemStyled>
         </GridItemStyled>
@@ -379,7 +321,7 @@ function MachinePage() {
             </Alert>
         </Snackbar>
 
-        {/* <GridItemStyled item xs={12} sm={4} md={4}>
+         <GridItemStyled item xs={12} sm={4} md={4}>
           <GridContainerStyled container direction='column'>
             <GridItemStyledTime item xs={12}>
               <ItemStyledTime>
@@ -436,41 +378,20 @@ function MachinePage() {
 
           </GridItemStyled>
           </GridContainerStyled>
-        </GridItemStyled> */}
+        </GridItemStyled>
 
-        {/* <Modal open={isCardOpen}>
-          <ModalStyled isOpen={isCardOpen}>
-            <OutlinedCard onClose={handleCardClick} />
-          </ModalStyled>
-        </Modal> */}
-
-        <GridItemStyled item xs={12} sm={7} md={7} >
-          <ItemCountDB height="24vh"
-                       background="none"
-                       backdropFilter="none"
-                       hoverBackground="none"
-                       borderColor='none'
-          >
-
-            <ProductionManagement 
-              fieldWidths={{
-                user: 120,
-                opTime: 120,
-                stopTime: 200,
-                stopReason: 120,
-                rate: 100
-              }} 
-              boxDimensions={{
-                height: '235px',
-                width: '100%'
-              }}
-            />
-            
-
-          </ItemCountDB>
+        
+        <GridItemStyled item xs={12} sm={3} md={3}>
+          
+          <ProductionItemStyled>
+          <h2>현재 생산량: {count}</h2>
+          <h2>불량품 수 : {defectiveCount}</h2>
+          {/* <BasicBars count={count} defectiveCount={defectiveCount} /> */}
+          </ProductionItemStyled>
 
         </GridItemStyled>
-          
+
+        
         <GridItemStyledChart item xs={8} sm={8} md={8}>
           <ItemStyledChart>
             차트
