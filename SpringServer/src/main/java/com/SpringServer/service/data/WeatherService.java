@@ -1,5 +1,6 @@
 package com.SpringServer.service.data;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -8,7 +9,9 @@ import org.springframework.web.client.RestTemplate;
 public class WeatherService {
 
     private String city = "Seoul";
-    private String apiKey = "b009a2b3be7127b4ffa9784b5e3ea960";
+
+    @Value("${OpenWeatherMap_Api_Key}")
+    private String apiKey;
     private String apiBaseURL = "http://api.openweathermap.org/data/2.5/weather";
     private RestTemplate restTemplate = new RestTemplate();
 
