@@ -42,7 +42,8 @@ export const StyledBox = styled(Box)`
   background-color: rgba(255, 255, 255, 0.2);
   background-size: contain;
   background-repeat: no-repeat;
-  -webkit-backdrop-filter: blur(15px);
+  // -webkit-backdrop-filter: blur(15px); 
+  backdrop-filter: blur(15px);
   padding: 4vw;
   border-radius: 15px;
   margin-top: 4vw; 

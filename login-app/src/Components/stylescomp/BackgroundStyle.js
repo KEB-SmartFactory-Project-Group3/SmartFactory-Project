@@ -27,7 +27,7 @@ export const StyledFactor = styled.div`
   // 2500*1000 사이즈일 때의 스타일
   @media screen and (min-width: 2500px) and (min-height: 1000px) {
     height: 89vh ;
-    width: 55vw ;
+    width: 56vw ;
 
   }
 

@@ -133,7 +133,7 @@ export const GridItemStyledChart = styled(Grid)`
 `;
 export const ItemStyledChart = styled.div`
   margin: 2px 0;
-  border: 2px solid #03A9F4;
+  border: 2px solid white;
   box-shadow: none; 
   margin-top: 25px; 
   border-radius: 5px; 
@@ -164,18 +164,22 @@ export const ProductionItemStyled = styled.div`
   box-shadow: none; 
   margin-top: 25px; 
   border-radius: 5px; 
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(8px);
   color: white;
   transition: background 0.3s, backdrop-filter 0.3s;
   padding: 1rem;
   width: 100%;
-  height: auto;
+  height: ${props => props.height || 'auto'};
   text-align: center; 
   cursor: pointer;
   overflow: hidden;
   // overflow: visible;
   box-sizing: border-box;
+  display: flex;           
+  align-items: center;    
+  justify-content: center; 
+  flex-direction: column;
 
   &:hover {
     background: rgba(255, 255, 255, 0.2);
@@ -235,10 +239,12 @@ export const ItemStyledTime = styled.div`
   margin: 1px 0; // 각 그리드 마진 조정
   box-shadow: none; 
   margin-top: 25px; 
+  border: 2px solid ${props => props.borderColor || 'none'};
   border-radius: 5px; 
   color: white;
   padding: 0rem; //상하 0
   width: 100%;
+  height: ${props => props.height || 'auto'};
   text-align: center; 
   cursor: pointer;
   overflow: hidden;

@@ -20,8 +20,10 @@ const colorAnimation = keyframes`
 `;
 
 export const StyledDiv = styled.div`
-  background: linear-gradient(45deg,#757575, #424242, #616161);
+  background: linear-gradient(45deg, #000000, #212121);
   background-size: 300% 300%;
-  animation: ${colorAnimation}  12s ease-in-out infinite;
+  animation:  ${colorAnimation} 12s ease-in-out infinite;
+
   background-position: center;
+  overflow: hidden;
 `;
