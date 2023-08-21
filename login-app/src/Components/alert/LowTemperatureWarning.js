@@ -15,6 +15,7 @@ function LowTemperatureWarning({ isOpen, onClose }) {
     }
 }, []);
 
+
   const handleClose = () => {
       localStorage.setItem('lowTempWarningClosed', 'true');
       setWasClosed(true);
@@ -38,10 +39,10 @@ function LowTemperatureWarning({ isOpen, onClose }) {
             fullWidth={true} 
             PaperProps={{
                 style: {
-                    backgroundColor: 'rgba(255, 255, 255, 0.8)', 
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
                     backdropFilter: 'blur(5px)', 
                     borderRadius: '15px', 
-                    border: '1px solid rgba(0, 0, 0, 0.12)'  
+                    border: '1px solid rgba(255, 255, 255, 0.8)'  
                 }
             }}
         >
@@ -57,29 +58,43 @@ function LowTemperatureWarning({ isOpen, onClose }) {
           </DialogTitle>
           <DialogContent>
             {showConfirm ? (
-                <Typography variant="body1" align="center">
-                    다시 알리지 않습니다. 계속하시겠습니까?
+                 <Typography variant="body1" align="center"  sx={{ padding: 2, fontWeight: 'bold', color: '#e53935' ,fontSize: 30 }}>
+                    다시 알리지 않습니다. <br /> 계속하시겠습니까?
                 </Typography>
             ) : (
-                <Typography variant="h6" align="center" sx={{ padding: 2 }}>
+                <Typography variant="subtitle1" align="center" sx={{ padding: 2, fontWeight: 'bold', color: '#e53935' ,fontSize: 30}}>
                     온도가 너무 낮습니다!
                 </Typography>
             )}
           </DialogContent>
           <DialogActions>
           {showConfirm ? (
-                  <>
-                      <Button onClick={handleClose} color="primary">
-                          확인
-                      </Button>
-                      <Button onClick={handleCancelConfirm} color="secondary">
-                          취소
-                      </Button>
-                  </>
+                   <>
+                   <Button variant="contained" onClick={handleClose}  
+                   style={{
+                       backgroundColor: 'white', 
+                       color: 'red'
+                   }}>
+                       확인
+                   </Button>
+                   <Button variant="containde" onClick={handleCancelConfirm}  style={{
+                       backgroundColor: 'white', 
+                       color: 'black'
+                   }}>
+                       취소
+                   </Button>
+               </>
               ) : (
-                  <Button onClick={handleShowConfirm} color="primary">
-                      cancel
-                  </Button>
+                <Button 
+                variant="contained" 
+                onClick={handleShowConfirm} 
+                style={{
+                    backgroundColor: 'white', 
+                    color: 'black'
+                }}
+                >
+                    cancel
+                </Button>
               )}
           </DialogActions>
         </Dialog>

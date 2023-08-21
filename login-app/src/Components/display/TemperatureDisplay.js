@@ -23,17 +23,30 @@ function TemperatureDisplay({ factoryTemperature, CustomCircularProgress }) {
   const [isLowTempWarningOpen, setIsLowTempWarningOpen] = useState(false)
   const [isInitialRender, setIsInitialRender] = useState(true) //초기 렌더링 상태
 
+
   useEffect(() => {
+    const highTempStoredValue = parseFloat(localStorage.getItem('highTempWarningTemperature') || '-1');
+    const wasClosedHighTemp = Boolean(localStorage.getItem('highTempWarningClosed')) && highTempStoredValue === factoryTemperature;
+    
+    const lowTempStoredValue = parseFloat(localStorage.getItem('lowTempWarningTemperature') || '-1');
+    const wasClosedLowTemp = Boolean(localStorage.getItem('lowTempWarningClosed')) && lowTempStoredValue === factoryTemperature;
+  
+    if (wasClosedHighTemp || wasClosedLowTemp) {
+      return;
+    }
+  
     if (isInitialRender) {
       setIsInitialRender(false);
-      return;  // 초기 렌더링이면 실행 안 함
+      return;
     }
   
     if (factoryTemperature >= 30) {
       setIsWarningOpen(true);
+      localStorage.setItem('highTempWarningTemperature', factoryTemperature.toString());
     } else if (factoryTemperature <= 18) {  
       setIsLowTempWarningOpen(true);
-    }
+      localStorage.setItem('lowTempWarningTemperature', factoryTemperature.toString()); 
+    } 
   }, [factoryTemperature]);
   
 
@@ -64,6 +77,7 @@ function TemperatureDisplay({ factoryTemperature, CustomCircularProgress }) {
           thickness={5}
           style={{ color: '#e0e0e0' }} // 이 부분을 원하는 배경색으로 설정
         /> */}
+      <Box position="relative" display="inline-flex" flexDirection="column" alignItems="center" ml={2}>
         <CustomCircularProgress 
           variant="determinate" 
           value={factoryTemperature} 
@@ -76,13 +90,13 @@ function TemperatureDisplay({ factoryTemperature, CustomCircularProgress }) {
           left={0}
           bottom={0}
           right={0}
-          position="absolute"
+          position="absolute" 
           display="flex"
           alignItems="center"
           justifyContent="center"
         >
           {factoryTemperature
-            ? <Typography variant="h5" style={{position: 'absolute', top: '35%'}}>
+            ? <Typography variant="h5" style={{position: 'absolute', top: '25%'}}>
                 {Math.round(factoryTemperature)}°C
               </Typography>
             : <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
@@ -90,13 +104,19 @@ function TemperatureDisplay({ factoryTemperature, CustomCircularProgress }) {
               </div>
           }
         </Box>
+
+        <Typography variant="subtitle1" mt={1} fontWeight="bold">
+          현재 온도
+        </Typography>
+
+      </Box>
+     
+
       </Box>
 
-      <HighTemperatureWarning isOpen={isWarningOpen} onClose={() => setIsWarningOpen(false)} />
+      <HighTemperatureWarning isOpen={isWarningOpen} onClose={() => setIsWarningOpen(false)} factemperature={factoryTemperature} />
       <LowTemperatureWarning isOpen={isLowTempWarningOpen} onClose={() => setIsLowTempWarningOpen(false)} />
  
-
-
     </Box>
   );
 }
