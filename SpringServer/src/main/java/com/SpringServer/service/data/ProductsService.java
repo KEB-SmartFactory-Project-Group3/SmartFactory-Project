@@ -25,13 +25,24 @@ public class ProductsService {
                 .defectiveCount(products.getDefectiveCount())
                 .state(products.getState())
                 .build();
-        try{
+
+        try {
             productsRepository.save(product);
-            return StringResultResponse.builder()
-                .result("products 저장이 완료되었습니다.")
-                .build();
         } catch (Exception e) {
-            throw new IllegalArgumentException("products 저장에 실패했습니다.");
+            throw new IllegalArgumentException("DB 저장에 실패했습니다.");
+        }
+
+
+        boolean is_Reached = goalService.is_reachedToGoal(product.getCount());
+        if(is_Reached) {
+            goalService.reachedGoalAmount();
+            return StringResultResponse.builder()
+                    .result(" DB 저장이 완료 된 후 GOAL에 도달하여 정지 명령이 전송되었습니다.")
+                    .build();
+        }else {
+            return StringResultResponse.builder()
+                    .result("DB 저장이 완료되었습니다.")
+                    .build();
         }
     }
 
