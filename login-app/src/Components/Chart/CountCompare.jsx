@@ -7,6 +7,9 @@ export default function BasicPie({ count, defectiveCount , width = 400, height =
     { value: defectiveCount, label: 'Defect' },
   ];
 
+  const palette = ['#78909c', '#37474f'];
+
+
   return (
     <div>
       <PieChart
@@ -16,7 +19,6 @@ export default function BasicPie({ count, defectiveCount , width = 400, height =
             arcLabelMinAngle: 45,
     
             data,
-            colors: ['pink', 'purple'],
           },
         ]}
         sx={{
@@ -27,6 +29,7 @@ export default function BasicPie({ count, defectiveCount , width = 400, height =
           },
          
         }}
+        colors={palette}
         width={width} 
         height={height}
 
