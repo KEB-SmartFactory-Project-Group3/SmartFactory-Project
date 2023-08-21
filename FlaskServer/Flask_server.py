@@ -115,32 +115,34 @@ def continuous_object_detection_and_processing():   # 물체를 인식하여 물
     global count_from_arduino, timestamp_from_arduino, pre_count
 
     while True:
-        # 이미지 가져오기 및 처리
-        sharpened_image = fetch_and_process_image()
-        # 객체 검출 수행
-        results = model(sharpened_image, size=416)
-        # 검출된 객체에 대한 클래스 이름 가져오기
-        detected_object_names = [model.names[int(cls)] for cls in results.pred[0][:, -1]]
-        # 현재 시각 저장
-        current_time = time.time()
-
-        # 클래스가 검출되지 않고 직전에 검출된 시간이 5초 이내이면 직전에 검출된 클래스 이름을 사용
-        if not detected_object_names and latest_detected_object_names and (current_time - latest_detected_time <= 5):
-            detected_object_names = latest_detected_object_names
-        else:
-            latest_detected_object_names = detected_object_names  # 검출된 클래스 이름을 저장
-            latest_detected_time = current_time  # 검출된 시간을 저장
-
-        # 가장 빈번한 클래스 이름을 선택
-        counter = Counter(detected_object_names)
-        most_common = counter.most_common(1)
-
-        if most_common:
-            object_status = most_common[0][0]
-        else:
-            object_status = "normal"
-
         if count_from_arduino != pre_count:
+
+            # 이미지 가져오기 및 처리
+            sharpened_image = fetch_and_process_image()
+            # 객체 검출 수행
+            results = model(sharpened_image, size=416)
+            # 검출된 객체에 대한 클래스 이름 가져오기
+            detected_object_names = [model.names[int(cls)] for cls in results.pred[0][:, -1]]
+            # 현재 시각 저장
+            current_time = time.time()
+
+            # 클래스가 검출되지 않고 직전에 검출된 시간이 5초 이내이면 직전에 검출된 클래스 이름을 사용
+            if not detected_object_names and latest_detected_object_names and (current_time - latest_detected_time <= 5):
+                detected_object_names = latest_detected_object_names
+            else:
+                latest_detected_object_names = detected_object_names  # 검출된 클래스 이름을 저장
+                latest_detected_time = current_time  # 검출된 시간을 저장
+
+            # 가장 빈번한 클래스 이름을 선택
+            counter = Counter(detected_object_names)
+            most_common = counter.most_common(1)
+
+            if most_common:
+                object_status = most_common[0][0]
+            else:
+                object_status = "normal"
+
+            # if count_from_arduino != pre_count:
             if pre_count != 0 and count_from_arduino == 1:
                 defective_count = 0
 
@@ -154,9 +156,11 @@ def continuous_object_detection_and_processing():   # 물체를 인식하여 물
             # 데이터를 백엔드 서버로 전송
             response = send_to_backend(serial_number, object_status, defective_count, count_from_arduino, timestamp_from_arduino)
             print("Backend Response:", response.text)  # 응답을 콘솔에 출력
-            pre_count = count_from_arduino
 
-        last_time = current_time
+            pre_count = count_from_arduino
+            last_time = current_time
+
+        time.sleep(1)
 
 
 @app.route('/get-live-transmission', methods=['GET'])
@@ -171,4 +175,4 @@ def get_live_transmission():    # 리액트 프론트 서버에 이미지 전송
 if __name__ == '__main__':
     t = Thread(target=continuous_object_detection_and_processing)
     t.start()  # 함수를 별도의 스레드에서 실행
-    app.run(host='0.0.0.0', debug=True, port=5000, threaded=True)
+    app.run(host='0.0.0.0', debug=False, port=5000, threaded=True)
