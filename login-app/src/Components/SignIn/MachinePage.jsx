@@ -150,6 +150,14 @@ function MachinePage() {
   // 목표생산량 animateText
   const [animateText, setAnimateText] = useState(false)
 
+  const formatTime = (time) => {
+    const hours = Math.floor(time / 3600000); // 시간
+    const minutes = Math.floor((time % 3600000) / 60000); // 분
+    const seconds = ((time % 60000) / 1000).toFixed(0); // 초
+  
+    return `${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  };
+
   //현재 생산 속도
   const elapsedSeconds = elapsedTime / 1000 // 초 단위로 표시
   const currentRate = count / elapsedSeconds
@@ -158,9 +166,14 @@ function MachinePage() {
   const remainingItems = targetCount - count
   const remainingSeconds = remainingItems / currentRate // 후에 formatTime 함수를 사용하여 시간, 분, 초 변환
 
-  // 로컬 스토리지에 저장
-  localStorage.setItem("remainingItems", remainingItems)
-  localStorage.setItem("remainingSeconds", remainingSeconds)
+
+ // 예상 남은 시간 계산 후 로컬 스토리지에 저장
+  const formattedRemainingTime = formatTime(remainingSeconds * 1000);
+  localStorage.setItem("remainingTime", formattedRemainingTime);
+
+  // 앞으로 남은 생산량을 로컬 스토리지에 저장
+  localStorage.setItem("remainingItems", String(remainingItems));
+
   // alert 횟수
   const [alertCount, setAlertCount] = useState(0)
 
@@ -213,13 +226,6 @@ function MachinePage() {
     localStorage.removeItem("targetCount");
   }
 
-  const formatTime = (time) => {
-    const hours = Math.floor(time / 3600000); // 시간
-    const minutes = Math.floor((time % 3600000) / 60000); // 분
-    const seconds = ((time % 60000) / 1000).toFixed(0); // 초
-  
-    return `${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-  };
 
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -253,15 +259,15 @@ function MachinePage() {
               <>
               <CSSTransition in={animateText} timeout={1000} classNames="fade" appear>
                 {/* <div>{targetCount}</div> */}
-                <div>
+                <div >
                   앞으로 남은 생산량 <br />
-                  <span style={{ fontWeight: 'bold', color: '#0f0' }}>{targetCount - count}</span>
-                  <Typography variant="body1">
+                  <span style={{ fontWeight: 'bold', color: '#0f0'}}>{targetCount - count}</span>
+                  <Typography variant="body1" sx={{ marginTop: 2 }} >
                     예상 남은 시간: 
                     {
                       isNaN(remainingSeconds) 
                       ? ""
-                      : formatTime(remainingSeconds * 1000)
+                      : <span style={{ color: 'red' }}>{formatTime(remainingSeconds * 1000)}</span> 
                     }
                   </Typography>
 

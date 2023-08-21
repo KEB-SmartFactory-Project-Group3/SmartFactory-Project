@@ -6,11 +6,11 @@ import Paper from '@mui/material/Paper';
 import { StyledBackground, StyledFactor, LandStyledFactor } from '../stylescomp/BackgroundStyle';
 import { CSSTransition } from 'react-transition-group';
 import { FadeBox } from '../stylescomp/FadeinStyle';
-import {GridItemStyled, SubmitContainer, StyledTextField, ItemStyledChart, GridItemStyledChart, ItemStyledCount, RateLabel, DigitalClockStyle, ItemStyledTime, ButtonStyled, GridContainerStyled, GridItemStyledTime} from '../stylescomp/MachineStyle';
+import {GridItemStyled, SubmitContainer, StyledTextField, ItemStyledChart, GridItemStyledChart, ItemStyledCount, RateLabel, DigitalClockStyle, ItemStyledTime, ButtonStyled, GridContainerStyled, GridItemStyledTime, ProductionItemStyled} from '../stylescomp/MachineStyle';
 import { TempGridStyled,TempItemStyled, TempHumItemStyled, TempHumDBStyled } from '../stylescomp/TemperatureStyle';
 import { LandGrid, LandItem, LandItemVision, PredictCountItem, TitrationItem, LandDigitalClockStyle } from '../stylescomp/LandingStyle';
-import TargetDonutChart from '../Chart/TargetCountChart';
-import BasicBars from '../Chart/CountCompare';
+import TargetProgressChart from '../Chart/TargetCountChart';
+import BasicPie from '../Chart/CountCompare';
 import useMachineCount from '../hooks/useMachineCount';
 import TempHumidityChart from '../Chart/TempHumidityChart';
 import RealTimeLineChart from '../Chart/RealTimeLineChart';
@@ -25,6 +25,7 @@ import { CircularProgress} from '@mui/material';
 import HumidityDisplay from '../display/HumidityDisplay';
 import LiveTransmissionComponent from './LiveTransmissionComponent';
 import TemperatureData from '../Data/TemperatureData';
+import useDefective from '../hooks/useDefective';
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -45,22 +46,17 @@ const formatTime = (time) => {
 
 function LandingPage() {
 
-    const {count, defectiveCount, targetCount} = useMachineCount()
+    const {count, targetCount} = useMachineCount()
+    const {defectiveCount} = useDefective()
     const {nowRate} = useMachineRate()
     const {elapsedTime} = customMachine()
     const {factoryTemperature,  factoryHumidity } = useTemperature()
 
-    // 남은 예상 시간, 남은 생산량 로컬 스토리지에서 가져옴
-    const rawRemainingItems = localStorage.getItem("remainingItems")
-    const remainingItemsFromStorage = rawRemainingItems ? parseInt( rawRemainingItems ) : 0
-   
-    function convertTimeToSeconds(timeString) {
-      const [hours, minutes, seconds] = timeString.split(':').map(parseFloat);
-      return (hours * 3600) + (minutes * 60) + seconds;
-  }
-  
-    const rawRemainingSeconds = localStorage.getItem("remainingSeconds");
-    const remainingSecondsFromStorage = rawRemainingSeconds ? convertTimeToSeconds(rawRemainingSeconds) : 0;
+    // 로컬 스토리지에서 예상 남은 시간을 가져오기
+    const storedRemainingTime = localStorage.getItem("remainingTime");
+
+    // 로컬 스토리지에서 앞으로 남은 생산량을 가져오기
+    const storedRemainingItems = parseInt(localStorage.getItem("remainingItems"), 10);
 
   return (
     <StyledBackground>
@@ -71,8 +67,8 @@ function LandingPage() {
 
         <LandGrid item xs={12} md={2}>
           <ItemStyledCount borderColor='#651fff'>
-            도달률
-            <TargetDonutChart nowRate={nowRate} />
+            {/* 도달률 */}
+            <TargetProgressChart nowRate={nowRate} />
           </ItemStyledCount>
         </LandGrid>
 
@@ -80,18 +76,18 @@ function LandingPage() {
         <LandGrid item xs={12} md={2}>
           <Grid container direction="column">
             <LandGrid item xs={12}>
-              <PredictCountItem highlight={remainingItemsFromStorage > 0}>
+              <PredictCountItem highlight={storedRemainingItems > 0}>
                  앞으로 남은 생산량
                 <Typography variant="h6"  style={{ color: '#0f0' }}>
-                    {remainingItemsFromStorage}
+                    {storedRemainingItems}
                 </Typography>
               </PredictCountItem>
             </LandGrid>
             <LandGrid item xs={12}>
-              <PredictCountItem highlightTime={remainingSecondsFromStorage > 0}>
+              <PredictCountItem highlightTime={storedRemainingTime > 0}>
                 예상 남은 시간
                 <Typography variant="h6"  style={{ color: '#ffeb3b' }}>
-                {remainingSecondsFromStorage }
+                {storedRemainingTime }
                 </Typography>
               </PredictCountItem>
             </LandGrid>
@@ -100,9 +96,10 @@ function LandingPage() {
 
         {/* 현재 생산량 */}
         <LandGrid item xs={12} md={3}>
-          <ItemStyledCount>
+          <ProductionItemStyled height="23vh">
             현재 생산량
-          </ItemStyledCount>
+            <BasicPie count={count} defectiveCount={defectiveCount} width={300} height={300} />
+          </ProductionItemStyled>
         </LandGrid>
 
         <TempGridStyled item xs={6} md={2.5}>
@@ -124,23 +121,26 @@ function LandingPage() {
         <TempGridStyled item xs={12} md={5}>
           <TempItemStyled>
             기계 차트
-            <RealTimeLineChart targetCount={targetCount}/>
+            <RealTimeLineChart width={550}height={300}targetCount={targetCount}/>
           </TempItemStyled>
         </TempGridStyled>
      
         {/* 다음 줄: 가동 시간 */}
         <TempGridStyled item xs={12} md={2}>
-          <TempItemStyled borderColor='#0f0'>
+          <ItemStyledTime borderColor='#0f0' height='15vh'>
+          <Typography variant="subtitle1" style={{ marginTop: '20px', fontWeight: 'bold' }}>
             가동 시간
+          </Typography>
+     
             <LandDigitalClockStyle variant='h3'>
               {formatTime(elapsedTime)}
             </LandDigitalClockStyle>
-          </TempItemStyled>
+          </ItemStyledTime>
         </TempGridStyled>
 
-       <LandGrid item xs={12} md={5} >
-          <LandItem>
-            컴퓨터 비전
+       <LandGrid item xs={12} md={5} transitionValue="none" transformValue="none" backdropFilter="none" >
+          <LandItem bg="none" filter="none" hoverBg="none" scale="none">
+            {/* 컴퓨터 비전 */}
             <LiveTransmissionComponent />
           </LandItem>
         </LandGrid>
