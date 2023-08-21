@@ -21,7 +21,7 @@ CORS(app, resources={r"*": {"origins": ["http://192.168.43.192:3005"]}})
 arduino_url = 'http://192.168.43.101/'
 
 # YOLOv5 모델 불러오기
-model = torch.hub.load('ultralytics/yolov5', 'custom', path='C:/YOLOv5_model/yolov5_cupramen_best.pt')
+model = torch.hub.load('ultralytics/yolov5', 'custom', path='your_path/yolov5_cupramen_best.pt') # 경로 설정 필요
 # 검출 임계값(Threshold) 설정
 model.conf = 0.5
 
