@@ -3,9 +3,18 @@ import { retrieveData } from '../api/ApiService';
 import axios from 'axios';
 
 function useMachineCount() {
-  const [count, setCount] = useState(0)
-  const [targetCount,setTargetCount] = useState(0)
+  // const [count, setCount] = useState(0)
+  // const [targetCount,setTargetCount] = useState(0)
   const [showAlert, setShowAlert] = useState(false);
+
+  const [targetCount, setTargetCount] = useState(() => localStorage.getItem("targetCount") || "");
+  const [count, setCount] = useState(() => parseInt(localStorage.getItem("count")) || 0);
+
+
+  useEffect(() => {
+    localStorage.setItem("targetCount", targetCount.toString());
+    localStorage.setItem("count", count.toString());
+}, [targetCount, count]);
 
   useEffect(() => {
     const intervalTime = setInterval(callCountApi, 1000);
@@ -20,11 +29,7 @@ function useMachineCount() {
       .then((response) => {
         console.log("API count 응답 데이터:", response)
         successfulResponse(response) 
-        // if (response && response.data && response.data.count !== undefined){
-        //     successfulResponse(response) 
-        // } else {
-        //   errorResponse(new Error("count 0 또는 API 응답 없음"))
-        // }
+
       })
       .catch((error) => errorResponse(error))
       .finally(() => console.log('count cleanup'));
@@ -32,9 +37,6 @@ function useMachineCount() {
 
   function successfulResponse(response) {
     setCount(response);
-
-    // const fetchedCount = response.data.count; // 실제 가져온 count 값
-    // setCount(fetchedCount)
   }
 
   function errorResponse(error) {
@@ -47,7 +49,7 @@ function useMachineCount() {
   }
 
   const apiServer = axios.create({
-    baseURL: 'http://172.20.10.3:8080',
+    baseURL: 'http://192.168.43.183:8080',
     withCredentials: true, //쿠키 자동 포함
   })
 
@@ -73,7 +75,7 @@ function useMachineCount() {
         const requestRateData = {
           goal : targetCount
         }
-        const response = await apiServer.post('/api/display/goal',requestRateData, config)
+        const response = await apiServer.post('/click/setgoal',requestRateData, config)
         if (response.status === 200) {
          console.log('Data posted successfully:', response.data);
          } else {

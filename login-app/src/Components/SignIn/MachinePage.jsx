@@ -18,11 +18,11 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/lab/Alert';
 import { CSSTransition } from 'react-transition-group';
 import { FadeBox } from '../stylescomp/FadeinStyle';
-import TargetDonutChart from '../Chart/TargetCountChart';
+import TargetProgressChart from '../Chart/TargetCountChart';
 import RealTimeLineChart from '../Chart/RealTimeLineChart';
 import Badge from '@mui/material/Badge';
 import MailIcon from '@mui/icons-material/Mail';
-import BasicBars from '../Chart/CountCompare';
+import BasicPie from '../Chart/CountCompare';
 import Tooltip from '@mui/material/Tooltip';
 import { sendStartToBackend , sendResetToBackend } from '../api/ApiService';
 import Dialog from '@mui/material/Dialog';
@@ -109,7 +109,14 @@ function MachinePage() {
   const {defectiveCount} = useDefective()
   const [formOpen, setFormOpen] = useState(false)
  
-  const [submitted, setSubmitted] = useState(false)
+  // const [submitted, setSubmitted] = useState(false)
+
+  const [submitted, setSubmitted] = useState(() => localStorage.getItem("submitted") === "true");
+
+  useEffect(() => {
+    localStorage.setItem("submitted", submitted);
+}, [submitted]);
+
 
   // reset 다이얼로그 상태
   const [openResetDialog, setOpenResetDialog] = useState(false)
@@ -182,15 +189,21 @@ function MachinePage() {
       setShowAlert(true);
       return;
   }
+  localStorage.setItem("submitted", true);
+  localStorage.setItem("targetCount", targetCount.toString());
+
     handleTargetCountSubmit()
     setSubmitted(true)
     setAnimateText(true); // 애니메이션 시작
     setTimeout(() => setAnimateText(false), 1000) // 지속 시간
   }
-
+  
+  
   const handleTextReset = () => {
     setSubmitted(false)
     setShowNoDataAlert(false) // 초기화
+    localStorage.removeItem("submitted");
+    localStorage.removeItem("targetCount");
   }
 
   const formatTime = (time) => {
@@ -222,7 +235,7 @@ function MachinePage() {
 
         <GridItemStyled item xs={12} >
             <ItemStyledCount borderColor="#651fff" height="11vh">
-              <TargetDonutChart nowRate={nowRate} />
+              <TargetProgressChart nowRate={nowRate} />
             </ItemStyledCount>
         </GridItemStyled>
 
@@ -392,7 +405,7 @@ function MachinePage() {
         
         <GridItemStyledChart item xs={8} sm={8} md={8}>
           <ItemStyledChart>
-            차트
+        
             <RealTimeLineChart targetCount={targetCount}/>
           </ItemStyledChart>
         </GridItemStyledChart>
@@ -400,9 +413,7 @@ function MachinePage() {
          <GridItemStyled item xs={12} sm={4} md={4}>
   
             <ProductionItemStyled>
-            {/* <h2>현재 생산량: {count}</h2>
-            <h2>불량품 수 : {defectiveCount}</h2> */}
-            <BasicBars count={count} defectiveCount={defectiveCount} />
+            <BasicPie count={count} defectiveCount={defectiveCount} />
             </ProductionItemStyled>
           
         </GridItemStyled>
