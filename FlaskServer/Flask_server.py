@@ -15,7 +15,7 @@ from threading import Thread
 app = Flask(__name__)
 
 # React server & CORS
-CORS(app, resources={r"*": {"origins": ["http://192.168.43.192:3004"]}})
+CORS(app, resources={r"*": {"origins": ["http://192.168.43.192:3005"]}})
 
 # Arduino webserver URL
 arduino_url = 'http://192.168.43.101/'
@@ -23,7 +23,7 @@ arduino_url = 'http://192.168.43.101/'
 # YOLOv5 모델 불러오기
 model = torch.hub.load('ultralytics/yolov5', 'custom', path='C:/YOLOv5_model/yolov5_cupramen_best.pt')
 # 검출 임계값(Threshold) 설정
-model.conf = 0.6
+model.conf = 0.5
 
 # 물체 count를 위한 변수들
 last_time = 0
@@ -105,6 +105,7 @@ def receive_data_from_arduino():    # 아두이노 ESP32 보드에서 물체 카
     timestamp_from_arduino = json_data['times']
 
     print("count_from_arduino: ", count_from_arduino)
+    print("pre_count:", pre_count, "count_from_arduino:", count_from_arduino)
 
     return jsonify({"defective_count": defective_count}), 200
 
@@ -152,7 +153,7 @@ def continuous_object_detection_and_processing():   # 물체를 인식하여 물
 
             # 데이터를 백엔드 서버로 전송
             response = send_to_backend(serial_number, object_status, defective_count, count_from_arduino, timestamp_from_arduino)
-
+            print("Backend Response:", response.text)  # 응답을 콘솔에 출력
             pre_count = count_from_arduino
 
         last_time = current_time
