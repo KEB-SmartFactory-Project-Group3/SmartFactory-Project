@@ -22,7 +22,10 @@ function LinearProgressWithLabel(props) {
     return (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Box sx={{ width: '100%', mr: 1 }}>
-                <LinearProgress variant="determinate" {...props} style={{ backgroundColor: color }} />
+                <LinearProgress variant="determinate" {...props} style={{ backgroundColor: 'white',height: '10px',borderRadius: '12px', border: '2px solid white',
+                        '& .MuiLinearProgress-bar': {  // 차오르는 부분의 색상 설정
+                            backgroundColor: color 
+                        }}} />
             </Box>
             <Box sx={{ minWidth: 35 }}>
                 <Typography variant="body2" color="text.secondary" style={{ color, fontSize: '18px' }}>{`${Math.round(
@@ -55,7 +58,7 @@ export default function TargetProgressChart() {
     return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
 
-            <div style={{ fontSize: '16px', fontWeight: 'bold', textAlign: 'center' }}>
+            <div style={{ fontSize: '16px', fontWeight: 'bold', textAlign: 'center' ,marginBottom:'10px'}}>
                 도달률
             </div>
 
