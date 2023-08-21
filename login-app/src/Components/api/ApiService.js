@@ -69,11 +69,11 @@ export const retrieveData = async (dataKey) => {
     let response;
 
     if (dataKey === 'factoryTemperature' || dataKey === 'times' || dataKey === 'factoryHumidity') {
-      response = await apiClient.get("/factoryinfo/current", config);
+      response = await apiClient.get("/conditions/current", config);
       return response.data[dataKey];  // dataKey에 대한 값 직접 반환
     } 
     else if (dataKey === 'maxTemperature' || dataKey === 'minTemperature' || dataKey === 'avgTemperature' || dataKey === 'maxHumidity' || dataKey === 'minHumidity' || dataKey === 'avgHumidity') {
-      response = await apiClient.get("/factoryinfo/statistics", config);
+      response = await apiClient.get("/conditions/statistics", config);
       return response.data[dataKey];
     } 
     
@@ -98,7 +98,7 @@ export const retrieveData = async (dataKey) => {
       }));
       return productsmodifiedData;
     } else if (dataKey === 'TempDBList') {
-      response = await apiClient.get("/factoryinfo/outlierlist", config);
+      response = await apiClient.get("/conditions/outlierlist", config);
       const outlierData = response.data.map(item => ({
           dbTime: item.times,
           dbTemp: item.factoryTemperature,
@@ -108,7 +108,7 @@ export const retrieveData = async (dataKey) => {
       return outlierData;
     }  
       else {
-        response = await apiClient.get("/products/count", config);
+        response = await apiClient.get("/products/current", config);
         if (dataKey === 'count') {
           return response.data.count
         } else if (dataKey ==='nowRate') {
