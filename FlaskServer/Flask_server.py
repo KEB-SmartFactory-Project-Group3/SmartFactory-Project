@@ -118,14 +118,14 @@ def continuous_object_detection_and_processing():   # 물체를 인식하여 물
         # 이미지 가져오기 및 처리
         sharpened_image = fetch_and_process_image()
         # 객체 검출 수행
-        results = model(sharpened_image, size=640)
+        results = model(sharpened_image, size=416)
         # 검출된 객체에 대한 클래스 이름 가져오기
         detected_object_names = [model.names[int(cls)] for cls in results.pred[0][:, -1]]
         # 현재 시각 저장
         current_time = time.time()
 
-        # 클래스가 검출되지 않고 직전에 검출된 시간이 3초 이내이면 직전에 검출된 클래스 이름을 사용
-        if not detected_object_names and latest_detected_object_names and (current_time - latest_detected_time <= 3):
+        # 클래스가 검출되지 않고 직전에 검출된 시간이 5초 이내이면 직전에 검출된 클래스 이름을 사용
+        if not detected_object_names and latest_detected_object_names and (current_time - latest_detected_time <= 5):
             detected_object_names = latest_detected_object_names
         else:
             latest_detected_object_names = detected_object_names  # 검출된 클래스 이름을 저장
