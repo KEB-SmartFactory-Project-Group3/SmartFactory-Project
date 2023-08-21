@@ -167,12 +167,24 @@ function MachinePage() {
   const remainingSeconds = remainingItems / currentRate // 후에 formatTime 함수를 사용하여 시간, 분, 초 변환
 
 
- // 예상 남은 시간 계산 후 로컬 스토리지에 저장
-  const formattedRemainingTime = formatTime(remainingSeconds * 1000);
-  localStorage.setItem("remainingTime", formattedRemainingTime);
+  useEffect(() => {
+    const remainingItems = targetCount - count;
+    const remainingSeconds = remainingItems / currentRate;
+    const formattedRemainingTime = formatTime(remainingSeconds * 1000);
 
-  // 앞으로 남은 생산량을 로컬 스토리지에 저장
-  localStorage.setItem("remainingItems", String(remainingItems));
+    localStorage.setItem("remainingTime", formattedRemainingTime);
+    localStorage.setItem("remainingItems", String(remainingItems));
+}, [count, targetCount, currentRate]);
+
+
+ // 예상 남은 시간 계산 후 로컬 스토리지에 저장
+  // const formattedRemainingTime = formatTime(remainingSeconds * 1000);
+  // localStorage.setItem("remainingTime", formattedRemainingTime);
+
+
+  // // 앞으로 남은 생산량을 로컬 스토리지에 저장
+  // localStorage.setItem("remainingItems", String(remainingItems));
+
 
   // alert 횟수
   const [alertCount, setAlertCount] = useState(0)
@@ -262,7 +274,7 @@ function MachinePage() {
                 <div >
                   앞으로 남은 생산량 <br />
                   <span style={{ fontWeight: 'bold', color: '#0f0'}}>{targetCount - count}</span>
-                  <Typography variant="body1" sx={{ marginTop: 2 }} >
+                  <Typography variant="body1" sx={{ marginTop: 0}} >
                     예상 남은 시간: 
                     {
                       isNaN(remainingSeconds) 

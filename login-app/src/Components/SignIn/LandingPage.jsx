@@ -1,4 +1,4 @@
-import React from 'react';
+import React , {useState , useEffect}from 'react';
 import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -26,6 +26,7 @@ import HumidityDisplay from '../display/HumidityDisplay';
 import LiveTransmissionComponent from './LiveTransmissionComponent';
 import TemperatureData from '../Data/TemperatureData';
 import useDefective from '../hooks/useDefective';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -52,11 +53,37 @@ function LandingPage() {
     const {elapsedTime} = customMachine()
     const {factoryTemperature,  factoryHumidity } = useTemperature()
 
-    // 로컬 스토리지에서 예상 남은 시간을 가져오기
-    const storedRemainingTime = localStorage.getItem("remainingTime");
+    // 로컬스토리지의 변화를 감지하고 상태를 업데이트해서 재랜더링
+    const [remainingItems, setRemainingItems] = useState(() => {
+      const storedValue = localStorage.getItem("remainingItems");
+      return storedValue ? parseInt(storedValue, 10) : 0;
+     });
 
-    // 로컬 스토리지에서 앞으로 남은 생산량을 가져오기
-    const storedRemainingItems = parseInt(localStorage.getItem("remainingItems"), 10);
+    const [formattedRemainingTime, setFormattedRemainingTime] = useState(() => {
+        const storedValue = localStorage.getItem("remainingTime");
+        return storedValue || "00:00:00";
+    });
+
+    useEffect(() => {
+      // 로컬 스토리지의 값을 확인하고, 변경이 있으면 상태 업데이트
+      const storedRemainingItems = localStorage.getItem("remainingItems");
+      if(storedRemainingItems !== String(remainingItems)) {
+          setRemainingItems(parseInt(storedRemainingItems, 10));
+      }
+
+      const storedFormattedTime = localStorage.getItem("remainingTime");
+      if(storedFormattedTime !== formattedRemainingTime) {
+          setFormattedRemainingTime(storedFormattedTime);
+      }
+
+    }, []);
+   
+  
+    // // 로컬 스토리지에서 예상 남은 시간을 가져오기
+    // const storedRemainingTime = localStorage.getItem("remainingTime");
+
+    // // 로컬 스토리지에서 앞으로 남은 생산량을 가져오기
+    // const storedRemainingItems = parseInt(localStorage.getItem("remainingItems"), 10);
 
   return (
     <StyledBackground>
@@ -76,18 +103,18 @@ function LandingPage() {
         <LandGrid item xs={12} md={2}>
           <Grid container direction="column">
             <LandGrid item xs={12}>
-              <PredictCountItem highlight={storedRemainingItems > 0}>
+              <PredictCountItem highlight={remainingItems > 0}>
                  앞으로 남은 생산량
                 <Typography variant="h6"  style={{ color: '#0f0' }}>
-                    {storedRemainingItems}
+                    {remainingItems}
                 </Typography>
               </PredictCountItem>
             </LandGrid>
             <LandGrid item xs={12}>
-              <PredictCountItem highlightTime={storedRemainingTime > 0}>
+              <PredictCountItem highlightTime={formattedRemainingTime > 0}>
                 예상 남은 시간
                 <Typography variant="h6"  style={{ color: '#ffeb3b' }}>
-                {storedRemainingTime }
+                {formattedRemainingTime}
                 </Typography>
               </PredictCountItem>
             </LandGrid>
@@ -95,12 +122,15 @@ function LandingPage() {
         </LandGrid>
 
         {/* 현재 생산량 */}
-        <LandGrid item xs={12} md={3}>
+        <GridItemStyled item xs={12} md={3}>
           <ProductionItemStyled height="23vh">
+         
+            <BasicPie count={count} defectiveCount={defectiveCount} width={250} height={250} />
+            {/* <Typography variant="subtitle1" style={{fontWeight: 'bold' , order: 1 }}>
             현재 생산량
-            <BasicPie count={count} defectiveCount={defectiveCount} width={300} height={300} />
+          </Typography> */}
           </ProductionItemStyled>
-        </LandGrid>
+        </GridItemStyled>
 
         <TempGridStyled item xs={6} md={2.5}>
         <TempItemStyled>
