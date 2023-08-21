@@ -22,13 +22,6 @@ erDiagram
     username VARCHAR(20)
   }
   
-  productInfo{
-    order(count) INT PK, FK
-    serialNumber VARCHAR(15) PK
-    quality VARCHAR(10)
-    manufacturingDate TIME 
-  }
-  
   Conditions{
     times Datetime(6) PK
     factoryTemperature DOUBLE
