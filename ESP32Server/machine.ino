@@ -11,10 +11,6 @@
 #define DHTTYPE DHT11
 DHT dht(DHTPIN, DHTTYPE); // 사용핀넘버 타입 등록
 
-
-//------------------------ global variables ------------------------------------------------------------------
-// const char* ssid = "Dohwan"; // "KT_GiGA_F2EA"; // "SmartFactory"; //                   // 와이파이 아이디
-// const char* password = "dh990921"; // "ffk8ebb167"; // "inha4885"; //     // 와이파이 비밀번호
 const char* ssid = "AndroidHotspot5460"; 
 const char* password = "19990220"; 
 
@@ -139,7 +135,8 @@ void machineReset(){
 void sendDataToServer(int currentCount) {
   HTTPClient http;
   // String serverUrl = "http://172.20.10.3:8080/machine/data";
-  String serverUrl = "http://192.168.43.183:8080/machine/data";
+  // String serverUrl = "http://192.168.43.183:8080/machine/data";
+  String camUrl = "http://192.168.43.9:5000/count";
   String requestBody;
 
   time_t now;
@@ -157,10 +154,14 @@ void sendDataToServer(int currentCount) {
 
   serializeJson(jsonDocument, requestBody);
 
-  http.begin(serverUrl);
+  http.begin(camUrl);
   http.addHeader("Content-Type", "application/json");
-  int httpResponseCode = http.POST(requestBody);
   
+  int httpResponseCode = http.POST(requestBody); 
+  if (httpResponseCode != 200){
+    count -= 1;
+  }
+  Serial.println(httpResponseCode);
   http.end();
   isSending = false; // 전송 완료 상태로 설정
 }
@@ -180,18 +181,14 @@ void counting(){
 
   if(distance > 2 && distance < 5){            // 물체와의 거리가 2cm 초과 10cm 미만이면
     int now_time = millis();
-    if(now_time - pre_time > 500 && !isSending){           // 중복 카운트를 방지하기 위해 0.5초 초과면 
+    if(now_time - pre_time > 5000 && !isSending){           // 중복 카운트를 방지하기 위해 5초 초과면 카운트
       count += 1;                         // 한번 카운트
-      isSending = true; // 전송 시작 상태로 설정
+      isSending = true; 		// 전송 시작 상태로 설정
       sendDataToServer(count);                // 서버로 데이터 전송
+      Serial.println("Data send done");
       pre_time = now_time;                // 이전 시각에 현재 시각 저장
     }
   }
-
-  if(digitalRead(reset_pin) == LOW){           // 리셋 버튼을 누르면
-    Serial.println("count reset");                
-    count = 0;                              // 카운트 초기화
-  } 
 }
 
 void oled_display(){
