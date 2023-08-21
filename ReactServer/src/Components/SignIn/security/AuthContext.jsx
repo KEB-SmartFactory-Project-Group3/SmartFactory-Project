@@ -10,7 +10,7 @@ export const useAuth = () => useContext(AuthContext)
 
 function AuthProvider( {children}) {
 
-  const [cookie, setCookie] = useCookies(['accessToken'])
+  const [cookie, setCookie, removeCookie] = useCookies(['accessToken'])
 
   //로그인 성공 여부
   const [isAuthenticated,setAuthenticated] = useState(false)
@@ -69,7 +69,7 @@ function AuthProvider( {children}) {
   function logout() {
     setAuthenticated(false)
     setCurrentUser(null) // 로그아웃 시 관리자 정보 초기화
-
+    removeCookie('accessToken', { path: '/' }) // 쿠키 삭제
   }
 
   return (
