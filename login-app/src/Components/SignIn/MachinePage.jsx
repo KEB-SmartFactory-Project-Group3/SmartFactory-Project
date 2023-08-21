@@ -113,6 +113,13 @@ function MachinePage() {
 
   const [submitted, setSubmitted] = useState(() => localStorage.getItem("submitted") === "true");
 
+  // 목표생산량이 0이되면 가동중지 실행
+  useEffect(() => {
+    if (targetCount - count === 0) {
+        handleStop();
+    }
+}, [count, targetCount, handleStop]);
+
   useEffect(() => {
     localStorage.setItem("submitted", submitted);
 }, [submitted]);
