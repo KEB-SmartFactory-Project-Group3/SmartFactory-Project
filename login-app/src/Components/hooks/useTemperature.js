@@ -3,31 +3,38 @@ import { retrieveData } from '../api/ApiService';
 import axios from 'axios';
 
 function useTemperature() {
-  const [temperature,setTemperature] = useState(0);
+
+  const [factoryTemperature,setFactoryTemperature] = useState(0)
+  const [factoryHumidity, setFactoryHumidity] = useState(0)
 
   useEffect(() => {
-    const intervalTime = setInterval(callTempApi, 1000);
+    const intervalTime = setInterval(callTempAndHumApi, 1000);
 
     return () => {
       clearInterval(intervalTime);
     };
-  }, [temperature]);
+  }, [factoryTemperature, factoryHumidity]);
 
-  function callTempApi() {
-    retrieveData('temperature')
+  function callTempAndHumApi() {
+    retrieveData('factoryTemperature')
       .then((response) => {
         console.log("API temp 응답 데이터:", response)
         successfulResponse(response) 
       })
       .catch((error) => errorResponse(error))
-      .finally(() => console.log('temp cleanup'));
+      .finally(() => console.log('temp cleanup'))
+
+    retrieveData('factoryHumidity')
+    .then((response) => {
+      console.log("API humidity 응답 데이터:", response)
+      setFactoryHumidity(response);
+    })
+    .catch((error) => errorResponse(error))
+    .finally(() => console.log('humidity cleanup'))
   }
 
   function successfulResponse(response) {
-    setTemperature(response);
-
-    // const fetchedtemp = response.data.temperature; // 실제 가져온 temp 값
-    // setCount(fetchedtemp)
+    setFactoryTemperature(response);
   }
 
   function errorResponse(error) {
@@ -35,7 +42,7 @@ function useTemperature() {
   }
 
  
-  return {temperature}
+  return {factoryTemperature,  factoryHumidity }
    
 }
 

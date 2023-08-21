@@ -33,6 +33,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import useDefective from '../hooks/useDefective';
 import ProductionManagement from '../Data/ProductionManagement';
+import useLocalStorage from '../hooks/useLocalStorage';
+
 // import styled from 'styled-components';
 
 const StyledDialog = styled(Dialog)`
@@ -166,15 +168,18 @@ function MachinePage() {
   const remainingItems = targetCount - count
   const remainingSeconds = remainingItems / currentRate // 후에 formatTime 함수를 사용하여 시간, 분, 초 변환
 
+  // 로컬 스토리지에 저장된 값을 읽어옴
+  const [storedRemainingItems, setStoredRemainingItems] = useLocalStorage('remainingItems', 0);
+  const [storedFormattedRemainingTime, setStoredFormattedRemainingTime] = useLocalStorage('remainingTime', '00:00:00');
 
-  useEffect(() => {
-    const remainingItems = targetCount - count;
-    const remainingSeconds = remainingItems / currentRate;
-    const formattedRemainingTime = formatTime(remainingSeconds * 1000);
+ useEffect(() => {
+   const remainingItems = targetCount - count;
+   const formattedRemainingTime = formatTime(remainingSeconds * 1000);
 
-    localStorage.setItem("remainingTime", formattedRemainingTime);
-    localStorage.setItem("remainingItems", String(remainingItems));
-}, [count, targetCount, currentRate]);
+   // 로컬 스토리지에 값을 저장
+   setStoredRemainingItems(remainingItems);
+   setStoredFormattedRemainingTime(formattedRemainingTime);
+ }, [count, targetCount, currentRate]);
 
 
  // 예상 남은 시간 계산 후 로컬 스토리지에 저장
@@ -273,13 +278,13 @@ function MachinePage() {
                 {/* <div>{targetCount}</div> */}
                 <div >
                   앞으로 남은 생산량 <br />
-                  <span style={{ fontWeight: 'bold', color: '#0f0'}}>{targetCount - count}</span>
+                  <span style={{ fontWeight: 'bold', color: '#0f0'}}>{storedRemainingItems}</span>
                   <Typography variant="body1" sx={{ marginTop: 0}} >
                     예상 남은 시간: 
                     {
                       isNaN(remainingSeconds) 
                       ? ""
-                      : <span style={{ color: 'red' }}>{formatTime(remainingSeconds * 1000)}</span> 
+                      : <span style={{ color: 'red' }}>{storedFormattedRemainingTime}</span> 
                     }
                   </Typography>
 
@@ -420,7 +425,7 @@ function MachinePage() {
         <GridItemStyled item xs={12} sm={3} md={3}>
           
           <ProductionItemStyled>
-          <h2>현재 생산량: {count}</h2>
+          <h2>현재 생산량: {count}</h2> <br />
           <h2>불량품 수 : {defectiveCount}</h2>
           {/* <BasicBars count={count} defectiveCount={defectiveCount} /> */}
           </ProductionItemStyled>

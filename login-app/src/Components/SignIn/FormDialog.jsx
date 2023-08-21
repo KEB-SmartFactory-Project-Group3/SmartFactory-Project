@@ -4,6 +4,7 @@ import { useAuth } from './security/AuthContext';
 import useTimeRecorder from '../hooks/customMachine'; 
 import axios from 'axios';
 import { styled } from '@mui/material/styles';
+import useMachineCount from '../hooks/useMachineCount';
 
 const StyledDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiPaper-root': {
@@ -36,10 +37,30 @@ export default function FormDialog({ open, handleClose, handleRestart, handleSto
 
   // const operationStartTime = useMachine()
   const authContext = useAuth()
-  // const {count} = useMachineCount()
+  const {count} = useMachineCount()
   const { elapsedTime : customMachineElapsedTime} = useTimeRecorder()
   const [selectedReason, setSelectedReason] = useState('')
   const [formattedOperationTime, setFormattedOperationTime] = useState('') 
+
+  // const [initialElapsedTime, setInitialElapsedTime] = useState(null);
+  // const [differenceInElapsedTime, setDifferenceInElapsedTime] = useState(null);
+  // const [formattedOperationStopTime, setFormattedOperationStopTime] = useState(null)
+
+  // useEffect(() => {
+  //     if (open && initialElapsedTime === null) {
+  //         // 처음 열렸을 때의 elapsedTime 값을 저장합니다.
+  //         setInitialElapsedTime(elapsedTime);
+  //     }
+  //     if (open && initialElapsedTime !== null) {
+  //         // elapsedTime의 변화량을 계산합니다.
+  //         const difference = elapsedTime - initialElapsedTime;
+  //         setDifferenceInElapsedTime(difference);
+  //         // 그리고 이 차이를 원하는 형식으로 변환하여 formattedOperationStopTime에 저장합니다.
+  //         const formattedDifference = formatTime(difference);
+  //         setFormattedOperationStopTime(formattedDifference);
+  //     }
+  // }, [open, elapsedTime]);
+
 
 
   const operationStopTimeMillis = Date.now(); // 밀리초로 현재 시간 가져오기
@@ -78,10 +99,9 @@ export default function FormDialog({ open, handleClose, handleRestart, handleSto
   }
 
   const apiServer = axios.create({
-    baseURL: 'http://172.20.10.3:8080',
+    baseURL: 'http://192.168.43.183:8080',
     withCredentials: true, //쿠키 자동 포함
   })
-
 
   //백엔드 api데이터 전송
   const handleReasonSubmit = async () => {
@@ -100,8 +120,8 @@ export default function FormDialog({ open, handleClose, handleRestart, handleSto
         const operationTime = formattedOperationTime; 
         // const operationTime = '04:05:30'; 
         const reason = selectedReason;
-        const countValue = 0; 
-        const state = 'start';
+        const countValue = count; 
+        const state = 'stop';
 
         console.log(name)
         console.log(operationStopTime)
@@ -117,7 +137,7 @@ export default function FormDialog({ open, handleClose, handleRestart, handleSto
           state,
         };
 
-        const response = await apiServer.post('/api/display/button',requestData, config)
+        const response = await apiServer.post('/click/stopbutton',requestData, config)
        if (response.status === 200) {
         console.log('Data posted successfully:', response.data);
         } else {
@@ -145,9 +165,9 @@ export default function FormDialog({ open, handleClose, handleRestart, handleSto
             label="휴식"
           />
           <FormControlLabel
-            value="교대"
+            value="도달"
             control={<WhiteRadio />}
-            label="교대"
+            label="도달"
           />
           <FormControlLabel
             value="고장"

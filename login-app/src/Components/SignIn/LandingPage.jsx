@@ -53,38 +53,12 @@ function LandingPage() {
     const {elapsedTime} = customMachine()
     const {factoryTemperature,  factoryHumidity } = useTemperature()
 
-    // 로컬스토리지의 변화를 감지하고 상태를 업데이트해서 재랜더링
-    const [remainingItems, setRemainingItems] = useState(() => {
-      const storedValue = localStorage.getItem("remainingItems");
-      return storedValue ? parseInt(storedValue, 10) : 0;
-     });
-
-    const [formattedRemainingTime, setFormattedRemainingTime] = useState(() => {
-        const storedValue = localStorage.getItem("remainingTime");
-        return storedValue || "00:00:00";
-    });
-
-    useEffect(() => {
-      // 로컬 스토리지의 값을 확인하고, 변경이 있으면 상태 업데이트
-      const storedRemainingItems = localStorage.getItem("remainingItems");
-      if(storedRemainingItems !== String(remainingItems)) {
-          setRemainingItems(parseInt(storedRemainingItems, 10));
-      }
-
-      const storedFormattedTime = localStorage.getItem("remainingTime");
-      if(storedFormattedTime !== formattedRemainingTime) {
-          setFormattedRemainingTime(storedFormattedTime);
-      }
-
-    }, []);
-   
+    // 로컬 스토리지에서 값을 불러옴
+    const [storedRemainingItems, setStoredRemainingItems] = useLocalStorage('remainingItems', 0);
+    const [storedFormattedRemainingTime, setStoredFormattedRemainingTime] = useLocalStorage('remainingTime', '00:00:00');
+    // const [storedRemainingItems, setStoredRemainingItems] = useState(() => localStorage.getItem('remainingItems') || 0);
+    // const [storedFormattedRemainingTime, setStoredFormattedRemainingTime] = useState(() => localStorage.getItem('remainingTime') || '00:00:00');
   
-    // // 로컬 스토리지에서 예상 남은 시간을 가져오기
-    // const storedRemainingTime = localStorage.getItem("remainingTime");
-
-    // // 로컬 스토리지에서 앞으로 남은 생산량을 가져오기
-    // const storedRemainingItems = parseInt(localStorage.getItem("remainingItems"), 10);
-
   return (
     <StyledBackground>
       <StyledFactor>
@@ -103,18 +77,18 @@ function LandingPage() {
         <LandGrid item xs={12} md={2}>
           <Grid container direction="column">
             <LandGrid item xs={12}>
-              <PredictCountItem highlight={remainingItems > 0}>
+              <PredictCountItem highlight={storedRemainingItems > 0}>
                  앞으로 남은 생산량
                 <Typography variant="h6"  style={{ color: '#0f0' }}>
-                    {remainingItems}
+                    {storedRemainingItems}
                 </Typography>
               </PredictCountItem>
             </LandGrid>
             <LandGrid item xs={12}>
-              <PredictCountItem highlightTime={formattedRemainingTime > 0}>
+              <PredictCountItem highlightTime={storedFormattedRemainingTime > 0}>
                 예상 남은 시간
                 <Typography variant="h6"  style={{ color: '#ffeb3b' }}>
-                {formattedRemainingTime}
+                {storedFormattedRemainingTime}
                 </Typography>
               </PredictCountItem>
             </LandGrid>

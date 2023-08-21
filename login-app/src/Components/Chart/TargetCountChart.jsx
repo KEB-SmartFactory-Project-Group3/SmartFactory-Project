@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { PieChart, Pie, Cell } from 'recharts';
+import styled from 'styled-components';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import useMachineRate from '../hooks/useMachineRate';
@@ -7,6 +7,22 @@ import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+
+const StyledLinearProgress = styled(LinearProgress)`
+    && {
+        height: 10px;
+        border-radius: 12px;
+        border: 2px solid white;
+        
+        /* remaining 부분의 배경색 */
+        background-color: white;
+        
+        /* 차오르는 부분의 색상 */
+        & .MuiLinearProgress-bar {
+            background-color: ${props => getColorByProgress(props.value)};
+        }
+    }
+`;
 
 function getColorByProgress(progress) {
 
@@ -22,10 +38,10 @@ function LinearProgressWithLabel(props) {
     return (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Box sx={{ width: '100%', mr: 1 }}>
-                <LinearProgress variant="determinate" {...props} style={{ backgroundColor: 'white',height: '10px',borderRadius: '12px', border: '2px solid white',
-                        '& .MuiLinearProgress-bar': {  // 차오르는 부분의 색상 설정
-                            backgroundColor: color 
-                        }}} />
+            <StyledLinearProgress 
+                    variant="determinate" 
+                    value={props.value}
+                />
             </Box>
             <Box sx={{ minWidth: 35 }}>
                 <Typography variant="body2" color="text.secondary" style={{ color, fontSize: '18px' }}>{`${Math.round(

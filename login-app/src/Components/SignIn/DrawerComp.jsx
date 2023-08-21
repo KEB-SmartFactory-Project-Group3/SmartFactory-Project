@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from './security/AuthContext';
-import { IconButton, ListItemButton, ListItemIcon, List, ListItemText} from "@mui/material";
+import { IconButton, ListItemButton, ListItemIcon, List} from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import HomeMaxIcon from '@mui/icons-material/HomeMax';
 import ThermostatIcon from '@mui/icons-material/Thermostat';
@@ -8,11 +8,10 @@ import BuildIcon from '@mui/icons-material/Build';
 import StorageIcon from '@mui/icons-material/Storage';
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
 import { Link } from 'react-router-dom';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
 import { Backdrop, CustomDrawer, WhiteListItemText } from "../stylescomp/DrawerStyle";
 import LogoutIcon from '@mui/icons-material/Logout';
-import Avatar from '@mui/material/Avatar';
+import Tooltip from '@mui/material/Tooltip';
+
 
 function DrawerComp({onClose, onLogout}) {
 
@@ -73,9 +72,11 @@ function DrawerComp({onClose, onLogout}) {
 
       </CustomDrawer>
 
+    <Tooltip title='로그아웃'>
       <IconButton sx={{ marginLeft: 'auto' }} onClick={onLogout}>
         <LogoutIcon sx={{ color: 'white', borderColor: 'white' }} />
       </IconButton>
+    </Tooltip>
       <IconButton
         sx={{ color: 'white', marginLeft: 'auto', marginLeft: { xs: 0, md: 'auto' } }}
         onClick={() => setOpen(!open)}

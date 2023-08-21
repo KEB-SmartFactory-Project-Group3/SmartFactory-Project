@@ -24,47 +24,46 @@ const customTheme = createTheme({
   },
 });
 
-
-const columns = [
-  { 
-    field: 'user', 
-    headerName: '관리자', 
-    width: 120, 
-    type: 'string',
-    renderCell: (params) => <span style={{ color: 'white' }}>{params.value}</span>
-  },
-  { 
-    field: 'opTime', 
-    headerName: '가동시간', 
-    type: 'string', 
-    width: 100,
-    renderCell: (params) => <span style={{ color: 'white' }}>{params.formattedValue}</span>
-  },
-  { 
-    field: 'stopTime', 
-    headerName: '작동중지시간', 
-    type: 'string', 
-    width: 120,
-    renderCell: (params) => <span style={{ color: 'white' }}>{params.formattedValue}</span>
-  },
-  { 
-    field: 'stopReason', 
-    headerName: '작동중지원인', 
-    type: 'string', 
-    width: 200,
-    renderCell: (params) => <span style={{ color: 'white' }}>{params.formattedValue}</span>
-  },
-  { 
-    field: 'rate', 
-    headerName: '도달률', 
-    type: 'Number', 
-    width: 120,
-    renderCell: (params) => <span style={{ color: 'white' }}>{params.value}</span> 
-  }
-];
-
-function ProductionManagement() {
+function ProductionManagement( { fieldWidths = {}, boxDimensions = { height: '650px', width: '100%' }} ) {
   const {user, opTime, stopTime, stopReason, rate}= useOperationStopList();
+
+  const columns = [
+    { 
+      field: 'user', 
+      headerName: '관리자', 
+      width: fieldWidths.user || 280,
+      type: 'string',
+      renderCell: (params) => <span style={{ color: 'white' }}>{params.value}</span>
+    },
+    { 
+      field: 'opTime', 
+      headerName: '가동시간', 
+      type: 'string', 
+      width: fieldWidths.opTime || 280,
+      renderCell: (params) => <span style={{ color: 'white' }}>{params.formattedValue}</span>
+    },
+    { 
+      field: 'stopTime', 
+      headerName: '작동중지시간', 
+      type: 'string', 
+      width: fieldWidths.stopTime || 300,
+      renderCell: (params) => <span style={{ color: 'white' }}>{params.formattedValue}</span>
+    },
+    { 
+      field: 'stopReason', 
+      headerName: '작동중지원인', 
+      type: 'string', 
+      width: fieldWidths.stopReason || 200,
+      renderCell: (params) => <span style={{ color: 'white' }}>{params.formattedValue}</span>
+    },
+    { 
+      field: 'rate', 
+      headerName: '도달률', 
+      type: 'Number', 
+      width: fieldWidths.rate || 100,
+      renderCell: (params) => <span style={{ color: 'white' }}>{params.value}</span> 
+    }
+  ];
 
   const rows = user.map((userItem, index) => ({
     id: index,
@@ -80,8 +79,10 @@ function ProductionManagement() {
     <ThemeProvider theme={customTheme}>
       <Box sx={{ 
               // height: '100%',
-              height: '650px', //스크롤 바 설정으로 높이 고정
-              width: '100%', 
+              // height: '650px', //스크롤 바 설정으로 높이 고정
+              // width: '100%', 
+              height: boxDimensions.height,
+              width: boxDimensions.width, 
               backgroundColor: 'white',
               border: '2px solid white',
               borderRadius: '4px',

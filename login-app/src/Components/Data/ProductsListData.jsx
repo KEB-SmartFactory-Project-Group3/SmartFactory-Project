@@ -1,7 +1,7 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
-import useTempDB from '../hooks/useTempDB';  
+import useProductsList from '../hooks/useProductsList';  
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const customTheme = createTheme({
@@ -27,64 +27,74 @@ const customTheme = createTheme({
 
 const columns = [
   { 
-    field: 'dbTime', 
-    headerName: '기록시간', 
-    width: 145, 
+    field: 'serialnum', 
+    headerName: '일련번호', 
+    width: 120, 
     type: 'string',
+    renderCell: (params) => <span style={{ color: 'white' }}>{params.value}</span>
+  },
+  { 
+    field: 'listcount', 
+    headerName: '생산량', 
+    type: 'number', 
+    width: 100,
+    renderCell: (params) => <span style={{ color: 'white' }}>{params.value}</span>
+  },
+  { 
+    field: 'listdefect', 
+    headerName: '불량품 량', 
+    type: 'number', 
+    width: 120,
+    renderCell: (params) => <span style={{ color: 'white' }}>{params.value}</span>
+  },
+  { 
+    field: 'productionTime', 
+    headerName: '제조 시간', 
+    type: 'string', 
+    width: 200,
     renderCell: (params) => <span style={{ color: 'white' }}>{params.formattedValue}</span>
   },
   { 
-    field: 'dbTemp', 
-    headerName: '온도', 
-    type: 'number', 
-    width: 50,
-    renderCell: (params) => <span style={{ color: 'white' }}>{params.value}</span>
-  },
-  { 
-    field: 'dbHum', 
-    headerName: '습도', 
-    type: 'number', 
-    width: 50,
-    renderCell: (params) => <span style={{ color: 'white' }}>{params.value}</span>
-  },
-  { 
-    field: 'dbVaild', 
-    headerName: '적정 범위 내', 
-    type: 'boolean', 
-    width: 100,
-    renderCell: (params) => 
-      params.value ? 
-      <span style={{ color: 'green' }}>true</span> : 
-      <span style={{ color: 'red' }}>false</span>
+    field: 'liststate', 
+    headerName: '상태', 
+    type: 'string', 
+    width: 120,
+    renderCell: (params) => {
+      let color = 'white';
+      if (params.value === 'defective') color = 'red';
+      else if (params.value === 'normal') color = 'green';
+      return <span style={{ color: color }}>{params.value}</span>;
+    }
   }
 ];
 
-function TemperatureData() {
+function ProductListData() {
   const {
-    dbTime,
-    dbTemp,
-    dbHum,
-    dbVaild
-  } = useTempDB();
+    serialnum,
+    liststate,
+    listcount,
+    listdefect,
+    productionTime
+  } = useProductsList();
 
-  const rows = dbTime.map((time, index) => ({
+  const rows = serialnum.map((num, index) => ({
     id: index,
-    dbTime: time,
-    dbTemp: dbTemp[index],
-    dbHum: dbHum[index],
-    dbVaild: dbVaild[index]
+    serialnum: num,
+    liststate: liststate[index],
+    listcount: listcount[index],
+    listdefect: listdefect[index],
+    productionTime: productionTime[index]
   }));
-  
 
-  console.log("DB rows:", rows)
+  // console.log("rows:", rows)
   return (
     <ThemeProvider theme={customTheme}>
       <Box sx={{ 
               // height: '100%',
-              height: '100%', 
+              height: '650px', //스크롤 바 설정으로 높이 고정
               width: '100%', 
               backgroundColor: 'white',
-              // border: '2px solid white',
+              border: '2px solid white',
               borderRadius: '4px',
               backgroundColor: 'rgba(255, 255, 255, 0.1)', 
               backdropFilter: 'blur(8px)' 
@@ -109,4 +119,4 @@ function TemperatureData() {
   );
 }
 
-export default TemperatureData;
+export default ProductListData;

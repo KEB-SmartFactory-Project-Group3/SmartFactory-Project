@@ -20,32 +20,20 @@ const Item = styled(Paper)(({ theme }) => ({
 
 function Computervison() {
 
-  const {
-    serialnum,
-    liststate,
-    listcount,
-    listdefect,
-    productionTime
-  } = useProductsList()
-
   return (
       <StyledBackground>
         <StyledFactor>
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={{ xs: 2, md: 3 }}>
-            {Array.from(Array(2)).map((_, index) => (
-              <VisionGridStyled item xs={12} sm={12} md={12} key={index}>
-                <VisionItemStyled>{index === 0 ? "computervision" : "data grid"}</VisionItemStyled>
-              </VisionGridStyled>
-            ))}
+             <VisionGridStyled item xs={12} sm={7} md={7}>
+              <VisionItemStyled><ProductListData /></VisionItemStyled>
+            </VisionGridStyled>
+            <VisionGridStyled item xs={12} sm={5} md={5}>
+              <VisionItemStyled> <LiveTransmissionComponent /></VisionItemStyled>
+            </VisionGridStyled>
           </Grid>
         </Box>
-
-        {/* <LiveTransmissionComponent /> */}
-        
-        {/* <ProductListData /> */}
  
-
         </StyledFactor>
       </StyledBackground>
   )

@@ -19,11 +19,17 @@ function AuthProvider( {children}) {
 
  
   async function login(id,password,name) {
-    setAuthenticated(true)
 
+    // 임시로 로그인 성공 처리
+  //   setAuthenticated(true);
+  //   setCurrentUser({ name: "Temporary User" })
+  //   return true;
+  // }
+  
+    setAuthenticated(true)
     try {
       // 백엔드 api 호출해서 로그인 인증
-      const response = await axios.post('http://165.246.116.143:8080/api/auth/login', {
+      const response = await axios.post('http://192.168.43.183:8080/api/auth/login', {
         id: id,
         password: password,
         name: name,
@@ -58,7 +64,7 @@ function AuthProvider( {children}) {
       }
    
     } 
-  }
+   }
 
   function logout() {
     setAuthenticated(false)
@@ -75,4 +81,3 @@ function AuthProvider( {children}) {
 }
 
 export default AuthProvider;
-

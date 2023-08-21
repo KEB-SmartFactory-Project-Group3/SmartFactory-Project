@@ -14,7 +14,7 @@ import { Tabs, Tab, useMediaQuery, useTheme, Typography} from '@mui/material';
 import Box from '@mui/material/Box';
 import DrawerComp from './DrawerComp';
 import AndroidIcon from '@mui/icons-material/Android';
-
+import CookieIcon from '@mui/icons-material/Cookie';
 
 function Header(props) {
    
@@ -63,23 +63,24 @@ function Header(props) {
 
   if (window.location.pathname === '/')
       return null
-  
+
+  // const isSpecificSize = useMediaQuery("(min-width: 1024px) and (max-width: 1471px)");
 
    return (
      <header className="header">
-      <AppBar  sx={{ background:'transparent',boxShadow:0 ,position: 'sticky'}} className="headerapp">
+      <AppBar  sx={{ background:'transparent',boxShadow:0 ,position: 'sticky' }} className="headerapp">
         {isMatch ? (
           <Box display='flex'>
-          <AndroidIcon sx={{color: 'white', padding: 1}}/>
+          <CookieIcon sx={{color: '#5c6bc0', padding: 1, fontSize: 30}}/>
           <Typography sx={{padding:0.5 ,color:'white'}} variant='h6' fontFamily='Tektur, cursive'>
             gugu
           </Typography>
-            <DrawerComp />
+            <DrawerComp onLogout={handleSubmitLogout} />
           </Box>
         ): (  
           <Toolbar>
             <Box sx={{display: 'flex', width: '100%', justifyContent:'center', alignItems:'center'}} >
-              <AndroidIcon sx={{color: 'white', marginRight: '5rem'}}/>
+              <CookieIcon sx={{color: '#5c6bc0', marginRight: '5rem', fontSize: 30}}/>
                 <Box>
                   <Tabs value={value} 
                       onChange={handleChange} 
@@ -94,34 +95,43 @@ function Header(props) {
                             value={`/Landing/${currentUser.name}`}
                             component={Link}
                             to={`/Landing/${currentUser.name}`}
-                            style={{ textDecoration: 'none', ":hover":{textDecoration:"underline"},
-                                    fontWeight:"bold", color: 'white', marginRight: '4rem' ,
-                                    borderBottom: value === `/Landing/${currentUser.name}` ? '2px solid white' : 'none', 
-                                    transition: 'border-bottom 0.3s ease',  
-                                   }}
-                                   onClick={(e) => handleChange(e, `/Landing/${currentUser.name}`)}
+                            style={{ 
+                              // ...tabStyle, 
+                              textDecoration: 'none', ":hover":{textDecoration:"underline"},
+                              fontWeight:"bold", color: 'white', marginRight: '4rem' ,
+                              borderBottom: value === `/Landing/${currentUser.name}` ? '2px solid white' : 'none', 
+                              transition: 'border-bottom 0.3s ease', 
+                              // backgroundColor: value === `/Landing/${currentUser.name}` ? '#5C6AC4' : 'transparent'  
+                              }}
+                              onClick={(e) => handleChange(e, `/Landing/${currentUser.name}`)}
                           />
                           <Tab
-                            label="기계"
+                            label="생산관리"
                             value="/MachinePage"
                             component={Link}
                             to="/MachinePage"
-                            style={{ textDecoration: 'none', ":hover":{textDecoration:"underline"},
+                            style={{
+                            // ...tabStyle,  
+                            textDecoration: 'none', ":hover":{textDecoration:"underline"},
                             fontWeight:"bold", color: 'white', marginRight: '4rem' ,
                             borderBottom: value === '/MachinePage' ? '2px solid white' : 'none', 
                             transition: 'border-bottom 0.3s ease',   
+                            // backgroundColor: value === `/Landing/${currentUser.name}` ? '#5C6AC4' : 'transparent' 
                            }}
                             onClick={(e) => handleChange(e, '/MachinePage')}
                           />
                           <Tab
-                            label="온도"
+                            label="온습도"
                             value="/TemperaturePage"
                             component={Link}
                             to="/TemperaturePage"
-                            style={{ textDecoration: 'none', ":hover":{textDecoration:"underline"},
+                            style={{ 
+                            // ...tabStyle, 
+                            textDecoration: 'none', ":hover":{textDecoration:"underline"},
                             fontWeight:"bold", color: 'white', marginRight: '4rem' ,
                             borderBottom: value === '/TemperaturePage' ? '2px solid white' : 'none', 
                             transition: 'border-bottom 0.3s ease',   
+                            // backgroundColor: value === `/Landing/${currentUser.name}` ? '#5C6AC4' : 'transparent' 
                            }}
                             onClick={(e) => handleChange(e, '/TemperaturePage')}
                           />
@@ -130,22 +140,28 @@ function Header(props) {
                             value="/Computervision"
                             component={Link}
                             to="/Computervision"
-                            style={{ textDecoration: 'none', ":hover":{textDecoration:"underline"},
+                            style={{ 
+                            // ...tabStyle, 
+                            textDecoration: 'none', ":hover":{textDecoration:"underline"},
                             fontWeight:"bold", color: 'white', marginRight: '4rem' , 
                             borderBottom: value === '/Computervision' ? '2px solid white' : 'none', 
                             transition: 'border-bottom 0.3s ease',   
+                            // backgroundColor: value === `/Landing/${currentUser.name}` ? '#5C6AC4' : 'transparent' 
                            }}
                             onClick={(e) => handleChange(e, '/Computervision')} 
                           />
                           <Tab
-                            label="관리자DB"
+                            label="생산관리DB"
                             value="/Administrator"
                             component={Link}
                             to="/Administrator"
-                            style={{ textDecoration: 'none', ":hover":{textDecoration:"underline"},
+                            style={{ 
+                            // ...tabStyle, 
+                            textDecoration: 'none', ":hover":{textDecoration:"underline"},
                             fontWeight:"bold", color: 'white', marginRight: '4rem' ,  
                             borderBottom: value === '/Administrator' ? '2px solid white' : 'none', 
                             transition: 'border-bottom 0.3s ease',   
+                            // backgroundColor: value === `/Landing/${currentUser.name}` ? '#5C6AC4' : 'transparent' 
                            }}
                             onClick={(e) => handleChange(e, '/Administrator')}
                           />
@@ -156,8 +172,8 @@ function Header(props) {
                         <>
                           <Tab 
                             label={
-                              <Box display="flex" alignItems="center">
-                                <AccountCircleIcon style={{ marginRight: '0.5rem' }} />
+                              <Box display="flex" alignItems="center" border="2px solid white" borderRadius='0.5rem'padding='0.5rem'>
+                                <AccountCircleIcon style={{ fontSize: '2vw', marginRight: '0.5rem' , color: '#7c4dff'}} />
                                 <span style={{ color: 'white', fontWeight:'bold'}} >현재 관리자 : {name}</span>
                               </Box>
                             }
@@ -167,12 +183,15 @@ function Header(props) {
                       )}
                       <Box display='flex' marginLeft={'auto'}>
                         {isAuthenticated && 
-                        <Button style={{ color: 'white'}} onClick={handleSubmitLogout}>Logout</Button>}
+                        <Button style={{ color: '#7c4dff', fontWeight: 'bold'}} onClick={handleSubmitLogout}>Logout</Button>}
                       </Box>
                   </Tabs>
+
+                  
                 </Box>
             </Box>
           </Toolbar>
+          
           )}
           </AppBar>
               
@@ -182,8 +201,8 @@ function Header(props) {
                 정말 로그아웃 하시겠습니까?
               </DialogContent>
               <DialogActions>
-                  <Button variant="contained" style={{ backgroundColor: '#5C6AC4', color: 'white' }} size="small" onClick={handleLogoutConfirm}>yes</Button>
-                  <Button variant="contained" style={{ backgroundColor: '#5C6AC4', color: 'white' }} size="small" onClick={handleLogoutCancel}>cancel</Button>
+                  <Button variant="contained" style={{ backgroundColor: 'black', color: 'white' }} size="small" onClick={handleLogoutConfirm}>yes</Button>
+                  <Button variant="contained" style={{ backgroundColor: 'black', color: 'white' }} size="small" onClick={handleLogoutCancel}>cancel</Button>
               </DialogActions>
             </Dialog>
     </header>

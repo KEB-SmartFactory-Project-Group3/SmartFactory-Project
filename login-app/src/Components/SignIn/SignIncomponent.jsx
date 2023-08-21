@@ -37,53 +37,53 @@ function SignIncomponent() {
     setPassword(e.target.value)
   }
 
-  function handleSubmit(e) {
-    e.preventDefault();
-
-    // 임시로 하드코딩된 로그인 처리
-    if (id === 'dabin' && password === '123') {
-      authContext.login(id, password).then((isLoginSuccessful) => {
-        if (isLoginSuccessful) {
-          // 로그인 성공 시 landig page로 이동
-          navigate(`/landing/${id}`);
-        } else {
-          alert('비밀번호가 틀렸습니다. 다시 입력하세요!');
-        }
-      });
-    } else {
-      alert('아이디 또는 비밀번호가 틀렸습니다.');
-    }
-  }
-  
-  // 로그인  코딩
+  // 임시 로그인 하드코딩
   // function handleSubmit(e) {
   //   e.preventDefault();
 
-  //   if(isLoggingIn) return //이미 로그인 중이면 중복 실행 방지
-  //   setIsLoggingIn(true)
-
-  //   authContext.login(id, password).then((isLoginInSuccessful) => {
-  //     setIsLoggingIn(false)
-  //     if (isLoginInSuccessful) {
-  //        // 로그인 성공하면 landig page로 이동
-  //         navigate(`/landing/${id}`) 
-  //     }else {
-  //       alert("비밀번호가 틀렸습니다. 다시 입력하세요!")
-  //     } 
-      
-  //     if (rememberMe) {
-  //       localStorage.setItem("rememberMe",true)
-  //       localStorage.setItem("rememberedUsername", id)
-  //     }else {
-  //       localStorage.removeItem("rememberMe")
-  //       localStorage.removeItem("rememberedUsername")
-  //     }
-
-  //   }) 
-  //   .catch((error) => {
-  //     alert(error.message) //api 오류 처리
-  //   })
+  //   if (id === 'dabin' && password === '123') {
+  //     authContext.login(id, password).then((isLoginSuccessful) => {
+  //       if (isLoginSuccessful) {
+  //         // 로그인 성공 시 landig page로 이동
+  //         navigate(`/landing/${id}`);
+  //       } else {
+  //         alert('비밀번호가 틀렸습니다. 다시 입력하세요!');
+  //       }
+  //     });
+  //   } else {
+  //     alert('아이디 또는 비밀번호가 틀렸습니다.');
+  //   }
   // }
+  
+  // 로그인  코딩
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    if(isLoggingIn) return //이미 로그인 중이면 중복 실행 방지
+    setIsLoggingIn(true)
+
+    authContext.login(id, password).then((isLoginInSuccessful) => {
+      setIsLoggingIn(false)
+      if (isLoginInSuccessful) {
+         // 로그인 성공하면 landig page로 이동
+          navigate(`/landing/${id}`) 
+      }else {
+        alert("비밀번호가 틀렸습니다. 다시 입력하세요!")
+      } 
+      
+      if (rememberMe) {
+        localStorage.setItem("rememberMe",true)
+        localStorage.setItem("rememberedUsername", id)
+      }else {
+        localStorage.removeItem("rememberMe")
+        localStorage.removeItem("rememberedUsername")
+      }
+
+    }) 
+    .catch((error) => {
+      alert(error.message) //api 오류 처리
+    })
+  }
 
 
   return (
