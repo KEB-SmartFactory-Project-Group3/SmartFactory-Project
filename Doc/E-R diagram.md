@@ -1,31 +1,25 @@
 ```mermaid
 erDiagram
-  user{
-    userId CHAR(8) PK
-    password VARCHAR(20)
-    username VARCHAR(20) PK
+  User{
+    id VARCHAR(25) PK
+    password VARCHAR(25)
+    username VARCHAR(25)
   }
 
-  factoryInfo{
-    times TIMESTAMP PK
-    factoryTemperature DOUBLE
-    factoryHumidity DOUBLE
-  }
-
-  productionInfo{
-    username VARCHAR(20) PK, FK
+  Products{
+    serialNumber CHAR(6) PK
     count INT PK
-    timestamp TIMESTAMP PK
-    targetCount INT
-    nowRate DOUBLE
+    productionTime Datetime(6)
+    defectiveCount INT
+    state VARCHAR(25)
   }
 
-  stopInfo{
-    username VARCHAR(20) PK, FK
-    stopTimestamp TIMESTAMP PK, FK
-    stopReason VARCHAR(10)
-    nowRate DOUBLE  
-    operatingTime TIME
+  OperationStop{
+    operationStopTime Datetime(6) PK
+    nowRate DOUBLE  FK
+    operatingTime TIME(6)
+    reason VARCHAR(25)
+    username VARCHAR(20)
   }
   
   productInfo{
@@ -34,11 +28,16 @@ erDiagram
     quality VARCHAR(10)
     manufacturingDate TIME 
   }
+  
+  Conditions{
+    times Datetime(6) PK
+    factoryTemperature DOUBLE
+    factoryHumidity INT
+    isValid bit
+  }
 
 
- user ||--|{ stopInfo: ""
- user ||--|{ productionInfo: ""
- productionInfo ||--|| productInfo: ""
- productionInfo ||--|{ stopInfo: "" 
+ User O|--|{ OperationStop: ""
+ Products O|--|{ OperationStop: ""
 
  
