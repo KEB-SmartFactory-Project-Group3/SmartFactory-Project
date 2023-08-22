@@ -48,7 +48,7 @@
 - 실시간 그래프를 통한 온도, 조도, 생산량 등의 시각화
 - 웹 애플리케이션을 통한 공장 제어
  
-  - ### 🔒 로그인 [상세 wiki](https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/wiki/기능-요약(로그인))
+  - ### 🔒 로그인 [로그인 상세 wiki](https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/wiki/기능-요약(로그인))
     - 서버와의 통신
     - 인증 상태 확인
     - 로그아웃 (사용자 정보 초기화)
@@ -65,7 +65,7 @@
     - 온도 적정 범위
     - 실시간 온습도 그래프
     - 실시간 최대 최소 평균값
-  - ### ❌ 불량품 페이지
+  - ### ❌ 불량품 페이지 [불량품 상세 wiki](https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/wiki/기능(불량품-검출))
   - ### ⚠️ 에러 페이지
   - ### 🗃️ 생산 관리 DB
 - 컴퓨터 비전과 인공지능을 활용한 식품 물체 인식
