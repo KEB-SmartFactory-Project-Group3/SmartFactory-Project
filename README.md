@@ -66,7 +66,8 @@
     - 실시간 온습도 그래프
     - 실시간 최대 최소 평균값
   - ### ❌ 불량품 페이지 [불량품 상세 wiki](https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/wiki/기능(불량품-검출))
-  - ### ⚠️ 에러 페이지
+  - ### ⚠️ 에러 페이지 [에러 상세 wiki](https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/wiki/기능(Error))
+    - 오류 메시지 표시
   - ### 🗃️ 생산 관리 DB
 - 컴퓨터 비전과 인공지능을 활용한 식품 물체 인식
 
