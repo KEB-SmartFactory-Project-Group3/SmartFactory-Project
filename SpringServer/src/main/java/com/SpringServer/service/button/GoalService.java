@@ -1,9 +1,6 @@
 package com.SpringServer.service.button;
 
-import com.SpringServer.model.dto.StringResultResponse;
 import com.SpringServer.model.dto.data.GoalDTO;
-import com.SpringServer.model.entity.Products;
-import com.SpringServer.repository.ProductsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +10,6 @@ import org.springframework.web.client.RestTemplate;
 @Service
 @RequiredArgsConstructor
 public class GoalService {
-
-    private final ProductsRepository productsRepository;
 
     private int GOAL = 0;
 
