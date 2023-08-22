@@ -61,7 +61,7 @@
     - 타이머 및 카운터 기능
     - 알림 및 경고
     - 목표 생산량 입력 및 처리
-  - ### 🌡️ 온습도 페이지
+  - ### 🌡️ 온습도 페이지 [온습도 상세 wiki](https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/wiki/기능(온습도))
     - 온도 적정 범위
     - 실시간 온습도 그래프
     - 실시간 최대 최소 평균값
