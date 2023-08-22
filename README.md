@@ -56,7 +56,7 @@
   - ### 🏠 홈 대시보드 [홈 상세 wiki](https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/wiki/기능(홈-대시보드))
     - 사용자 정의 훅을 사용하여 데이터 가져옴
     - 생산관리, 온습도, 불량품 대시보드
-  - ### 📈 생산 관리 페이지 [생산 관리 상세 wiki](https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/wiki/기능-요약(생산-관리))
+  - ### 📈 생산 관리 페이지 [생산 관리 상세 wiki](https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/wiki/기능(생산-관리))
     - 데이터 전송 및 알림
     - 타이머 및 카운터 기능
     - 알림 및 경고
