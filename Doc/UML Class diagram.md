@@ -62,10 +62,6 @@ classDiagram
         <<Repository>>
         + findFirstByOrderByCountDesc(): Products
     } 
-        
-    class OperationStopRepository{
-        <<Repository>>
-    }
 
     class ConditionsRepository{
         <<Repository>>
@@ -77,6 +73,10 @@ classDiagram
         + getAverageTemperature(): Double
         + getAverageHumidity(): Double
         + findByIsValidFalse(): List
+    }
+
+    class OperationStopRepository{
+        <<Repository>>
     }
 
     class ConditionsService{
@@ -161,14 +161,7 @@ classDiagram
     class AuthenticationController{
         <<Controller>>
         - AuthenticationService
-        + register()
-        + login()
-        + logout()
-    }
-
-    class AuthenticationController{
-        <<Controller>>
-        - AuthenticationService
+        - JwtService
         + register()
         + login()
         + logout()
@@ -212,12 +205,6 @@ classDiagram
         + getCurrentWeather()
     }
     
-    class ExceptionHandlerController{
-        <<Controller>>
-        + handleDuplicateIdException()
-        + handleIllegalArgumentException()
-    }
-        
     class ExceptionHandlerController{
         <<Controller>>
         + handleDuplicateIdException()
@@ -274,7 +261,8 @@ classDiagram
     AuthenticationService --> UserRepository: Association
     AuthenticationService --> JwtService: Association
 
-    MachineESP32 ..> ProductsController: send to
+    ButtonService ..> MachineESP32: send to
+    MachineESP32 ..> Flask: send to
     ConditionESP32 ..> ConditionsController: send to
     Flask ..> ProductsController: send to
     CamESP32 ..> Flask: send to
@@ -305,6 +293,14 @@ classDiagram
     WeatherController ..> WeatherService: Dependency
 
     ExceptionHandlerController ..> DuplicateIdException: Dependency
+
+
+
+    
+    
+    
+
+ 
 
 
 
