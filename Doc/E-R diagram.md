@@ -31,6 +31,6 @@ erDiagram
 
 
  User O|--|{ OperationStop: ""
- Products O|--|{ OperationStop: ""
+ Products O|--|| OperationStop: ""
 
  
