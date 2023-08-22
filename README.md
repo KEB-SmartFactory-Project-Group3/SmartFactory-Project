@@ -68,7 +68,8 @@
   - ### ❌ 불량품 페이지 [불량품 상세 wiki](https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/wiki/기능(불량품-검출))
   - ### ⚠️ 에러 페이지 [에러 상세 wiki](https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/wiki/기능(Error))
     - 오류 메시지 표시
-  - ### 🗃️ 생산 관리 DB
+  - ### 🗃️ 생산 관리 DB [생산 DB 상세 wiki](https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/wiki/기능(생산관리-DB))
+    - 생산 관리 관련 데이터 베이스 저장
 - 컴퓨터 비전과 인공지능을 활용한 식품 물체 인식
 
 ---
