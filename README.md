@@ -53,7 +53,7 @@
     - 인증 상태 확인
     - 로그아웃 (사용자 정보 초기화)
     - 로그인 성공 시 인증 토큰 반환 (쿠키에 저장)
-  - ### 🏠 홈 대시보드 [홈 상세 wiki](https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/wiki/기능-요약(홈-대시보드))
+  - ### 🏠 홈 대시보드 [홈 상세 wiki](https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/wiki/기능(홈-대시보드))
     - 사용자 정의 훅을 사용하여 데이터 가져옴
     - 생산관리, 온습도, 불량품 대시보드
   - ### 📈 생산 관리 페이지 [생산 관리 상세 wiki](https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/wiki/기능-요약(생산-관리))
