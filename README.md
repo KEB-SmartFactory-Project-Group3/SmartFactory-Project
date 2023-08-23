@@ -78,6 +78,29 @@
     - 생산 관리 관련 데이터 베이스 저장
 - 컴퓨터 비전과 인공지능을 활용한 식품 물체 인식
   - ### 🖥️ 컴퓨터 비전 페이지 [컴퓨터 비전 상세 wiki](https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/wiki/컴퓨터-비전)
+
 ---
 
+## 🏆 프로젝트 결과
+
+<div align="center">
+
+### 로그인 화면
+
+<img src="https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/blob/image/Image/Project%20Result/로그인페이지.gif" alt="로그인 화면" width="70%" style="border-radius: 10px; box-shadow: 0px 0px 15px rgba(0,0,0,0.2);">
+
+</div>
+
+<div align="center">
+
+### main 화면
+
+<img src="https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/blob/image/Image/Project%20Result/메인.gif" alt="main 화면" width="70%" style="border-radius: 10px; box-shadow: 0px 0px 15px rgba(0,0,0,0.2);">
+
+</div>
+
+
+---
+
+---
 
