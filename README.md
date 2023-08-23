@@ -5,6 +5,11 @@
 ## ✏️ 프로젝트 개요
 본 프로젝트는 공장의 모니터링 및 원격 제어 시스템을 개발하는 것을 목표로 한다. 아두이노를 활용하여 센서 데이터를 수집하고, 웹 애플리케이션을 사용하여 실시간 모니터링 및 제어 기능을 구현한다.
 
+
+---
+
+![](https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/blob/image/Image/Readme/new%20system%20flow.PNG)
+
 ---
 ## 🕑 개발 기간
 - 23.07.24 - 23.08.23
@@ -42,6 +47,7 @@
 - C++
 
 ---
+
 ## ⚙️ 기능 소개
 
 - 센서 데이터 수집 및 저장
