@@ -71,7 +71,7 @@
   - ### 🗃️ 생산 관리 DB [생산 DB 상세 wiki](https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/wiki/기능(생산관리-DB))
     - 생산 관리 관련 데이터 베이스 저장
 - 컴퓨터 비전과 인공지능을 활용한 식품 물체 인식
-  - ### 🗃️ 컴퓨터 비전 페이지 [컴퓨터 비전 상세 wiki](https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/wiki/컴퓨터-바전)
+  - ### 🖥️ 컴퓨터 비전 페이지 [컴퓨터 비전 상세 wiki](https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/wiki/컴퓨터-비전)
 ---
 
 
