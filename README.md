@@ -24,27 +24,41 @@
 ## 💻 개발 환경
 
 ### 🌐 Front-End
-- React 18.2.0
-- HTML 5
-- CSS 3
-- MUI 5.14.3
+
+- ![React](https://img.shields.io/badge/React-18.2.0-61DAFB?logo=react)
+
+- ![HTML5](https://img.shields.io/badge/HTML-5-E34F26?logo=html5&logoColor=white)
+
+- ![CSS3](https://img.shields.io/badge/CSS-3-1572B6?logo=css3&logoColor=white)
+
+- ![Material-UI](https://img.shields.io/badge/MUI-5.14.3-0081CB?logo=material-ui)
 
 ### 🖥️ Back-End
-- Java 17
-- Python
-- Flask
+
+- ![Java](https://img.shields.io/badge/Java-17-ED8B00?logo=java&logoColor=white)
+  
+- ![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)
+  
+- ![Flask](https://img.shields.io/badge/Flask-black?logo=flask&logoColor=white)
 
 ### 📦 Framework
-- Node v14.21.3
-- Spring Boot 3.1.2
+
+- ![Node.js](https://img.shields.io/badge/Node.js-14.21.3-339933?logo=node.js&logoColor=white)
+
+- ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.1.2-6DB33F?logo=spring-boot)
 
 ### 🗃️ Database
-- MySQL
+
+- ![MySQL](https://img.shields.io/badge/MySQL-blue?logo=mysql&logoColor=white)
 
 ### 🔌 Sensor
-- Arduino ESP32 (ET Board)
-- ESP32 Cam
-- C++
+
+- ![Arduino](https://img.shields.io/badge/Arduino-00979D?logo=arduino&logoColor=white)
+  
+- ![C++](https://img.shields.io/badge/C%2B%2B-00599C?logo=c%2B%2B&logoColor=white)
+
+- ![ESP32](https://img.shields.io/badge/ESP32-blue?logo=espressif&logoColor=white)
+
 
 ---
 
@@ -99,7 +113,30 @@
 
 </div>
 
+<div align="center">
 
+### 생산관리 - 목표생산량 전송 및 가동시작 
+
+<img src="https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/blob/image/Image/Project%20Result/생산관리1-가동시작.gif" alt="production management 화면" width="70%" style="border-radius: 10px; box-shadow: 0px 0px 15px rgba(0,0,0,0.2);">
+
+</div>
+
+
+<div align="center">
+
+### 생산관리 - 가동중지 및 제품관리DB
+
+<img src="https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/blob/image/Image/Project%20Result/생산관리2-가동중지_제품관리DB.gif" alt="production management 화면" width="70%" style="border-radius: 10px; box-shadow: 0px 0px 15px rgba(0,0,0,0.2);">
+
+</div>
+
+<div align="center">
+
+### 생산관리 - 불량품 및 도달률
+
+<img src="https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/blob/image/Image/Project%20Result/생산관리2-불량품검출_도달률100_.gif" alt="production management 화면" width="70%" style="border-radius: 10px; box-shadow: 0px 0px 15px rgba(0,0,0,0.2);">
+
+</div>
 ---
 
 ---
