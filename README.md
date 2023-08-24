@@ -143,7 +143,7 @@
 
 ### 온습도 화면
 
-<img src="https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/blob/image/Image/Project%20Result/리셋.gif" alt="온습도 화면" width="70%" style="border-radius: 10px; box-shadow: 0px 0px 15px rgba(0,0,0,0.2);">
+<img src="https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/blob/main/Image/Project%20Result/온습도-페이지.gif" alt="온습도 화면" width="70%" style="border-radius: 10px; box-shadow: 0px 0px 15px rgba(0,0,0,0.2);">
 
 </div>
 
@@ -159,7 +159,7 @@
 
 ### 로그아웃
 
-<img src="https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/blob/image/Image/Project%20Result/리셋.gif" alt="로그아웃" width="70%" style="border-radius: 10px; box-shadow: 0px 0px 15px rgba(0,0,0,0.2);">
+<img src="https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/blob/main/Image/Project%20Result/로그아웃.gif" alt="로그아웃" width="70%" style="border-radius: 10px; box-shadow: 0px 0px 15px rgba(0,0,0,0.2);">
 
 </div>
 ---
