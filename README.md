@@ -162,7 +162,6 @@
 <img src="https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/blob/main/Image/Project%20Result/로그아웃.gif" alt="로그아웃" width="70%" style="border-radius: 10px; box-shadow: 0px 0px 15px rgba(0,0,0,0.2);">
 
 </div>
----
 
----
+
 
