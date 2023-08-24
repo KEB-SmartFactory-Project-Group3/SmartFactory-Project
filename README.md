@@ -117,7 +117,7 @@
 
 ### 생산관리 - 목표생산량 전송 및 가동시작 
 
-<img src="https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/blob/image/Image/Project%20Result/생산관리1-가동시작.gif" alt="production management 화면" width="70%" style="border-radius: 10px; box-shadow: 0px 0px 15px rgba(0,0,0,0.2);">
+<img src="https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/blob/image/Image/Project%20Result/생산관리1-가동시작.gif" alt="목표생산량 전송 및 가동시작" width="70%" style="border-radius: 10px; box-shadow: 0px 0px 15px rgba(0,0,0,0.2);">
 
 </div>
 
@@ -126,7 +126,7 @@
 
 ### 생산관리 - 가동중지 및 제품관리DB
 
-<img src="https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/blob/image/Image/Project%20Result/생산관리2-가동중지_제품관리DB.gif" alt="production management 화면" width="70%" style="border-radius: 10px; box-shadow: 0px 0px 15px rgba(0,0,0,0.2);">
+<img src="https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/blob/image/Image/Project%20Result/생산관리2-가동중지_제품관리DB.gif" alt="가동중지 및 제품관리DB" width="70%" style="border-radius: 10px; box-shadow: 0px 0px 15px rgba(0,0,0,0.2);">
 
 </div>
 
@@ -134,7 +134,32 @@
 
 ### 생산관리 - 불량품 및 도달률
 
-<img src="https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/blob/image/Image/Project%20Result/생산관리2-불량품검출_도달률100_.gif" alt="production management 화면" width="70%" style="border-radius: 10px; box-shadow: 0px 0px 15px rgba(0,0,0,0.2);">
+<img src="https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/blob/image/Image/Project%20Result/생산관리2-불량품검출_도달률100_.gif" alt="불량품 및 도달률" width="70%" style="border-radius: 10px; box-shadow: 0px 0px 15px rgba(0,0,0,0.2);">
+
+</div>
+
+
+<div align="center">
+
+### 온습도 화면
+
+<img src="https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/blob/image/Image/Project%20Result/리셋.gif" alt="온습도 화면" width="70%" style="border-radius: 10px; box-shadow: 0px 0px 15px rgba(0,0,0,0.2);">
+
+</div>
+
+<div align="center">
+
+### 리셋 
+
+<img src="https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/blob/image/Image/Project%20Result/리셋.gif" alt="reset 화면" width="70%" style="border-radius: 10px; box-shadow: 0px 0px 15px rgba(0,0,0,0.2);">
+
+</div>
+
+<div align="center">
+
+### 로그아웃
+
+<img src="https://github.com/KEB-SmartFactory-Project-Group3/SmartFactory-Project/blob/image/Image/Project%20Result/리셋.gif" alt="로그아웃" width="70%" style="border-radius: 10px; box-shadow: 0px 0px 15px rgba(0,0,0,0.2);">
 
 </div>
 ---
